@@ -1,6 +1,6 @@
 # PadalaPocket architecture
 
-Updated 2026-11-06 under [DEC-031](decision-ledger.md). This is the canonical system overview, stack and diagram. It describes the working design under DEC-030, not a deployed system. Product requirements live in [product spec](product-spec.md); detailed API/data/execution contracts live in [technical spec](technical-spec.md); progress lives in [implementation plan](implementation-plan.md).
+Updated 2026-11-06 under [DEC-031](decision-ledger.md). This is the canonical system overview, stack and diagram. It describes the working design under DEC-030. Under DEC-035, S-001 infrastructure is implemented locally; deployment and product integrations remain unverified. Product requirements live in [product spec](product-spec.md); detailed API/data/execution contracts live in [technical spec](technical-spec.md); progress lives in [implementation plan](implementation-plan.md).
 
 ## Maintenance rule
 
@@ -12,13 +12,13 @@ Designed for two JavaScript-capable builders and the team's under-30-hour implem
 
 | Area | Working baseline | Reason / boundary |
 |---|---|---|
-| Frontend | Vite, vanilla JavaScript, HTML and CSS | Shared existing skills; no framework learning dependency. Visual design remains with the human designer under [design brief](design-brief.md) |
+| Frontend | Vite 8.3.6, vanilla JavaScript, HTML and CSS | Shared existing skills; no framework learning dependency. Visual design remains with the human designer under [design brief](design-brief.md) |
 | Backend | JavaScript ESM, Node.js API functions on Vercel | Same language as browser; required payment SDKs run in Node. No separate Python service or Express server |
 | Data and identity | Supabase Postgres, Auth and private Storage | Founder familiarity; central transactional balances, permissions and photos |
 | Payment | Noir 0.3.0, Velo 0.1.0-alpha.4, Stellar SDK 16.0.1 | Exact versions locally installed/imported; retain handbook's Velo alpha choice. Use required deployed Testnet contracts |
 | Image identification | Server-side image-capable AI API; provider/model pending | Real photo identification required. Never expose provider credentials or treat AI text as payment authorization |
 | Simulated off-ramp | Stellar reference test anchor, SEP-10/SEP-24 flow | Demonstrate authenticated test withdrawal; no real PHP or GCash settlement |
-| Repository | npm workspaces: `apps/web`, `apps/api` | Proposed layout only. One root install and lockfile; pin installed dependencies. No shared package until actual reuse requires it |
+| Repository | npm workspaces: `apps/web`, `apps/api` | Workspace manifests and root lockfile now exist under S-001. Pin installed dependencies. No shared package until actual reuse requires it |
 
 Runtime evidence and exact engine ranges live in [EV-025](../work/evidence-ledger.md). Use local Node 26.12.1; target Vercel Node 26.x and verify both deployed build and function patch versions. Browser code calls our API; payment SDKs and signing stay server-side. Prefer same-origin `/api` routing; validate Vite output and Vercel function routing in the first deployment. Hosting duration/plan remains unverified.
 
@@ -79,3 +79,7 @@ Before treating this design as ready for implementation, resolve the parent-appr
 ## Competition presentation
 
 The handbook requires an Architecture diagram in the root README showing the apps, agent, Noir contracts and Velo. Use this document as the canonical reference; when preparing the submission, include a diagram reflecting the actual verified build in the README and link back here. Do not submit this proposed diagram as proof of working integration. See [required README format](../seed/sources/velo-noir-builder-handbook.md#repo-and-readme-format).
+
+## Shared setup implementation boundary
+
+S-001 adds a blank web entry (no product interface), Vite development `/api` proxy, a Node health handler and root `api/index.js` bridge required by the proposed Vercel configuration. Health reports Testnet/runtime only and performs no signing/provider action. Node built-in tests and a PR workflow are present; no browser interaction runner is chosen yet. `scripts/check-contracts.mjs` reports no fixtures and rejects unexpected JSON fixtures until S-002 adds validation. See [development setup](development.md) and [S-001 evidence](../handoff/S-001.md). The diagram above continues to represent the future product components, not completed integration.

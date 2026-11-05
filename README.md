@@ -18,7 +18,7 @@ Interviews are not required. Unknowns and assumptions may remain explicit. The t
 ## Build later
 
 The [architecture](docs/architecture.md) owns the working stack and component diagram; the [technical spec](docs/technical-spec.md) owns proposed API/data contracts and integration checks. Review them together, confirm [design ownership](docs/design-brief.md), then use [the implementation plan](docs/implementation-plan.md) and [task template](handoff/TASK-000-template.md).
-Application scaffolding and build commands have not been authorized or created.
+Shared infrastructure is implemented locally for S-001; review/CI/merge acceptance remains open. See [development setup](docs/development.md) for install, run and check commands. Product UI and payment integrations are not implemented.
 
 ## Guides and agent skills
 

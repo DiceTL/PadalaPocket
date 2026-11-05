@@ -4,7 +4,7 @@ Updated 2026-11-06. This is the project orientation and constraint summary. Prod
 
 ## Current direction and document map
 
-The team accepted a focused PadalaPocket Testnet demo for one OFW parent, one student and one seller under DEC-029. It includes photo AI for allowance purchases, parent review, Savings/private My Money, weekly time advancement and a test-anchor withdrawal with simulated fiat payout. Real GCash receipt remains a future feasibility gap. Product and technical specs are drafts; application implementation has not started or been authorized.
+The team accepted a focused PadalaPocket Testnet demo for one OFW parent, one student and one seller under DEC-029. It includes photo AI for allowance purchases, parent review, Savings/private My Money, weekly time advancement and a test-anchor withdrawal with simulated fiat payout. Real GCash receipt remains a future feasibility gap. Product and technical specs are drafts; shared S-001 infrastructure is implemented locally under DEC-035; payment/UI implementation has not started. S-001 review/CI/merge acceptance remains open.
 
 | Need | Canonical document |
 |---|---|

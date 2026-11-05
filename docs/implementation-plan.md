@@ -1,6 +1,6 @@
 # Implementation plan
 
-Revised 2026-11-06 under [DEC-033](decision-ledger.md). This is the only task-status source. All build/checkpoint tasks below are Planned. No application work has been performed or authorized by these planning changes. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
+Revised 2026-11-06 under [DEC-034](decision-ledger.md). This is the only task-status source. S-001 infrastructure is implemented locally under DEC-035 and awaits backend acceptance, committed-clone, CI and deployment evidence; S-002 is blocked on that acceptance. Other build/checkpoint tasks remain Planned. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
 
 ## Execution order
 
@@ -26,17 +26,30 @@ S-002 establishes stable envelopes and initial synthetic examples. Provider/wall
 
 Mock data must match the accepted contract revision and include success, pending, empty, rejection and technical errors. Use the same small request interface for mock/live modes. Mock UI completion does not complete real integration. Real APIs are connected at C-003/C-004/C-005; demo mocks are disabled before C-005 passes.
 
-## Time allocation and investigation limits
+## Relative effort estimation
 
-Estimates in the tables are rough active working hours, including focused tests and review preparation, not measured performance. Shared and joint tasks consume both developers' time. They provisionally treat the target as under 30 elapsed working hours with concurrent tracks; the team must confirm elapsed versus combined person-hours at start. The target is not proven achievable, and upper estimates can exhaust it before unexpected problems.
+Task estimates use Fibonacci points: **1, 2, 3, 5, 8, 13**. Points compare total work, technical complexity and uncertainty, including integration, automated tests, manual/live checks and review. They are initial planning judgments for this team and its AI-assisted workflow, not measured productivity or commitments.
 
-Using the dependency graph and concurrent tracks, these assumptions give a critical path of approximately **15.25–25 active elapsed hours**, including joint checkpoints but excluding account/provider waits and unexpected rework. At the upper estimate a 30-hour elapsed window leaves about five hours of contingency. This arithmetic is not a validated delivery estimate or evidence that the team has that time available.
+| Points | Relative meaning | Project reference |
+|---|---|---|
+| 1 | Small, clear coordination/change with little uncertainty | C-001 shared setup handoff |
+| 2 | Small bounded task requiring a few decisions | FE-001 design agreement |
+| 3 | Moderate task with known boundaries and several checks | S-002 stable contracts and fixtures |
+| 5 | Substantial feature or integration with multiple states | FE-003 setup/dashboard views |
+| 8 | Complex behavior, cross-system integration or significant uncertainty | B-001 Noir/Velo proof; B-006 durable money accounting |
+| 13 | Too large or uncertain for confident execution as one task | Split or investigate before starting |
 
-Reserve approximately 3.5–5 hours for C-001–C-006 together; do not spend that reserve on extra features. Review remaining critical-path estimates at every checkpoint and report work versus time left. C-006 explicitly reserves 1–1.5 hours for final setup proof, README/video/write-up, rather than starting them with no time remaining. External account approvals/waits are not included; check access before work starts.
+Estimates were reassessed by task scope and risk, not converted from the old hour ranges. In particular, payment/policy/anchor investigations receive higher points because unknown external behavior can dominate the work. AI may accelerate code generation, but tests, review, service access and integration uncertainty remain part of the estimate. Use one shared scale; do not compare developers' performance using point totals or count a joint checkpoint twice.
 
-Investigation hard limits: B-001 payment/Velo proof 2 hours; B-002 cap exception 1 hour; B-003 wallet routing/mapping 1.5 hours; B-004 anchor/AI access 1 hour total. These are proposed working limits for execution, not statements that the services will work. At the limit, record evidence, exact blocker and best supported alternatives; mark Blocked and obtain a concrete team decision to extend the limit, revise the approach/scope or stop. Do not silently extend, skip sequential dependencies or mark an unsuccessful experiment Done. Other tasks use the upper estimate as a review trigger, not permission to cut acceptance checks.
+**Points do not represent hours.** Do not convert points into an ETA, derive a completion date from their sum, or claim that this plan fits the deadline. The old 15.25–25-hour forecast and hourly task/reserve estimates are superseded. The team's stated under-30-hour target and the competition deadline remain separate constraints in [context](../seed/context.md); actual available time and its interpretation still need team confirmation.
 
-No agreed feature is automatically cut. Multiple children, real GCash payout and production scheduling remain deferred. Re-estimate after B-004; if critical-path work plus the joint reserve exceeds available hours, the founder must decide scope or time before dependent build continues.
+Backend authors initial estimates and both developers review them at C-001. Re-estimate remaining affected tasks at C-002 and subsequent checkpoints when scope, evidence or dependencies change. Update the plan and packet together; do not alter completed-task estimates to manufacture predictable results. At 13 points, split into smaller sequential tasks or define a bounded investigation before execution.
+
+## Investigation and deadline reviews
+
+For B-001–B-004, record the specific question, intended experiment and expected evidence before starting. Review immediately after the first experiment and whenever new access barriers, unsupported capabilities or repeated failures appear. Record the exact blocker and supported alternatives; if external access or a team decision prevents progress, mark Blocked and coordinate. Agree any further experiment before retrying the same approach indefinitely. These are outcome-based review points, not a point-to-time conversion.
+
+At every checkpoint compare actual remaining availability with unfinished required outcomes and risks. Protect the integration and release work in C-001–C-006; do not consume their capacity on extra features. If time looks insufficient, the founder decides whether to change scope, approach or available time. No feature is silently cut and a failed investigation is not marked Done. Multiple children, real GCash payout and production scheduling remain deferred.
 
 ## File ownership and proposed file map
 
@@ -58,50 +71,50 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 
 ## Shared setup
 
-| Task / packet | Dependency | Effort hours | State |
+| Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [S-001 Shared workspace and Git foundation](../handoff/S-001.md) | Build authorization and stack review | 1–1.5 | Planned |
-| [S-002 API contracts and development fixtures](../handoff/S-002.md) | S-001 | 0.5–1 | Planned |
+| [S-001 Shared workspace and Git foundation](../handoff/S-001.md) | Build authorization and stack review | 5 | Review |
+| [S-002 API contracts and development fixtures](../handoff/S-002.md) | S-001 backend acceptance and clone/CI/deployment evidence outstanding | 3 | Blocked |
 
 ## Backend sequence
 
-| Task / packet | Dependency | Effort hours | State |
+| Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [B-001 Noir/Velo payment and claim proof](../handoff/B-001.md) | C-001; Velo access and fresh Testnet signers | 1–2 | Planned |
-| [B-002 Verify parent-approved cap exception](../handoff/B-002.md) | B-001 | 0.5–1 | Planned |
-| [B-003 Verify wallet backing and money mapping](../handoff/B-003.md) | B-002 | 0.75–1.5 | Planned |
-| [B-004 Verify anchor and AI access](../handoff/B-004.md) | B-003 | 0.5–1 | Planned |
-| [B-005 Implement family authentication and private access](../handoff/B-005.md) | C-002 | 1–1.5 | Planned |
-| [B-006 Implement durable money accounting](../handoff/B-006.md) | B-005 | 1–1.5 | Planned |
-| [B-007 Parent rules and confirmed allowance funding](../handoff/B-007.md) | B-006 | 0.75–1.25 | Planned |
-| [B-008 Implement photo AI and retry](../handoff/B-008.md) | C-003 | 0.75–1.25 | Planned |
-| [B-009 Implement rules and parent decisions](../handoff/B-009.md) | B-008 | 0.75–1.25 | Planned |
-| [B-010 Implement payment execution and reconciliation](../handoff/B-010.md) | B-009 | 1–1.5 | Planned |
-| [B-011 Implement Savings and private My Money](../handoff/B-011.md) | C-004 | 0.75–1.25 | Planned |
-| [B-012 Implement weekly clock and transfers](../handoff/B-012.md) | B-011 | 0.75–1.25 | Planned |
-| [B-013 Withdrawal endpoints and hosted recovery](../handoff/B-013.md) | B-012 | 0.75–1.25 | Planned |
+| [B-001 Noir/Velo payment and claim proof](../handoff/B-001.md) | C-001; Velo access and fresh Testnet signers | 8 | Planned |
+| [B-002 Verify parent-approved cap exception](../handoff/B-002.md) | B-001 | 8 | Planned |
+| [B-003 Verify wallet backing and money mapping](../handoff/B-003.md) | B-002 | 8 | Planned |
+| [B-004 Verify anchor and AI access](../handoff/B-004.md) | B-003 | 8 | Planned |
+| [B-005 Implement family authentication and private access](../handoff/B-005.md) | C-002 | 5 | Planned |
+| [B-006 Implement durable money accounting](../handoff/B-006.md) | B-005 | 8 | Planned |
+| [B-007 Parent rules and confirmed allowance funding](../handoff/B-007.md) | B-006 | 5 | Planned |
+| [B-008 Implement photo AI and retry](../handoff/B-008.md) | C-003 | 5 | Planned |
+| [B-009 Implement rules and parent decisions](../handoff/B-009.md) | B-008 | 5 | Planned |
+| [B-010 Implement payment execution and reconciliation](../handoff/B-010.md) | B-009 | 8 | Planned |
+| [B-011 Implement Savings and private My Money](../handoff/B-011.md) | C-004 | 5 | Planned |
+| [B-012 Implement weekly clock and transfers](../handoff/B-012.md) | B-011 | 8 | Planned |
+| [B-013 Withdrawal endpoints and hosted recovery](../handoff/B-013.md) | B-012 | 5 | Planned |
 
 ## Frontend sequence
 
-| Task / packet | Dependency | Effort hours | State |
+| Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [FE-001 Design agreement and contract review](../handoff/FE-001.md) | C-001 | 0.5–1 | Planned |
-| [FE-002 Build approved shell and stable mock states](../handoff/FE-002.md) | FE-001 | 1–2 | Planned |
-| [FE-003 Build allowance setup and dashboards](../handoff/FE-003.md) | C-002 | 1–2 | Planned |
-| [FE-004 Student purchase, parent review and status screens](../handoff/FE-004.md) | C-003 | 1.5–2.5 | Planned |
-| [FE-005 Savings, My Money and weekly clock screens](../handoff/FE-005.md) | C-004 | 1–2 | Planned |
-| [FE-006 Withdrawal and complete demo integration preparation](../handoff/FE-006.md) | FE-005 | 0.75–1.25 | Planned |
+| [FE-001 Design agreement and contract review](../handoff/FE-001.md) | C-001 | 2 | Planned |
+| [FE-002 Build approved shell and stable mock states](../handoff/FE-002.md) | FE-001 | 3 | Planned |
+| [FE-003 Build allowance setup and dashboards](../handoff/FE-003.md) | C-002 | 5 | Planned |
+| [FE-004 Student purchase, parent review and status screens](../handoff/FE-004.md) | C-003 | 8 | Planned |
+| [FE-005 Savings, My Money and weekly clock screens](../handoff/FE-005.md) | C-004 | 5 | Planned |
+| [FE-006 Withdrawal and complete demo integration preparation](../handoff/FE-006.md) | FE-005 | 3 | Planned |
 
 ## Joint checkpoints
 
-| Task / packet | Dependency | Effort hours | State |
+| Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [C-001 Shared setup handoff](../handoff/C-001.md) | S-002 | 0.25 | Planned |
-| [C-002 Finalize contracts after feasibility](../handoff/C-002.md) | B-004 and FE-002 | 0.25–0.5 | Planned |
-| [C-003 Connect identity and allowance funding](../handoff/C-003.md) | B-007 and FE-003 | 0.5–0.75 | Planned |
-| [C-004 Connect photo purchase, approval and merchant claim](../handoff/C-004.md) | B-010 and FE-004 | 0.75–1 | Planned |
-| [C-005 Connect weekly lifecycle, private funds and withdrawal](../handoff/C-005.md) | B-013 and FE-006 | 0.75–1 | Planned |
-| [C-006 Submission and reproducible demo](../handoff/C-006.md) | C-005 | 1–1.5 | Planned |
+| [C-001 Shared setup handoff](../handoff/C-001.md) | S-002 | 1 | Planned |
+| [C-002 Finalize contracts after feasibility](../handoff/C-002.md) | B-004 and FE-002 | 3 | Planned |
+| [C-003 Connect identity and allowance funding](../handoff/C-003.md) | B-007 and FE-003 | 3 | Planned |
+| [C-004 Connect photo purchase, approval and merchant claim](../handoff/C-004.md) | B-010 and FE-004 | 5 | Planned |
+| [C-005 Connect weekly lifecycle, private funds and withdrawal](../handoff/C-005.md) | B-013 and FE-006 | 5 | Planned |
+| [C-006 Submission and reproducible demo](../handoff/C-006.md) | C-005 | 5 | Planned |
 
 ## Shared-edit protocol
 
@@ -112,6 +125,8 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 5. Backend alone edits this plan and each checkpoint packet. Frontend provides its UI/test evidence through the checkpoint PR for backend inclusion. Each developer owns evidence edits in their own task packets. No automatic outside messaging or unsolicited posting is authorized.
 
 ## Git branches and merges
+
+S-001 exception under DEC-036: backend alone reviews and accepts this task. Direct work on `main` is permitted; record the accepted commit instead of requiring a PR/merge or teammate review. Fresh committed-clone, remote CI and hosted routing/runtime checks remain required. The existing local branch is `setup/S-001`; this documentation change does not switch branches or commit files.
 
 - Keep `main` runnable. Shared setup uses `setup/S-001`, then `setup/S-002`; merge each after its checks/review. Both tracks start from the C-001 base commit.
 - Use one short-lived branch per task: `backend/B-001`, `frontend/FE-001`, and so on. Checkpoints may use `integration/C-003` to assemble and check coordinated changes before merging to `main`.
@@ -154,7 +169,7 @@ All renumbered tasks were unstarted. Old links are not execution instructions; u
 | F-001–F-005 | FE-001; FE-002/FE-003; FE-004; FE-005; FE-006 respectively |
 | C-002–C-005 | C-003–C-006 respectively; new C-002 is contract review |
 
-Original F task files are compatibility links only. Product IDs F-001–F-008 are unchanged. Current plan has 27 active packets, including shared tasks and checkpoints.
+Product IDs F-001–F-008 are unchanged; frontend task packets use FE-001 onward. Current plan has 27 active packets, including shared tasks and checkpoints.
 
 | Planning item | State | Evidence |
 |---|---|---|
@@ -162,4 +177,4 @@ Original F task files are compatibility links only. Product IDs F-001–F-008 ar
 | PLAN-001 Concept | Done | DEC-029 |
 | PLAN-002 Product spec | Draft ready | Proposed defaults still need relevant decisions |
 | PLAN-003 Technical scope | Draft ready | Architecture/contracts; EV-025 local imports only |
-| PLAN-004 Plan/packets | Revised draft ready | DEC-032–DEC-033; document checks, no build executed |
+| PLAN-004 Plan/packets | Revised draft ready | DEC-032–DEC-034; relative effort points and document checks, no build executed |

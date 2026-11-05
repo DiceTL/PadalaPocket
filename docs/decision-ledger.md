@@ -42,4 +42,10 @@ Record important choices before changing downstream documents. IDs are stable; s
 
 | DEC-033 | 2026-11-06 | Founder requests all implementation-plan review findings be addressed | Split large tasks, distinguish FE task IDs from F product IDs, add an early contract checkpoint, estimates/investigation limits, operator protection before full Auth, shared-edit protocol, PR automation and checkbox acceptance. Renumber unstarted tasks with a migration map; estimates are planning assumptions, not a delivery promise or automatic scope cuts. Execution remains separately authorized |
 
+| DEC-034 | 2026-11-06 | Founder requests Fibonacci relative effort estimates instead of task hours, including AI-assisted implementation | Use 1, 2, 3, 5, 8, 13 points for relative complexity, work and uncertainty including tests/review. Replace hourly task estimates and derived schedule forecasts; points have no time conversion. Actual competition deadline and team time budget remain constraints. Reassess investigations at explicit outcome/failure checkpoints rather than using effort points as time limits |
+
+| DEC-035 | 2026-11-06 | Founder authorizes executing S-001 then S-002, stopping on unmet dependencies | Shared infrastructure now uses Vite 8.3.6, npm workspaces, Node built-in tests and an API root bridge for Vercel. No product UI design is delegated. S-002 waits for S-001 review/merge/CI acceptance; local checks are not remote CI or deployment evidence |
+
+| DEC-036 | 2026-11-06 | Founder assigns S-001 acceptance to backend alone because teammate review time is unavailable; founder works directly on main | For S-001, backend review and a recorded accepted commit replace teammate review and mandatory PR/merge. Fresh committed-clone, remote CI and hosted routing/runtime evidence remain required. Other task ownership is unchanged. |
+
 Accepted concept and MVP scope are captured in [product spec](product-spec.md), derived from DEC-006–DEC-029. Proposed defaults and unresolved feasibility remain visible there; no build authorization or visual design decision is implied.

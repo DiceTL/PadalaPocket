@@ -19,7 +19,7 @@ Reference canonical rules instead of copying the full specs.
 
 ## Verification
 
-Name specific behavior/failure test cases, actual commands established in S-001, relevant automated PR checks, and required manual/live interactions. Record an effort range and investigation limit where relevant.
+Name specific behavior/failure test cases, actual commands established in S-001, relevant automated PR checks, and required manual/live interactions. Record a Fibonacci effort estimate (1, 2, 3, 5, 8, 13) using the plan’s shared scale and an outcome-based investigation review where relevant; points are not hours.
 Do not invent commands before the app stack exists.
 
 ## Evidence after implementation
