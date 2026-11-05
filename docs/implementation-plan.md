@@ -1,6 +1,6 @@
 # Implementation plan
 
-Revised 2026-11-06 under [DEC-034](decision-ledger.md). This is the only task-status source. S-001 infrastructure is implemented locally under DEC-035 and awaits backend acceptance, committed-clone, CI and deployment evidence; S-002 is blocked on that acceptance. Other build/checkpoint tasks remain Planned. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
+Revised 2026-11-06 under [DEC-034](decision-ledger.md). This is the only task-status source. S-001 is accepted at implementation commit `58f4b6c`: fresh committed-clone checks and deployed health verification passed; remote CI is green per founder report. Evidence and limitations live in [S-001](../handoff/S-001.md). S-002 is unblocked under DEC-035/DEC-036. Other build/checkpoint tasks remain Planned. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
 
 ## Execution order
 
@@ -22,7 +22,7 @@ Tell an AI: “Implement B-001 from this plan and its packet, within scope; run 
 
 Before S-001, confirm scoped build authorization, repository access, working stack and available hours. Shared infrastructure can precede UI design; product UI waits for FE-001's human design source or explicit delegation. Confirm provider credentials before the relevant investigation, without storing secrets in Markdown.
 
-S-002 establishes stable envelopes and initial synthetic examples. Provider/wallet/mapping-dependent fields stay explicitly provisional. Frontend may mock stable states while backend investigates. At C-002 both accept or revise topology, mapping, required product defaults and affected request/response examples before either builds dependent features. Record decisions first, then update architecture, technical spec and fixtures together. If a required decision fails, stop its dependent tasks rather than inventing a successful fallback.
+S-002 establishes stable envelopes and initial synthetic examples. Provider/wallet/mapping-dependent fields stay explicitly provisional. Frontend may mock stable states while backend investigates. At C-002 backend decides whether to accept or revise topology, mapping, required product defaults and affected request/response examples before dependent features proceed. Frontend may provide feedback; backend records decisions first, then updates architecture, technical spec and fixtures together. If a required decision fails, stop its dependent tasks rather than inventing a successful fallback.
 
 Mock data must match the accepted contract revision and include success, pending, empty, rejection and technical errors. Use the same small request interface for mock/live modes. Mock UI completion does not complete real integration. Real APIs are connected at C-003/C-004/C-005; demo mocks are disabled before C-005 passes.
 
@@ -43,7 +43,7 @@ Estimates were reassessed by task scope and risk, not converted from the old hou
 
 **Points do not represent hours.** Do not convert points into an ETA, derive a completion date from their sum, or claim that this plan fits the deadline. The old 15.25–25-hour forecast and hourly task/reserve estimates are superseded. The team's stated under-30-hour target and the competition deadline remain separate constraints in [context](../seed/context.md); actual available time and its interpretation still need team confirmation.
 
-Backend authors initial estimates and both developers review them at C-001. Re-estimate remaining affected tasks at C-002 and subsequent checkpoints when scope, evidence or dependencies change. Update the plan and packet together; do not alter completed-task estimates to manufacture predictable results. At 13 points, split into smaller sequential tasks or define a bounded investigation before execution.
+Backend authors and approves initial estimates at C-001; frontend may provide input. Re-estimate remaining affected tasks at C-002 and subsequent checkpoints when scope, evidence or dependencies change. Update the plan and packet together; do not alter completed-task estimates to manufacture predictable results. At 13 points, split into smaller sequential tasks or define a bounded investigation before execution.
 
 ## Investigation and deadline reviews
 
@@ -60,10 +60,10 @@ These are future paths, not existing application files. Keep changes within task
 | Root package/config/lockfile, `.env.example`, deployment routing | Backend | Workspaces, reproducible commands and shared configuration |
 | `apps/api/` | Backend | Auth/access, rules, AI, payments, accounting, demo clock, anchor routes and backend tests |
 | `supabase/` | Backend | Migrations, policies and reproducible database setup |
-| `handoff/api-examples/` | Backend writes; both review | Synthetic versioned request/response fixtures and endpoint mapping, created in S-002 |
+| `handoff/api-examples/` | Backend writes and approves; frontend may provide feedback | Synthetic versioned request/response fixtures and endpoint mapping, created in S-002 |
 | `apps/web/` | Frontend after FE-001 | Approved views, request client, mock development mode and UI tests |
 | Connected-flow tests | Backend owns suite/config; frontend owns web interaction tests | Choose one location and owner per test; avoid both developers creating competing suites |
-| Architecture, contracts and decisions | Backend coordinates; both review affected interfaces | Canonical docs updated with relevant changes |
+| Architecture, contracts and decisions | Backend owns technical decisions and approval; frontend may provide feedback | Canonical docs updated with relevant changes |
 | This plan | Backend coordinates status updates | One editor at a time; frontend supplies evidence in its own task packet |
 | Task packets | Task owner | Scope and verification evidence, never a separate status tracker |
 
@@ -73,8 +73,8 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 
 | Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [S-001 Shared workspace and Git foundation](../handoff/S-001.md) | Build authorization and stack review | 5 | Review |
-| [S-002 API contracts and development fixtures](../handoff/S-002.md) | S-001 backend acceptance and clone/CI/deployment evidence outstanding | 3 | Blocked |
+| [S-001 Shared workspace and Git foundation](../handoff/S-001.md) | Build authorization and stack review; acceptance evidence recorded | 5 | Done |
+| [S-002 API contracts and development fixtures](../handoff/S-002.md) | S-001 accepted at `58f4b6c` | 3 | Planned |
 
 ## Backend sequence
 
@@ -131,7 +131,7 @@ S-001 exception under DEC-036: backend alone reviews and accepts this task. Dire
 - Keep `main` runnable. Shared setup uses `setup/S-001`, then `setup/S-002`; merge each after its checks/review. Both tracks start from the C-001 base commit.
 - Use one short-lived branch per task: `backend/B-001`, `frontend/FE-001`, and so on. Checkpoints may use `integration/C-003` to assemble and check coordinated changes before merging to `main`.
 - At each task start, fetch and branch from the latest merged `main`. Commit small coherent changes. Do not edit another developer's active branch, rewrite shared history, force-push or resolve a conflict by blindly choosing one side.
-- Completed task branches merge through a reviewed PR after relevant checks. The other developer reviews; backend coordinates root/shared files and status updates. Merge completed tasks promptly rather than waiting until the whole track ends. A passing mock-only screen may merge in its labeled development mode; it must not replace an available real integration in the submission configuration.
+- Completed task branches merge after backend acceptance and relevant checks. Backend is the sole technical reviewer and task acceptance authority, including checkpoints; frontend may provide implementation evidence and feedback. Backend coordinates root/shared files and status updates. Merge completed tasks promptly rather than waiting until the whole track ends. A passing mock-only screen may merge in its labeled development mode; it must not replace an available real integration in the submission configuration.
 - Before merge, update the task branch with current `main` using a normal merge and rerun checks affected by the combined changes. At checkpoints, merge the verified integration branch into `main`; both developers sync before starting their next task. Use a consistent merge method; avoid repeated rebasing of branches another person uses.
 - Notify the other developer before changing root manifests/lockfile, deployment configuration, API examples or interfaces. Agree one editor and merge order. Regenerate the lockfile with the agreed package manager after coordinated manifest changes; do not hand-edit it or run competing installs on separate branches without coordination.
 - A contract change updates the technical spec, fixtures and affected tests/consumers in a coordinated change. Architectural changes also update the decision ledger and architecture. Frontend can keep consuming the previous agreed contract until the update is merged.

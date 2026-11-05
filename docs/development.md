@@ -27,6 +27,6 @@ The `Workspace checks` workflow runs install, contract checks, both workspace te
 
 ## Deployment routing
 
-The root `vercel.json` builds `apps/web/dist`; `api/index.js` bridges Vercel's root function convention to `apps/api/src/health.mjs`. `/api/*` rewrites to this entry, with the handler validating the requested route. This is proposed hosting configuration until a real preview deployment verifies it. Root package engines select Node 26.x. Check `node -v` in build logs and `runtime` from `/api/health`; they can differ in patch version. Later SDK work must verify both meet Noir's exact requirement.
+The root `vercel.json` builds `apps/web/dist`; `api/index.js` bridges Vercel's root function convention to `apps/api/src/health.mjs`. `/api/*` rewrites to this entry, with the handler validating the requested route. This routing is verified by the production health check recorded in [S-001 evidence](../handoff/S-001.md#final-acceptance-evidence--2026-11-06). Root package engines select Node 26.x. Check `node -v` in build logs and `runtime` from `/api/health`; they can differ in patch version. Later SDK work must verify both meet Noir's exact requirement.
 
 Only public configuration may use `VITE_` names. Server credentials/signing keys must never appear in web imports or public environment variables. Use new Testnet-only accounts later; no real funds. No actual secret values belong in tracked files. Keep deployment secrets in host settings. Provider authentication and payment proof are later tasks, not part of the public health route.

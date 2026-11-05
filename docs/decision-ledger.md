@@ -48,4 +48,6 @@ Record important choices before changing downstream documents. IDs are stable; s
 
 | DEC-036 | 2026-11-06 | Founder assigns S-001 acceptance to backend alone because teammate review time is unavailable; founder works directly on main | For S-001, backend review and a recorded accepted commit replace teammate review and mandatory PR/merge. Fresh committed-clone, remote CI and hosted routing/runtime evidence remain required. Other task ownership is unchanged. |
 
+| DEC-037 | 2026-11-06 | Founder assigns backend sole decision and acceptance authority for S-002 and checkpoints C-001–C-006, including API contracts, feasibility outcomes and integration readiness | Frontend may contribute implementation evidence and feedback, but its approval is not a gate. Backend records decisions, acceptance evidence and task status. Product decisions remain subject to existing product ownership rules; this assigns technical/checkpoint authority and does not transfer UI design ownership from the human designer. |
+
 Accepted concept and MVP scope are captured in [product spec](product-spec.md), derived from DEC-006–DEC-029. Proposed defaults and unresolved feasibility remain visible there; no build authorization or visual design decision is implied.

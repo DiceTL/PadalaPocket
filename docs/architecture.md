@@ -1,6 +1,6 @@
 # PadalaPocket architecture
 
-Updated 2026-11-06 under [DEC-031](decision-ledger.md). This is the canonical system overview, stack and diagram. It describes the working design under DEC-030. Under DEC-035, S-001 infrastructure is implemented locally; deployment and product integrations remain unverified. Product requirements live in [product spec](product-spec.md); detailed API/data/execution contracts live in [technical spec](technical-spec.md); progress lives in [implementation plan](implementation-plan.md).
+Updated 2026-11-06 under [DEC-031](decision-ledger.md). This is the canonical system overview, stack and diagram. It describes the working design under DEC-030. Under DEC-035, S-001 infrastructure and hosted health routing are verified; see [acceptance evidence](../handoff/S-001.md#final-acceptance-evidence--2026-11-06). Product integrations remain unverified. Product requirements live in [product spec](product-spec.md); detailed API/data/execution contracts live in [technical spec](technical-spec.md); progress lives in [implementation plan](implementation-plan.md).
 
 ## Maintenance rule
 
