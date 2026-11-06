@@ -11,6 +11,11 @@
     "node": "26.x"
   },
   "packageManager": "npm@12.2.1",
+  "overrides": {
+    "@stellar/stellar-sdk": {
+      "axios": "1.20.0"
+    }
+  },
   "scripts": {
     "dev:web": "npm run dev --workspace @padalapocket/web",
     "dev:api": "npm run dev --workspace @padalapocket/api",

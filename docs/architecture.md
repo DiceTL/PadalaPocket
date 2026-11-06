@@ -1,6 +1,6 @@
 # PadalaPocket architecture
 
-Updated 2026-11-06 under [DEC-031](decision-ledger.md). This is the canonical system overview, stack and diagram. It describes the working design under DEC-030. Under DEC-035, S-001 infrastructure and hosted health routing are verified; see [acceptance evidence](../handoff/S-001.md#final-acceptance-evidence--2026-11-06). Product integrations remain unverified. Product requirements live in [product spec](product-spec.md); detailed API/data/execution contracts live in [technical spec](technical-spec.md); progress lives in [implementation plan](implementation-plan.md).
+Updated 2026-11-06 under [DEC-031/DEC-041–DEC-043](decision-ledger.md). This is the canonical system overview, stack and diagram. It describes the working design under DEC-030. Under DEC-035, S-001 infrastructure and hosted health routing are verified; see [acceptance evidence](../handoff/S-001.md#final-acceptance-evidence--2026-11-06). B-001's isolated integration evidence is separate from the proposed product integrations. Product requirements live in [product spec](product-spec.md); detailed API/data/execution contracts live in [technical spec](technical-spec.md); progress lives in [implementation plan](implementation-plan.md).
 
 ## Maintenance rule
 
@@ -15,7 +15,7 @@ Designed for two JavaScript-capable builders and the team's under-30-hour implem
 | Frontend | Vite 8.3.6, vanilla JavaScript, HTML and CSS | Shared existing skills; no framework learning dependency. Visual design remains with the human designer under [design brief](design-brief.md) |
 | Backend | JavaScript ESM, Node.js API functions on Vercel | Same language as browser; required payment SDKs run in Node. No separate Python service or Express server |
 | Data and identity | Supabase Postgres, Auth and private Storage | Founder familiarity; central transactional balances, permissions and photos |
-| Payment | Noir 0.3.0, Velo 0.1.0-alpha.4, Stellar SDK 16.0.1 | Exact versions locally installed/imported; retain handbook's Velo alpha choice. Use required deployed Testnet contracts |
+| Payment | Noir 0.3.0, Velo 0.1.0-alpha.4, Stellar SDK 16.0.1 | Exact SDK pins; scoped axios 1.20.0 security override under DEC-043. Use required deployed Testnet contracts |
 | Image identification | Server-side image-capable AI API; provider/model pending | Real photo identification required. Never expose provider credentials or treat AI text as payment authorization |
 | Simulated off-ramp | Stellar reference test anchor, SEP-10/SEP-24 flow | Demonstrate authenticated test withdrawal; no real PHP or GCash settlement |
 | Repository | npm workspaces: `apps/web`, `apps/api` | Workspace manifests and root lockfile now exist under S-001. Pin installed dependencies. No shared package until actual reuse requires it |
@@ -40,8 +40,8 @@ flowchart TD
     API --> Agent["Agent decision and payment module"]
     Agent --> NoirSDK["Noir SDK"]
     NoirSDK --> Contracts["Deployed Noir Testnet contracts"]
-    Agent -.->|"Candidate sponsorship role"| Velo["Velo SDK and service"]
-    Velo -.->|"Submission support unverified"| Ledger["Stellar Testnet"]
+    Agent -.->|"Additional product role to scope"| Velo["Velo SDK and service"]
+    Velo -->|"Separate checkout confirmed in B-001"| Ledger["Stellar Testnet"]
     Contracts --> Ledger
     API -->|"Demo merchant signer via Noir SDK"| Contracts
     Contracts -->|"Confirmed merchant claim"| Merchant["Demo merchant Stellar account"]
@@ -49,7 +49,7 @@ flowchart TD
     Anchor -.-> Fiat["Simulated fiat payout - no GCash receipt"]
 ```
 
-The required contracts are `device_registry`, `agent_registry` and `payment_escrow`; identifiers remain in [the extracted handbook](../seed/sources/velo-noir-builder-handbook.md#using-noir). The diagram deliberately does not imply that Velo standard checkout recognizes Noir contract payments. The handbook's reference architecture leaves their connection to the project; our proposed sponsorship role still needs a real execution proof.
+The required contracts are `device_registry`, `agent_registry` and `payment_escrow`; identifiers remain in [the extracted handbook](../seed/sources/velo-noir-builder-handbook.md#using-noir). Velo checkout does not establish Noir contract payments. B-001 uses the authorized direct-Noir/separate-checkout alternative after an unavailable Gas handoff; that isolated proof does not select a product funding or checkout flow.
 
 ## Responsibilities and boundaries
 
@@ -59,7 +59,7 @@ The required contracts are `device_registry`, `agent_registry` and `payment_escr
 | Node API and agent module | Authenticate/authorize, apply spending rules, obtain AI assessment, execute permitted actions, reconcile results | AI classifies images; application policy decides and signers execute. No direct AI authority over keys |
 | Supabase | Application records, memberships, bucket accounting and private photo evidence | Database balances require reconciliation with ledger-backed holdings; My Money app access is student-only |
 | Noir contracts | Device ownership, constrained agent policy, escrow authorization and merchant claim | Parent approval in the app does not by itself bypass contract policy |
-| Velo | Required additional SDK integration; sponsorship is the current candidate | Successful SDK import proves no live service/envelope compatibility |
+| Velo | B-001 creates/retrieves a separate checkout; product role remains to scope | Checkout confirmation is independent of Noir authorization/claim |
 | Test anchor | Test withdrawal protocol and simulated off-chain completion | No production peso exchange or GCash payout |
 
 Server custody for separate owner, agent and merchant Testnet signers is a proposal; exact signing permissions, request binding and recovery live in [technical spec](technical-spec.md#signing-and-integration-proof). Public Stellar activity may reveal wallet relationships despite private My Money app records. Physical wallet/escrow layout remains unresolved.
@@ -80,6 +80,21 @@ Before treating this design as ready for implementation, resolve the parent-appr
 
 The handbook requires an Architecture diagram in the root README showing the apps, agent, Noir contracts and Velo. Use this document as the canonical reference; when preparing the submission, include a diagram reflecting the actual verified build in the README and link back here. Do not submit this proposed diagram as proof of working integration. See [required README format](../seed/sources/velo-noir-builder-handbook.md#repo-and-readme-format).
 
+## B-001 proof implementation boundary
+
+DEC-041/DEC-042 implement an isolated operator CLI and `/api/operator/proof` route in the Node API. In direct mode the CLI prepares/signs one short-lived Noir envelope locally and sends it only in the authenticated POST body. The route validates the signature, fixed invocation/source, bounded fee and timebounds, reconciles the exact hash and uses Noir's confirmation-waiting submit. A fixed Velo checkout status action uses the separate General key. The earlier Gas reservation and sensitive envelope are preserved, with fresh expiry/sequence evidence gating transition. This is a bounded experiment, not product signing/recovery infrastructure. See [B-001 evidence](../handoff/B-001.md).
+
+```mermaid
+flowchart LR
+    CLI[Operator CLI] -->|Prepare and sign| Noir[Noir SDK - Testnet]
+    CLI -->|Authorization header| Proof[Protected preview proof API]
+    Proof -->|Validated exact envelope - direct submit| Ledger[Required Noir Testnet contracts]
+    Proof -->|Fixed separate checkout status| Velo[Velo SDK and checkout]
+    Gas[Historical Velo Gas attempt] -.->|Preserved identity - no retry| Archive[Expired envelope and recovery journal]
+```
+
 ## Shared setup implementation boundary
 
 S-001 adds a blank web entry (no product interface), Vite development `/api` proxy, a Node health handler and root `api/index.js` bridge required by the proposed Vercel configuration. Health reports Testnet/runtime only and performs no signing/provider action. Node built-in tests and a PR workflow are present; no browser interaction runner is chosen yet. S-002 adds versioned synthetic fixtures and strict development-contract validation through `scripts/check-contracts.mjs` (DEC-038); it adds no product routes or runtime shared library. See [development setup](development.md) and [S-001 evidence](../handoff/S-001.md). The diagram above continues to represent the future product components, not completed integration.
+
+B-001 retains the old Gas exact-envelope idempotency/rejection guards. DEC-042 adds a separate explicit registration-only transition: ledger close after immutable maxTime, unchanged source sequence, RPC NOT_FOUND and preserved rejection/unknown history. It does not declare the relayer reservation cancelled. Direct dispatch uncertainty permits hash observation only in the CLI; it blocks replacement preparation and blind retries. See the canonical [execution contract](technical-spec.md#b-001-temporary-implementation--dec-041).

@@ -1,6 +1,6 @@
 # Shared development setup
 
-S-001 establishes infrastructure only. The web entry is intentionally blank pending human design authority. The only API route is `GET /api/health`, reporting runtime and Testnet configuration; it performs no payment, authentication or provider action.
+S-001 establishes infrastructure only. The web entry is intentionally blank pending human design authority. `GET /api/health` reports runtime and Testnet configuration without provider calls. B-001 adds a separately protected operator proof route; it is disabled by default.
 
 ## Local commands
 
@@ -27,6 +27,28 @@ The `Workspace checks` workflow runs install, contract checks, both workspace te
 
 ## Deployment routing
 
-The root `vercel.json` builds `apps/web/dist`; `api/index.js` bridges Vercel's root function convention to `apps/api/src/health.mjs`. `/api/*` rewrites to this entry, with the handler validating the requested route. This routing is verified by the production health check recorded in [S-001 evidence](../handoff/S-001.md#final-acceptance-evidence--2026-11-06). Root package engines select Node 26.x. Check `node -v` in build logs and `runtime` from `/api/health`; they can differ in patch version. Later SDK work must verify both meet Noir's exact requirement.
+The root `vercel.json` builds `apps/web/dist`; `api/index.js` bridges Vercel's root function convention to `apps/api/src/router.mjs`. `/api/*` rewrites to this entry, with the handler validating the requested route. This routing is verified by the production health check recorded in [S-001 evidence](../handoff/S-001.md#final-acceptance-evidence--2026-11-06). Root package engines select Node 26.x. Check `node -v` in build logs and `runtime` from `/api/health`; they can differ in patch version. Later SDK work must verify both meet Noir's exact requirement.
 
 Only public configuration may use `VITE_` names. Server credentials/signing keys must never appear in web imports or public environment variables. Use new Testnet-only accounts later; no real funds. No actual secret values belong in tracked files. Keep deployment secrets in host settings. Provider authentication and payment proof are later tasks, not part of the public health route.
+
+
+## B-001 operator proof
+
+This isolated Testnet experiment requires separate fresh owner/agent/merchant signers and a 256-bit operator token. Keep `.env.local` owner-readable only (`chmod 600 .env.local`); Git ignores it. Node explicitly loads it with `--env-file`; regular dev commands do not load secrets automatically. SDK pins are unchanged; DEC-043 scopes axios 1.20.0 beneath Stellar to address the earlier audit findings. Run `npm ci`, `npm run check`, and `npm audit --omit=dev` when changing that dependency baseline.
+
+Initialization (`init`, then `fund`) is once only and refuses to replace existing identities. The original Gas proof used `VELO_GAS_API_KEY` and `VELO_GAS_BASE_URL=https://www.velo-build.dev`; its exact envelope/request and journal remain preserved. DEC-042's `transition-direct` command performs fresh read-only ledger/source-sequence checks before explicitly changing transport and renewing the unattempted finite policy expiry. It is registration-only, requires preserved historical evidence and refuses another transition. The successful transition is recorded in [B-001](../handoff/B-001.md); do not run it again or edit the journal to bypass a guard.
+
+Configure Preview only with the same identities/policy, `PROOF_ENABLED=true`, `PROOF_TRANSPORT=direct`, a General `VELO_API_KEY`, and the fixed `PROOF_CHECKOUT_ID` from the proof packet. Set local `PROOF_BASE_URL` to that deployment's HTTPS origin. Production keeps this proof disabled. Signed envelopes stay local and are sent only in the authenticated POST body; direct mode requires no envelope environment redeployment per operation.
+
+Run each pair separately, confirming ledger SUCCESS before preparing the next:
+
+```sh
+node --env-file=.env.local apps/api/scripts/proof.mjs prepare registerDevice
+node --env-file=.env.local apps/api/scripts/proof.mjs call registerDevice
+```
+
+Repeat explicitly for `registerAgent`, then `fundEscrow`. Before authorization, run `call snapshot` and `call check`; require the real check to pass. Then prepare/call `authorize`, record `call snapshot`, prepare/call `claim`, and record `call snapshot` again. Demo funding is 5 XLM, authorization 0.1 XLM and cap 1 XLM. Record separate hashes and balances; pending/submitted is not success. `call checkout` retrieves the fixed separate 0.10-XLM Velo checkout; it never establishes Noir settlement or implements product funding.
+
+The CLI journals dispatch before sending and refuses another direct dispatch or replacement preparation for an attempted operation. After any uncertainty use `call transaction HASH`; preserve the exact envelope/nonce and investigate rather than resetting identity. The original Gas `call status` remains identity-only. `.env.b001-evidence.json` is an ignored sanitized journal; `.env.b001-gas-envelope` is the owner-only sensitive archive. Never print, commit or upload the archive.
+
+Preview protection is additional to operator authentication. A connected Vercel share helper can supply a temporary `_vercel_jwt` cookie saved, without logging it, in owner-only ignored `.env.b001-preview-cookie`. The CLI accepts only that single cookie or the legacy `__vercel_protection_bypass` cookie and sends it to its validated Preview origin with redirects forbidden. It also supports the pre-existing local `VERCEL_AUTOMATION_BYPASS_SECRET` header when already configured; do not disable Deployment Protection. Tokens/cookies/envelopes stay out of URLs and logs. B-005 disables/removes the temporary proof route in favor of real Auth.
