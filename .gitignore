@@ -9,3 +9,6 @@ __pycache__/
 .DS_Store
 
 .vercel/
+
+# Supabase CLI local cache
+supabase/.temp/

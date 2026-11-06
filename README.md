@@ -33,3 +33,5 @@ The [original idea document](seed/sources/PadalaPocket_Hackathon_Idea.docx) is p
 Read the [extracted competition builder handbook](seed/sources/velo-noir-builder-handbook.md) for the full supplied rules, examples and required README format. Its [original DOCX](seed/sources/velo-noir-builder-handbook.docx) is preserved; [context](seed/context.md) records current implications and evidence boundaries.
 
 B-003 investigates wallet backing and escrow withdrawal; [its packet](handoff/B-003.md) records actual results and open acceptance items. [The technical spec](docs/technical-spec.md#b-003-money-mapping-and-backing-proof) defines the fixed simulated PHP/Testnet-XLM mapping and proposed rounding/reserve treatment.
+
+R-001 identity setup: see [released contract](docs/technical-spec.md#r-001-released-identity-and-persistence-contract--dec-057) and [verification evidence](handoff/R-001.md). Provisioning credentials stay in ignored `.env.local` / `.env.r001-accounts.json`; only publishable configuration reaches the browser.

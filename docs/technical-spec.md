@@ -165,3 +165,13 @@ Accepted demo fee/reserve treatment (DEC-049): fees, Soroban rent and account mi
 `node --env-file=.env.local apps/api/scripts/wallet-backing.mjs init|run|observe` uses fresh experiment devices and a private exclusive `.env.b003-state.json`. It records exact signed envelopes before dispatch, actual ledger fees after SUCCESS and wallet/escrow/pending snapshots. All signers are pinned to the initial state. An uncertain dispatch stops; observe by stored hashes, never replace blindly. The local lock is not distributed coordination; interrupted runs require operator inspection rather than automatic resume. No new product endpoint, database balances, scheduler or real family authentication is implemented.
 
 The additional [B-003 topology verification](../handoff/B-003.md#additional-bucket-topology-verification--2026-11-07) directly verifies separate Needs/Wants/Savings escrows and independent owner withdrawals. Savings has the parent as its required device-agent address but no registered spending policy; both parent and allowance-agent payment checks refuse spending. This verifies backing primitives, while application-level weekly/release orchestration remains later work.
+
+## R-001 released identity and persistence contract — DEC-057
+
+- Browser: Supabase `signInWithPassword` using public VITE configuration, SDK in-memory session (`persistSession: false`), bearer JWT on API requests. Sign out calls Supabase Auth with `scope: 'local'` to preserve other sessions. Reload requires sign-in. No browser role selection or service key.
+- `GET /api/me`: existing direct `{userId, familyId, role}` projection. Auth `getUser` validates the bearer; `family_members` supplies the trusted role. Missing/invalid token → 401; unprovisioned user → 403; provider failure → 503. Existing error envelope retained.
+- `POST /api/identity-records`: authenticated parent/student; UUID `Idempotency-Key`; JSON `{value}` with 1–120 characters and no extra fields. Server assigns `user_id`. Returns 201 `{id,value,created_at}`. Same owner/key/value returns 200 prior record; changed value → 409 `IDEMPOTENCY_CONFLICT`. These are synthetic nonfinancial gate records.
+- `GET /api/identity-records/:id`: UUID; returns the owned record projection above, or 404 for missing/other-owner records. All results are `no-store`. RLS and API owner predicates both apply.
+- SQL migration establishes read-only self membership, owned record select/insert and unique `(user_id,request_key)`. Roles and family IDs are provisioned by the trusted operator script. No financial operation is implemented by this slice.
+
+Remaining funding/photo/purchase contracts must be frozen before R-002 consumers; no funding implementation is authorized until the deployed gate is confirmed.

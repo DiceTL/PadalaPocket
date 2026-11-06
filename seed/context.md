@@ -103,3 +103,5 @@ Prototype withdrawal-service selection: [DEC-006](../docs/decision-ledger.md). P
 The handbook confirms mandatory Noir/Velo use, with stricter SDK/deployment requirements above. The original idea's API versions, fees and alpha claims remain historical inputs unless separately checked. The handbook also contains technical guidance that must be checked against installed SDK versions at build time.
 
 B-003 backing design is proposed under DEC-047; current transfer evidence and limitations live in [its packet](../handoff/B-003.md). DEC-046 accepts the fixed snapshot conversion for simultaneous simulated-PHP/Testnet-XLM display; [technical details](../docs/technical-spec.md#b-003-money-mapping-and-backing-proof) remain distinct from verified implementation.
+
+R-001 uses the existing Supabase/Vercel stack under DEC-057; implementation and hosted acceptance are tracked in [R-001](../handoff/R-001.md).

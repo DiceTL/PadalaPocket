@@ -21,9 +21,9 @@ The active product scope is [the reduced submission MVP](product-spec.md#five-ho
 
 | Active packet | Owner / dependency | Effort points | State |
 |---|---|---|---|
-| [R-001 Establish deployed identity foundation](../handoff/R-001.md) | Backend accepts; frontend contributes login under R-003 | 5 | Planned |
+| [R-001 Establish deployed identity foundation](../handoff/R-001.md) | Backend accepts; frontend contributes login under R-003 | 5 | Review |
 | [R-002 Build live purchase backend](../handoff/R-002.md) | Backend; R-001 deployed gate | 13 | Planned |
-| [R-003 Build reduced demo screens](../handoff/R-003.md) | Frontend; starts on R-001A contract release, contributes to R-001B gate | 8 | Planned |
+| [R-003 Build reduced demo screens](../handoff/R-003.md) | Frontend; starts on R-001A contract release, contributes to R-001B gate | 8 | In progress |
 | [R-004 Integrate and prepare recording](../handoff/R-004.md) | Backend acceptance; progressive checks start with R-001B; final gate requires R-002/R-003 | 5 | Planned |
 
 **Viability review (DEC-056):** current router handles health/operator proof only; web Auth rejects live mode; no supabase migration directory exists; wallet proof persistence and locks are local files. Product persistence/concurrency and deployed integration remain new work. The windows are aggressive operating budgets, not a dependable completion forecast. Five-hour readiness remains conditional on measured gates. This review did not inspect hosted credentials or run a live journey.

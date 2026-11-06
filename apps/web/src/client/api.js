@@ -21,13 +21,14 @@ export function getFixture(name, expectedKind) {
   return fixture;
 }
 
-export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-identity', fetchImpl = globalThis.fetch } = {}) {
+export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-identity', fetchImpl = globalThis.fetch, getAccessToken = async () => null } = {}) {
   return {
     mode,
     async getMe() {
       if (mode === 'mock') return structuredClone(getFixture(identityFixtureName, 'identity').body);
       if (typeof fetchImpl !== 'function') throw new Error('Fetch is unavailable.');
-      const response = await fetchImpl('/api/me', { headers: { Accept: 'application/json' } });
+      const token = await getAccessToken();
+      const response = await fetchImpl('/api/me', { headers: { Accept: 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) } });
       const body = await response.json();
       if (!response.ok) throw new ApiError(body?.error, response.status);
       return body;

@@ -52,7 +52,8 @@ export function createAppController({ auth, api }) {
       state = { ...state, status: 'ready', activePage: page, error: null };
       publish();
     },
-    signOut() {
+    async signOut() {
+      await auth.signOut?.();
       state = { screen: 'signin', status: 'idle', user: null, error: null, activePage: null, mock: mockMode };
       publish();
     },

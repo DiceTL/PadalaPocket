@@ -1,11 +1,9 @@
 import { handler as health } from './health.mjs';
-import { createProofHandler } from './proof.mjs';
+import { createIdentityHandler } from './identity.mjs';
 
-const proof = createProofHandler({
-  createDependencies: async env => (await import('./proof-sdk.mjs')).createDependencies(env),
-});
-
+const identity = createIdentityHandler();
 export function handler(req, res) {
   const path = new URL(req.url, 'http://localhost').pathname;
-  return path === '/api/operator/proof' ? proof(req, res) : health(req, res);
+  if (path === '/api/me' || path === '/api/identity-records' || path.startsWith('/api/identity-records/')) return identity(req, res);
+  return health(req, res);
 }

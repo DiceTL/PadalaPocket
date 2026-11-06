@@ -25,7 +25,7 @@ function renderSignIn(root, state, controller) {
   const card = el('section', 'signin-card');
   card.setAttribute('aria-labelledby', 'signin-title');
   if (state.mock) card.append(mockBadge());
-  else card.append(el('span', 'mock-badge unavailable-badge', 'Live authentication is not connected'));
+
   card.append(el('p', 'eyebrow', 'A clearer way to manage allowance'));
   card.append(el('h1', 'brand-title', 'PadalaPocket'));
   const signinHeading = el('h2', 'signin-heading', 'Sign in');
@@ -62,11 +62,6 @@ function renderSignIn(root, state, controller) {
   });
   card.append(form);
   if (state.mock) card.append(el('p', 'mock-note', MOCK_DISCLOSURE));
-  else {
-    card.append(el('p', 'mock-note', 'Sign-in is unavailable until the live authentication integration is implemented.'));
-    submit.disabled = true;
-    submit.textContent = 'Sign-in unavailable';
-  }
   const liveRegion = el('p', 'sr-only', state.status === 'loading' ? 'Signing in' : '');
   liveRegion.setAttribute('aria-live', 'polite');
   card.append(liveRegion);
@@ -133,7 +128,7 @@ function renderShell(root, state, controller) {
     content.append(el('div', 'preview-panel', 'No account data is connected in this shell preview.'));
     const errorButton = el('button', 'button button-secondary', 'Preview a sample service error');
     errorButton.type = 'button'; errorButton.addEventListener('click', () => controller.triggerExampleError());
-    content.append(errorButton);
+    if (state.mock) content.append(errorButton);
   }
   main.append(content);
   shell.append(sidebar, main);

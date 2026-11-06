@@ -129,3 +129,7 @@ flowchart LR
     T --> S
     T -->|Cross-owner funding primitive verified| M[My Money escrow - student owner and agent]
 ```
+
+## R-001 identity implementation — DEC-057
+
+The API validates bearer tokens with Supabase Auth and loads server-provisioned membership. Postgres RLS limits membership reads and synthetic gate records to their owner. The browser uses only publishable configuration; in-memory SDK sessions refresh while the page is open and require sign-in after reload. The operator provisioning script alone requires a server secret. Legacy operator proof HTTP routing is removed; proof CLIs remain separate. Hosted acceptance evidence belongs in [R-001](../handoff/R-001.md).

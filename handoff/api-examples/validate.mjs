@@ -26,6 +26,16 @@ export function validateFixture(f) {
     assert.equal(typeof f.body.error.retryable, 'boolean');
     return;
   }
+  if (f.kind === 'identity-record') {
+    keys(f.body, 'id value created_at');
+    assert(uuid(f.body.id));
+    assert(typeof f.body.value === 'string' && f.body.value.length >= 1 && f.body.value.length <= 120);
+    assert(Number.isFinite(Date.parse(f.body.created_at)));
+    assert(['GET', 'POST'].includes(f.method));
+    assert.equal(f.httpStatus, f.method === 'POST' ? 201 : 200);
+    assert.equal(f.path, f.method === 'POST' ? '/api/identity-records' : `/api/identity-records/${f.body.id}`);
+    return;
+  }
   assert.equal(f.method, 'GET');
   assert.equal(f.httpStatus, 200);
   if (f.kind === 'identity') {

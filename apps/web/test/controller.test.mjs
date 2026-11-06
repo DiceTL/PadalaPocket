@@ -32,7 +32,7 @@ test('error fixture can be projected into the shell and signed-out state clears 
   await controller.triggerExampleError();
   assert.equal(controller.getState().status, 'error');
   assert.equal(controller.getState().error.retryable, true);
-  controller.signOut();
+  await controller.signOut();
   assert.equal(controller.getState().screen, 'signin');
   assert.equal(controller.getState().user, null);
 });

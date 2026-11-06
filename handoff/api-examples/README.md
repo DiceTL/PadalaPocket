@@ -26,3 +26,5 @@ Only `/api/health` exists today. These mapped product endpoints are unimplemente
 ## Checking examples
 
 `npm run check:contracts` validates every case and runs negative/coverage tests. `npm run check` includes that command in existing CI. The allowlisted shapes reject extra fields at every modeled object boundary, including nested additions to parent responses. These are fixture checks, not live privacy guarantees. Actual endpoint tests must check cross-user authorization and role projections when routes exist.
+
+R-001 adds synthetic `identity-record` response cases. POST requires bearer Auth, a UUID `Idempotency-Key`, and `{ "value": "Synthetic persistence check" }`. The existing identity/error envelopes are retained. See the technical spec for exact replay and ownership behavior.
