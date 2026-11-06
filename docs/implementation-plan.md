@@ -100,8 +100,8 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 
 | Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [FE-001 Design agreement and contract review](../handoff/FE-001.md) | C-001 | 2 | Planned |
-| [FE-002 Build approved shell and stable mock states](../handoff/FE-002.md) | FE-001 | 3 | Planned |
+| [FE-001 Design agreement and contract review](../handoff/FE-001.md) | Design/fixture acceptance recorded on frontend branch; local integration review/checks passed; commit and CI acceptance pending | 2 | In progress |
+| [FE-002 Build approved shell and stable mock states](../handoff/FE-002.md) | Shell and mock states implemented on frontend branch; local integration review/checks passed; commit and CI acceptance pending | 3 | In progress |
 | [FE-003 Build allowance setup and dashboards](../handoff/FE-003.md) | C-002 | 5 | Planned |
 | [FE-004 Student purchase, parent review and status screens](../handoff/FE-004.md) | C-003 | 8 | Planned |
 | [FE-005 Savings, My Money and weekly clock screens](../handoff/FE-005.md) | C-004 | 5 | Planned |

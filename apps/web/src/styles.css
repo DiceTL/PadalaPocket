@@ -1,0 +1,85 @@
+:root {
+  font-family: 'Segoe UI', sans-serif;
+  color: #192638;
+  background: #f5f7fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --navy: #17283e;
+  --teal: #087f80;
+  --teal-dark: #066d6e;
+  --ink: #192638;
+  --muted: #6e7b8d;
+  --line: #e2e8ee;
+  --surface: #fff;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: wait; opacity: .72; }
+:focus-visible { outline: 3px solid #0b8290; outline-offset: 3px; }
+.signin-page { min-height: 100vh; display: grid; place-items: center; padding: 28px 20px; background: radial-gradient(ellipse at 50% 0%, #e6f3f1 0, #f5f7fa 56%); }
+.signin-card { width: min(100%, 430px); padding: 30px; background: var(--surface); border: 1px solid #e7edf0; border-radius: 18px; box-shadow: 0 18px 55px #243a5012; }
+.mock-badge { display: inline-flex; align-items: center; min-height: 26px; padding: 5px 9px; border-radius: 99px; background: #e9f6f3; color: #176b5d; font-size: 11px; font-weight: 700; letter-spacing: .055em; }
+.unavailable-badge { background: #fff4df; color: #80591d; }
+.eyebrow { margin: 24px 0 7px; color: var(--teal); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.brand-title, .brand-lockup, .mobile-brand { color: var(--navy); font-family: 'Segoe UI', sans-serif; font-weight: 800; letter-spacing: -.045em; }
+.brand-title { margin: 0 0 36px; font-size: 29px; }
+.signin-heading { margin: 0 0 8px; font: 700 23px 'Segoe UI', sans-serif; letter-spacing: -.025em; }
+.muted { color: var(--muted); line-height: 1.55; }
+.intro { margin: 0 0 26px; font-size: 14px; }
+.signin-form { display: grid; gap: 17px; }
+.field-label { display: grid; gap: 8px; font-size: 13px; font-weight: 600; color: #39485a; }
+.field-input { width: 100%; min-height: 48px; padding: 0 13px; border: 1px solid #d8e0e7; border-radius: 9px; background: #fff; color: var(--ink); }
+.field-input::placeholder { color: #9aa5b1; }
+.field-input:focus { border-color: var(--teal); outline: 3px solid #087f8024; }
+.button { min-height: 46px; border: 0; border-radius: 9px; padding: 0 17px; font-weight: 700; transition: background .15s ease, transform .15s ease; }
+.button:active { transform: translateY(1px); }
+.button-primary { margin-top: 3px; background: var(--teal); color: #fff; }
+.button-primary:hover { background: var(--teal-dark); }
+.spinner { display: inline-block; width: 16px; height: 16px; margin-right: 9px; vertical-align: -3px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.mock-note { margin: 20px 0 0; color: #778393; font-size: 12px; line-height: 1.55; }
+.notice { border-radius: 9px; padding: 12px 14px; font-size: 13px; line-height: 1.5; }
+.notice p { margin: 5px 0 0; }
+.notice-error { color: #842c28; background: #fff1ef; border: 1px solid #f2d2ce; }
+.app-shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+.app-shell.role-student { display: block; padding-bottom: 76px; }
+.sidebar { position: sticky; top: 0; display: flex; flex-direction: column; height: 100vh; padding: 27px 17px 18px; background: #fff; border-right: 1px solid var(--line); }
+.brand-lockup { padding: 0 12px 25px; font-size: 20px; }
+.role-chip { color: #59677a; font-size: 12px; font-weight: 600; }
+.sidebar > .role-chip { padding: 0 12px 18px; }
+.navigation { display: grid; gap: 5px; }
+.nav-item { min-height: 45px; padding: 0 12px; text-align: left; border: 0; border-radius: 8px; background: transparent; color: #5b687a; font-size: 14px; font-weight: 600; }
+.nav-item:hover { background: #f4f7f8; color: var(--navy); }
+.nav-item.is-active { background: #e8f5f2; color: #08736d; }
+.sidebar-bottom { display: grid; gap: 14px; margin-top: auto; padding: 0 10px; }
+.button-quiet { background: transparent; color: #576579; text-align: left; }
+.button-quiet:hover { background: #f4f7f8; }
+.shell-main { min-width: 0; }
+.topbar { display: flex; align-items: center; gap: 16px; min-height: 72px; padding: 0 38px; border-bottom: 1px solid var(--line); background: #fff; }
+.topbar .mock-badge { margin-left: auto; }
+.mobile-brand { display: none; }
+.mobile-signout { display: none; min-height: 44px; padding: 0 7px; font-size: 12px; }
+.page-content { width: min(100%, 1000px); margin: 0 auto; padding: 42px 38px 90px; }
+.page-content .eyebrow { margin-top: 0; }
+.page-title { margin: 0; color: var(--navy); font: 700 clamp(27px, 3vw, 36px) 'Segoe UI', sans-serif; letter-spacing: -.04em; }
+.page-description { max-width: 570px; margin: 12px 0 30px; }
+.preview-panel { display: grid; place-items: center; min-height: 190px; padding: 24px; border: 1px dashed #cbd7dc; border-radius: 14px; background: #fff; color: #758293; text-align: center; font-size: 14px; }
+.button-secondary { margin-top: 16px; border: 1px solid #cbd8df; background: white; color: #31515a; }
+.button-secondary:hover { background: #f1f8f7; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.role-student .sidebar { position: fixed; z-index: 5; inset: auto 0 0; width: 100%; height: auto; padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); border: 0; border-top: 1px solid var(--line); box-shadow: 0 -8px 24px #23394c0d; }
+.role-student .sidebar > .brand-lockup, .role-student .sidebar > .role-chip, .role-student .sidebar-bottom { display: none; }
+.role-student .navigation { display: flex; justify-content: space-around; gap: 2px; }
+.role-student .nav-item { flex: 1; min-width: 0; min-height: 52px; padding: 4px; text-align: center; font-size: 12px; }
+.role-student .mobile-brand { display: block; font-size: 17px; }
+.role-student .mobile-signout { display: inline-flex; align-items: center; }
+.role-student .topbar { min-height: 60px; gap: 10px; padding: 8px 17px; flex-wrap: wrap; row-gap: 5px; }
+.role-student .topbar .mock-badge { flex-basis: 100%; width: max-content; margin-left: 0; font-size: 9px; }
+.role-student .page-content { padding: 31px 20px 35px; }
+.role-student .page-description { margin-bottom: 23px; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation: none !important; } }
