@@ -1,6 +1,6 @@
 # Project instructions
 
-- Read AGENT_ROUTING.md first. Current stage: idea development; planning does not authorize application scaffolding.
+- Read AGENT_ROUTING.md first. Current stage: MVP building. Work from the scoped tasks in docs/implementation-plan.md and their handoff packets; do not scaffold or implement work outside an authorized task.
 - Preserve seed/sources/ as original inputs. Record corrections in evidence or decisions rather than rewriting source history.
 - Never invent product facts, APIs, research, or completion evidence. Distinguish sourced evidence, assumptions, proposals, and team decisions.
 - Interviews are not required. Ask neutral questions one topic at a time; do not promote draft features into requirements without a team decision.

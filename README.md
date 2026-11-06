@@ -18,7 +18,9 @@ Interviews are not required. Unknowns and assumptions may remain explicit. The t
 ## Build later
 
 The [architecture](docs/architecture.md) owns the working stack and component diagram; the [technical spec](docs/technical-spec.md) owns proposed API/data contracts and integration checks. Review them together, confirm [design ownership](docs/design-brief.md), then use [the implementation plan](docs/implementation-plan.md) and [task template](handoff/TASK-000-template.md).
-Shared infrastructure is implemented locally for S-001; review/CI/merge acceptance remains open. See [development setup](docs/development.md) for install, run and check commands. Product UI and payment integrations are not implemented.
+S-001, S-002 and C-001 are accepted; see the implementation plan for canonical status. See [development setup](docs/development.md) for install, run and check commands. Product UI is not implemented. B-001 adds a protected Testnet proof experiment using direct Noir submission and a separate Velo checkout/status role under DEC-042; the earlier Gas attempt is preserved. SDK versions remain pinned with a scoped axios security override under DEC-043. See [proof instructions](docs/development.md#b-001-operator-proof) and [actual integration evidence and limitations](handoff/B-001.md).
+
+B-002 adds a local isolated cap-exception experiment under DEC-044; see [its packet](handoff/B-002.md) for results and security limits. Product currency and wallet topology remain undecided.
 
 ## Guides and agent skills
 

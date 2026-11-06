@@ -1,6 +1,6 @@
 # Implementation plan
 
-Revised 2026-11-06 under [DEC-034](decision-ledger.md). This is the only task-status source. S-001 is accepted at implementation commit `58f4b6c`: fresh committed-clone checks and deployed health verification passed; remote CI is green per founder report. Evidence and limitations live in [S-001](../handoff/S-001.md). S-002 is Done; see its acceptance packet. C-001 has backend-local verification evidence and awaits backend acceptance, final checks and merge; other build/checkpoint tasks remain Planned. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
+Revised 2026-11-06 under [DEC-034/DEC-042–DEC-043](decision-ledger.md). This is the only task-status source. S-001 is accepted at implementation commit `58f4b6c`: fresh committed-clone checks and deployed health verification passed; remote CI is green per founder report. Evidence and limitations live in [S-001](../handoff/S-001.md). S-002 is Done; see its acceptance packet. C-001 is Done: backend acceptance and reported green branch/PR/main CI are recorded in its packet. B-001 is merged as `e1382f0`; founder confirms passing PR/main CI. B-002 has local implementation and successful isolated Testnet exception evidence ready for review; earlier Gas evidence is preserved. Other build/checkpoint tasks remain Planned. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
 
 S tasks and C-001–C-006 are implemented, verified and accepted solely by backend under [DEC-039](decision-ledger.md). Frontend feedback and personal workspace evidence are optional. Backend runs checkpoint integration checks against completed FE work; existing FE dependencies and human UI design ownership remain in force.
 
@@ -82,8 +82,8 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 
 | Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [B-001 Noir/Velo payment and claim proof](../handoff/B-001.md) | C-001; Velo access and fresh Testnet signers | 8 | Planned |
-| [B-002 Verify parent-approved cap exception](../handoff/B-002.md) | B-001 | 8 | Planned |
+| [B-001 Noir/Velo payment and claim proof](../handoff/B-001.md) | C-001 satisfied. Direct Noir device/agent registration, escrow funding, passing check, authorization and merchant claim are hosted Testnet SUCCESS; separate Velo checkout is paid and Horizon verified. Backend accepted implementation/evidence; PR #4 merged as `e1382f0`; founder confirms PR/main CI passed (2026-11-07) | 8 | Done |
+| [B-002 Verify parent-approved cap exception](../handoff/B-002.md) | B-001 merged `e1382f0`; isolated exception/claim/revocation succeeded; ordinary cap unchanged; backend acceptance, remote CI and merge remain | 8 | Review |
 | [B-003 Verify wallet backing and money mapping](../handoff/B-003.md) | B-002 | 8 | Planned |
 | [B-004 Verify anchor and AI access](../handoff/B-004.md) | B-003 | 8 | Planned |
 | [B-005 Implement family authentication and private access](../handoff/B-005.md) | C-002 | 5 | Planned |
@@ -111,7 +111,7 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 
 | Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
-| [C-001 Shared setup handoff](../handoff/C-001.md) | S-002 satisfied; backend-local checks pass; backend acceptance, final checks and merge pending | 1 | Review |
+| [C-001 Shared setup handoff](../handoff/C-001.md) | S-002 satisfied; backend accepted; green CI reported; merged at `85e2077` | 1 | Done |
 | [C-002 Finalize contracts after feasibility](../handoff/C-002.md) | B-004 and FE-002 | 3 | Planned |
 | [C-003 Connect identity and allowance funding](../handoff/C-003.md) | B-007 and FE-003 | 3 | Planned |
 | [C-004 Connect photo purchase, approval and merchant claim](../handoff/C-004.md) | B-010 and FE-004 | 5 | Planned |
