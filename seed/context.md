@@ -97,3 +97,5 @@ Prototype withdrawal-service selection: [DEC-006](../docs/decision-ledger.md). P
 ## Historical technical claims in the original idea
 
 The handbook confirms mandatory Noir/Velo use, with stricter SDK/deployment requirements above. The original idea's API versions, fees and alpha claims remain historical inputs unless separately checked. The handbook also contains technical guidance that must be checked against installed SDK versions at build time.
+
+B-003 backing design is proposed under DEC-047; current transfer evidence and limitations live in [its packet](../handoff/B-003.md). DEC-046 accepts the fixed snapshot conversion for simultaneous simulated-PHP/Testnet-XLM display; [technical details](../docs/technical-spec.md#b-003-money-mapping-and-backing-proof) remain distinct from verified implementation.

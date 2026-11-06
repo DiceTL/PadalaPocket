@@ -27,6 +27,8 @@ Defer multiple children, additional purchase-type support, real peso/GCash settl
 
 ## Demo journey
 
+Money display under DEC-045/046/049: show simulated Philippine pesos alongside the corresponding actual Testnet XLM amount used for the transfer. Peso figures are illustrative; Testnet XLM has no redeemable peso value. Use the frozen ₱9.68/XLM reference checked 2026-11-07 PHT; source evidence is EV-026. Logical balances for Needs, Wants, Savings and My Money remain separate under DEC-048/049. Convert with integer nearest-stroop rounding; assign bucket-split remainder to Wants. Budget fees and account reserves outside spendable balances. These are accepted demo rules, not production exchange or payout commitments.
+
 1. Show parent setup, funding-wallet balance and weekly allocation settings.
 2. Advance to week start and demonstrate allowance transfer into Needs/Wants.
 3. Student photographs a permitted item; AI identifies it and the agent makes a Testnet payment. Merchant claims it.
