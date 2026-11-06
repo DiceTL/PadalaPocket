@@ -1,1 +1,1 @@
-export { handler as default } from '../apps/api/src/health.mjs';
+export { handler as default } from '../apps/api/src/router.mjs';
