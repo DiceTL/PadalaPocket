@@ -16,11 +16,13 @@ Designed for two JavaScript-capable builders and the team's under-30-hour implem
 | Backend | JavaScript ESM, Node.js API functions on Vercel | Same language as browser; required payment SDKs run in Node. No separate Python service or Express server |
 | Data and identity | Supabase Postgres, Auth and private Storage | Founder familiarity; central transactional balances, permissions and photos |
 | Payment | Noir 0.3.0, Velo 0.1.0-alpha.4, Stellar SDK 16.0.1 | Exact SDK pins; scoped axios 1.20.0 security override under DEC-043. Use required deployed Testnet contracts |
-| Image identification | Server-side image-capable AI API; provider/model pending | Real photo identification required. Never expose provider credentials or treat AI text as payment authorization |
+| Image identification | Server-side image-capable AI API; Groq Qwen proof candidate under DEC-050 | Real photo identification required. Never expose provider credentials or treat AI text as payment authorization |
 | Simulated off-ramp | Stellar reference test anchor, SEP-10/SEP-24 flow | Demonstrate authenticated test withdrawal; no real PHP or GCash settlement |
 | Repository | npm workspaces: `apps/web`, `apps/api` | Workspace manifests and root lockfile now exist under S-001. Pin installed dependencies. No shared package until actual reuse requires it |
 
 Runtime evidence and exact engine ranges live in [EV-025](../work/evidence-ledger.md). Use local Node 26.12.1; target Vercel Node 26.x and verify both deployed build and function patch versions. Browser code calls our API; payment SDKs and signing stay server-side. Prefer same-origin `/api` routing; validate Vite output and Vercel function routing in the first deployment. Hosting duration/plan remains unverified.
+
+B-004 is probing Groq `qwen/qwen3.8-27b` through an operator-only REST script; application integration and identification accuracy remain unverified. Gemini evidence and its separate local credential are retained. See [B-004 evidence](../handoff/B-004.md).
 
 ## Component diagram
 
@@ -36,7 +38,7 @@ flowchart TD
     API -->|"Validate identity"| Auth
     API --> DB["Supabase Postgres"]
     API --> Storage
-    API --> AI["Image AI provider - pending"]
+    API --> AI["Image AI - Groq proof candidate"]
     API --> Agent["Agent decision and payment module"]
     Agent --> NoirSDK["Noir SDK"]
     NoirSDK --> Contracts["Deployed Noir Testnet contracts"]
@@ -50,6 +52,8 @@ flowchart TD
 ```
 
 The required contracts are `device_registry`, `agent_registry` and `payment_escrow`; identifiers remain in [the extracted handbook](../seed/sources/velo-noir-builder-handbook.md#using-noir). Velo checkout does not establish Noir contract payments. B-001 uses the authorized direct-Noir/separate-checkout alternative after an unavailable Gas handoff; that isolated proof does not select a product funding or checkout flow.
+
+B-004 has verified merchant SEP-10 authentication and recovered one SEP-24 withdrawal with actual status `incomplete`. The reference anchor hosts its interactive form on the separate exact HTTPS origin recorded in DEC-051. Under DEC-052, the real interactive initiation link is distinct from the information page. The replacement session accepted fictional demo fields and a 1-XLM merchant transfer was confirmed on Testnet; authenticated anchor lookup subsequently returned `completed` (simulated fiat completion). See the packet for evidence.
 
 ## Responsibilities and boundaries
 
