@@ -42,3 +42,5 @@ Coins.ph attempt outcome: **failed feasibility attempt for the current project**
 
 Assign new IDs sequentially. Preserve rejected or superseded findings and explain why.
 For statistics record the population, period, and measure. For technical claims record version/network and the actual source or experiment.
+
+| EV-026 | Market-reference pages showed approximately ₱9.68 per mainnet XLM | [CoinGecko XLM/PHP](https://www.coingecko.com/en/coins/stellar/php), [Coins.ph reference price](https://www.coins.ph/en-ph/prices/XLM/PHP) | 2026-11-07 00:51 PHT (2026-11-06 16:51 UTC) | CoinGecko search result displayed ₱9.68; Coins.ph displayed ₱9.68 with last-update 2026-11-06 05:30 UTC, and says its data uses third-party sources. Pages differ in freshness; agreement does not prove an executable quote or independent feeds. Replaces earlier ₱9.84 illustration for demo mapping only. Testnet assets have no redeemable peso value. | Web references inspected; fixed demo snapshot accepted under DEC-046 |

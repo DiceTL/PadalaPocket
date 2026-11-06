@@ -102,3 +102,22 @@ B-001 retains the old Gas exact-envelope idempotency/rejection guards. DEC-042 a
 ## B-002 isolated exception experiment
 
 DEC-044 adds a local operator-only proof CLI using the same Noir SDK and deployed Testnet contracts. A fresh ordinary device keeps a finite 1-XLM cap; a distinct exception device/agent receives exactly 1.1 test XLM. The owner signs the exact request; the CLI checks that signature before preparing authorization. The exception agent is revoked after payment/claim. No HTTP endpoint or browser signing authority is added. This experiment does not choose the product wallet topology; actual results and security limits live in [B-002](../handoff/B-002.md).
+
+## B-003 accepted demo bucket backing — DEC-047/DEC-049
+
+Under DEC-049, the demo uses separate native-XLM Noir escrows for Needs and Wants, both parent-owned with the allowance agent registered; Savings uses a separate parent-owned device escrow with no active spending policy; My Money uses a student-owned device escrow with separate student spending authority. Keys remain server-held for the demo, with access enforced by later family Auth. The allowance agent must never be registered on Savings or My Money. This is accepted demo topology, not production custody or public-ledger anonymity.
+
+Transfer path: parent funding wallet → allowance escrows; week-end owner defunding returns leftovers to the parent wallet, then separate confirmed funding sends Needs leftovers into Savings and Wants leftovers into My Money. Savings release uses the same owner withdrawal/refunding path after approval. Each leg is separately journaled/reconciled; transit funds are reserved and never displayed as spendable destination funds until confirmed. No claim of an atomic cross-device transfer. B-003 confirmed funding by an account other than the device owner and owner withdrawal with active/revoked policies; see [its evidence](../handoff/B-003.md). The additional B-003 proof directly verified separate Needs/Wants/Savings escrows, independent owner withdrawals and Savings without an active spending policy. Savings names the parent as its required device agent. Full bucket journeys remain to implement.
+
+The display uses the fixed snapshot selected in DEC-046. DEC-049 accepts integer conversion rounded to the nearest stroop, gives any Needs/Wants split remainder to Wants, and budgets fees/reserves outside spendable balances. Detailed units and accounting live in the technical spec. Diagram shows the accepted demo topology; arrows are not completion claims:
+
+```mermaid
+flowchart LR
+    P[Parent funding wallet] --> N[Needs escrow - parent owner]
+    P --> W[Wants escrow - parent owner]
+    N --> T[Parent wallet - reserved transit]
+    W --> T
+    S[Savings escrow - parent owner, no active agent] --> T
+    T --> S
+    T -->|Cross-owner funding primitive verified| M[My Money escrow - student owner and agent]
+```
