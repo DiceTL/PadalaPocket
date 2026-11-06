@@ -1,5 +1,9 @@
 # PadalaPocket architecture
 
+## Deadline architecture scope — DEC-055
+
+The submission build uses the existing Vite → Node API → Supabase Auth/Postgres/private Storage architecture and server-side Noir/Groq integrations. Only parent funding → Needs escrow → purchase authorization → merchant claim is active in the five-hour scope. Existing diagrams also show deferred components; consult the [current product scope](product-spec.md#five-hour-submission-mvp). Velo is a separate operator checkout/status demonstration, not gas sponsorship or allowance settlement. Private money, weekly transfers and anchor app wiring are deferred. Provisioned accounts replace signup UI; this does not relax authentication. The live path is planned, not yet verified.
+
 Updated 2026-11-06 under [DEC-031/DEC-041–DEC-043](decision-ledger.md). This is the canonical system overview, stack and diagram. It describes the working design under DEC-030. Under DEC-035, S-001 infrastructure and hosted health routing are verified; see [acceptance evidence](../handoff/S-001.md#final-acceptance-evidence--2026-11-06). B-001's isolated integration evidence is separate from the proposed product integrations. Product requirements live in [product spec](product-spec.md); detailed API/data/execution contracts live in [technical spec](technical-spec.md); progress lives in [implementation plan](implementation-plan.md).
 
 ## Maintenance rule

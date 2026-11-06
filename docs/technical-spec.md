@@ -1,5 +1,9 @@
 # PadalaPocket MVP technical spec
 
+## Deadline contract boundary — DEC-055
+
+The [reduced submission scope](product-spec.md#five-hour-submission-mvp) supersedes broader route requirements for this release. Under DEC-056, R-001A releases identity/session contracts first for concurrent frontend work, then freezes balance, funding, photo/purchase creation and status contracts before their consumers implement them. R-001B requires deployed logins, trusted roles and a durable authorized database write/read before task acceptance. Keep existing identity/error envelopes, money units, immutable request binding, durable reservations and exact-transaction reconciliation. Supabase identity and private object access remain required. Provision only one trusted family/seller; omit deferred feature routes. R-001 records exact request/response examples here and in fixtures; this note does not claim that those contracts or endpoints already exist.
+
 Draft shared developer contract, authorized by [DEC-030](decision-ledger.md). The stack below is the working baseline; interfaces and implementation choices are proposals until reviewed. S-001 infrastructure is implemented; product routes below remain unimplemented. Requirements live in [product spec](product-spec.md); task status lives only in [implementation plan](implementation-plan.md).
 
 ## Architecture reference

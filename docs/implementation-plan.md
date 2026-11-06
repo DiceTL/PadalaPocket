@@ -1,32 +1,42 @@
 # Implementation plan
 
-Revised 2026-11-07 under [DEC-034/DEC-042–DEC-049](decision-ledger.md). This is the only task-status source. S-001 is accepted at implementation commit `58f4b6c`: fresh committed-clone checks and deployed health verification passed; remote CI is green per founder report. Evidence and limitations live in [S-001](../handoff/S-001.md). S-002 is Done; see its acceptance packet. C-001 is Done: backend acceptance and reported green branch/PR/main CI are recorded in its packet. B-001 is merged as `e1382f0`; founder confirms passing PR/main CI. B-002 is accepted and merged with passing branch/main CI per founder confirmation. B-003 is Done: separate bucket backing verified, backend review accepted, founder reports branch/main CI passed; merged as `5c9f034` (B-003 branch commit `0a41be6`). B-004 investigation is in progress; other build/checkpoint tasks remain Planned. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
+Revised 2026-11-07 under [DEC-034/DEC-042–DEC-049](decision-ledger.md). This is the only task-status source. S-001 is accepted at implementation commit `58f4b6c`: fresh committed-clone checks and deployed health verification passed; remote CI is green per founder report. Evidence and limitations live in [S-001](../handoff/S-001.md). S-002 is Done; see its acceptance packet. C-001 is Done: backend acceptance and reported green branch/PR/main CI are recorded in its packet. B-001 is merged as `e1382f0`; founder confirms passing PR/main CI. B-002 is accepted and merged with passing branch/main CI per founder confirmation. B-003 is Done: separate bucket backing verified, backend review accepted, founder reports branch/main CI passed; merged as `5c9f034` (B-003 branch commit `0a41be6`). B-004 is Done. DEC-055 supersedes the original remaining sequence with the deadline plan below. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
 
 S tasks and C-001–C-006 are implemented, verified and accepted solely by backend under [DEC-039](decision-ledger.md). Frontend feedback and personal workspace evidence are optional. Backend runs checkpoint integration checks against completed FE work; existing FE dependencies and human UI design ownership remain in force.
 
-## Execution order
+## Five-hour submission build — DEC-055
 
-Backend first completes S-001 → S-002, then runs C-001. Then follow these sequences without skipping tasks:
+This sequence supersedes the original serial execution gates for this deadline. Start baseline **2026-11-07 04:40 PHT**, recording-ready target **09:40 PHT**. The supplied handbook closes submissions at **12:00 PHT**. Protect the remaining 2h20 for recording, upload and submission. These are time budgets, not estimates derived from points or a guarantee.
 
-| Phase | Backend | Frontend | Joint exit |
+The active product scope is [the reduced submission MVP](product-spec.md#five-hour-submission-mvp). Backend and frontend work concurrently after a short contract freeze. The existing stack and human design authority remain applicable. Reuse verified primitives from B-001–B-004; scripts are evidence/reference implementations, not ready-made public endpoints.
+
+| Window (PHT) | Backend | Frontend | Required result |
 |---|---|---|---|
-| Feasibility / stable mock interface | B-001 → B-002 → B-003 → B-004 | FE-001 → FE-002 | C-002: accept feasibility results and finalize affected contracts |
-| Identity / allowance | B-005 → B-006 → B-007 | FE-003 | C-003: connect real login, settings and funding |
-| Purchase | B-008 → B-009 → B-010 | FE-004 | C-004: connect real AI, decisions and payment/claim |
-| Private funds / weekly lifecycle / withdrawal | B-011 → B-012 → B-013 | FE-005 → FE-006 | C-005: complete deployed journey |
-| Release | Backend executes C-006 | Optional feedback | C-006: final checks, README and demo materials |
+| 04:40–05:00 | R-001A: release minimum identity/data contracts; check resource access | Prepare approved screens and consume released identity contract | Shared interfaces; blockers visible; this is not delivery acceptance |
+| 05:00–05:30 | R-001B: provisioned Auth, trusted /api/me and minimal durable database operation deployed | R-003: connect both real logins and API identity immediately | First delivery gate: both accounts work on public deployment; data survives another request |
+| 05:30–06:00 | R-002: authenticated, durable, repeat-safe Needs funding | R-003: connect funding/status immediately | Go/no-go gate: confirmed backing, persisted status, duplicate-safe funding |
+| 06:00–07:20 | R-002: photo AI, rules, Noir authorization and claim | R-003: connect each route as it becomes available | Progressively deployed AI → rules → payment/claim; no final integration wait |
+| 07:20–08:40 | R-004: harden complete deployed journey and reconciliation | Repair integrated journey and target viewport issues | Real uninterrupted journey plus failure checks |
+| 08:40–09:40 | Freeze features; final checks, README/evidence and rehearsal | Blocking presentation fixes and recording preparation | Recording-ready deployment and two-minute script |
 
-Each developer works at their own pace in their current sequence. Backend runs each checkpoint once its named task dependencies are complete. Waiting for an unfinished FE deliverable does not require frontend attendance, review or personal workspace evidence; developers may improve current-task tests/docs without skipping ahead. During the early feasibility phase frontend completes design, stable mock states and the request boundary rather than committing to unsettled wallet behavior. This reduces speculative rework, but backend remains the critical path; splitting tasks does not eliminate that workload imbalance.
+| Active packet | Owner / dependency | Effort points | State |
+|---|---|---|---|
+| [R-001 Establish deployed identity foundation](../handoff/R-001.md) | Backend accepts; frontend contributes login under R-003 | 5 | Planned |
+| [R-002 Build live purchase backend](../handoff/R-002.md) | Backend; R-001 deployed gate | 13 | Planned |
+| [R-003 Build reduced demo screens](../handoff/R-003.md) | Frontend; starts on R-001A contract release, contributes to R-001B gate | 8 | Planned |
+| [R-004 Integrate and prepare recording](../handoff/R-004.md) | Backend acceptance; progressive checks start with R-001B; final gate requires R-002/R-003 | 5 | Planned |
 
-Tell an AI: “Implement B-001 from this plan and its packet, within scope; run required checks and record evidence.” Start only when dependencies and build authorization are met. Packets hold acceptance/evidence; only this document holds status. F-xxx means product feature; FE-xxx means frontend task.
+**Viability review (DEC-056):** current router handles health/operator proof only; web Auth rejects live mode; no supabase migration directory exists; wallet proof persistence and locks are local files. Product persistence/concurrency and deployed integration remain new work. The windows are aggressive operating budgets, not a dependable completion forecast. Five-hour readiness remains conditional on measured gates. This review did not inspect hosted credentials or run a live journey.
 
-## Start gates and contract timing
+R-001 has two gates: A releases usable contracts so frontend can start concurrently; B proves both deployed logins, trusted roles and a durable authorized database write/read. Only B permits R-001 acceptance. Frontend screen preparation and backend schema preparation can proceed before B, but document completion cannot establish readiness. Use shared durable database constraints; local files or process locks are not a deployed money journal.
 
-Before S-001, confirm scoped build authorization, repository access, working stack and available hours. Shared infrastructure can precede UI design; product UI waits for FE-001's human design source or explicit delegation. Confirm provider credentials before the relevant investigation, without storing secrets in Markdown.
+At **06:00 PHT**, require authenticated confirmed Needs funding, a persisted result readable after a new request, and repeated/concurrent same-key requests producing no second transfer. If any element fails, announce the failed gate and **activate the fallback**: stop expanding the feature set, stabilize the actually working deployed subset, label unfinished/mock screens explicitly, and prepare a recording with separately identified existing Noir/Velo/AI/anchor proof evidence. Preserve security and money invariants. This fallback is an incomplete prototype submission, not completion of the reduced MVP and not a guarantee of event eligibility. R-004's MVP acceptance stays unmet. Record what works and what does not; retain the 09:40 rehearsal target and submission buffer. Do not silently move the gate when late; resuming the full target requires an explicit team decision based on recovered evidence.
 
-S-002 establishes stable envelopes and initial synthetic examples. Provider/wallet/mapping-dependent fields stay explicitly provisional. Frontend may mock stable states while backend investigates. At C-002 backend decides whether to accept or revise topology, mapping, required product defaults and affected request/response examples before dependent features proceed. Frontend may provide feedback; backend records decisions first, then updates architecture, technical spec and fixtures together. If a required decision fails, stop its dependent tasks rather than inventing a successful fallback.
+During implementation, integrate and verify in this order: identity → confirmed funding → photo identification → authorization → merchant claim. Record each observed deployed result in the owning packet; do not wait until 07:20 to discover session/routing/persistence failures. R-004 gathers these observations rather than repeating successful provider calls. At 07:20, an incomplete purchase path triggers the same fallback; at 08:40 feature work stops.
 
-Mock data must match the accepted contract revision and include success, pending, empty, rejection and technical errors. Use the same small request interface for mock/live modes. Mock UI completion does not complete real integration. Real APIs are connected at C-003/C-004/C-005; demo mocks are disabled before C-005 passes.
+Keep decisions and contracts short. Review each meaningful slice once, commit coherent work, and run relevant tests; run combined CI at integration/release boundaries. DEC-055 overrides one-branch-per-original-task and the original checkpoint dependency chain for these slices. Preserve existing security and money invariants. The backend edits shared contracts; frontend edits apps/web and its packet. Do not overwrite another builder's work. User retains commit/push control unless separately delegated.
+
+A task from the original plan remains deferred unless its full original acceptance criteria are met. Completing a rescue slice does not automatically complete B-005–B-013 or FE-003–FE-006. FE-001/FE-002 merge is recorded locally as `65821fc`; remote CI acceptance still needs evidence.
 
 ## Relative effort estimation
 
@@ -86,15 +96,15 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 | [B-002 Verify parent-approved cap exception](../handoff/B-002.md) | B-001 merged `e1382f0`; isolated exception/claim/revocation succeeded; ordinary cap unchanged; founder confirms B-002 merge to main and passing branch/main GitHub Actions (2026-11-07); merge hash unavailable locally | 8 | Done |
 | [B-003 Verify wallet backing and money mapping](../handoff/B-003.md) | B-002 accepted; funding/withdrawal/private isolation and fee-adjusted conservation verified on Testnet; founder accepts demo topology/accounting under DEC-049; backend review accepted after separate bucket proof; founder confirms branch/main CI passed and merge to main `5c9f034` (task commit `0a41be6`) | 8 | Done |
 | [B-004 Verify anchor and AI access](../handoff/B-004.md) | Groq identified the synthetic sample; SEP-24 replacement withdrawal completed after confirmed 1-XLM Testnet transfer; backend review accepted; founder confirms branch and main CI passed; merged as `8f78d81` (branch commit `2dd1c06`) | 8 | Done |
-| [B-005 Implement family authentication and private access](../handoff/B-005.md) | C-002 | 5 | Planned |
-| [B-006 Implement durable money accounting](../handoff/B-006.md) | B-005 | 8 | Planned |
-| [B-007 Parent rules and confirmed allowance funding](../handoff/B-007.md) | B-006 | 5 | Planned |
-| [B-008 Implement photo AI and retry](../handoff/B-008.md) | C-003 | 5 | Planned |
-| [B-009 Implement rules and parent decisions](../handoff/B-009.md) | B-008 | 5 | Planned |
-| [B-010 Implement payment execution and reconciliation](../handoff/B-010.md) | B-009 | 8 | Planned |
-| [B-011 Implement Savings and private My Money](../handoff/B-011.md) | C-004 | 5 | Planned |
-| [B-012 Implement weekly clock and transfers](../handoff/B-012.md) | B-011 | 8 | Planned |
-| [B-013 Withdrawal endpoints and hosted recovery](../handoff/B-013.md) | B-012 | 5 | Planned |
+| [B-005 Implement family authentication and private access](../handoff/B-005.md) | C-002 | 5 | Deferred under DEC-055 |
+| [B-006 Implement durable money accounting](../handoff/B-006.md) | B-005 | 8 | Deferred under DEC-055 |
+| [B-007 Parent rules and confirmed allowance funding](../handoff/B-007.md) | B-006 | 5 | Deferred under DEC-055 |
+| [B-008 Implement photo AI and retry](../handoff/B-008.md) | C-003 | 5 | Deferred under DEC-055 |
+| [B-009 Implement rules and parent decisions](../handoff/B-009.md) | B-008 | 5 | Deferred under DEC-055 |
+| [B-010 Implement payment execution and reconciliation](../handoff/B-010.md) | B-009 | 8 | Deferred under DEC-055 |
+| [B-011 Implement Savings and private My Money](../handoff/B-011.md) | C-004 | 5 | Deferred under DEC-055 |
+| [B-012 Implement weekly clock and transfers](../handoff/B-012.md) | B-011 | 8 | Deferred under DEC-055 |
+| [B-013 Withdrawal endpoints and hosted recovery](../handoff/B-013.md) | B-012 | 5 | Deferred under DEC-055 |
 
 ## Frontend sequence
 
@@ -102,21 +112,21 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 |---|---|---|---|
 | [FE-001 Design agreement and contract review](../handoff/FE-001.md) | Design/fixture acceptance recorded on frontend branch; local integration review/checks passed; commit and CI acceptance pending | 2 | In progress |
 | [FE-002 Build approved shell and stable mock states](../handoff/FE-002.md) | Shell and mock states implemented on frontend branch; local integration review/checks passed; commit and CI acceptance pending | 3 | In progress |
-| [FE-003 Build allowance setup and dashboards](../handoff/FE-003.md) | C-002 | 5 | Planned |
-| [FE-004 Student purchase, parent review and status screens](../handoff/FE-004.md) | C-003 | 8 | Planned |
-| [FE-005 Savings, My Money and weekly clock screens](../handoff/FE-005.md) | C-004 | 5 | Planned |
-| [FE-006 Withdrawal and complete demo integration preparation](../handoff/FE-006.md) | FE-005 | 3 | Planned |
+| [FE-003 Build allowance setup and dashboards](../handoff/FE-003.md) | C-002 | 5 | Deferred under DEC-055 |
+| [FE-004 Student purchase, parent review and status screens](../handoff/FE-004.md) | C-003 | 8 | Deferred under DEC-055 |
+| [FE-005 Savings, My Money and weekly clock screens](../handoff/FE-005.md) | C-004 | 5 | Deferred under DEC-055 |
+| [FE-006 Withdrawal and complete demo integration preparation](../handoff/FE-006.md) | FE-005 | 3 | Deferred under DEC-055 |
 
 ## Joint checkpoints
 
 | Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
 | [C-001 Shared setup handoff](../handoff/C-001.md) | S-002 satisfied; backend accepted; green CI reported; merged at `85e2077` | 1 | Done |
-| [C-002 Finalize contracts after feasibility](../handoff/C-002.md) | B-004 and FE-002 | 3 | Planned |
-| [C-003 Connect identity and allowance funding](../handoff/C-003.md) | B-007 and FE-003 | 3 | Planned |
-| [C-004 Connect photo purchase, approval and merchant claim](../handoff/C-004.md) | B-010 and FE-004 | 5 | Planned |
-| [C-005 Connect weekly lifecycle, private funds and withdrawal](../handoff/C-005.md) | B-013 and FE-006 | 5 | Planned |
-| [C-006 Submission and reproducible demo](../handoff/C-006.md) | C-005 | 5 | Planned |
+| [C-002 Finalize contracts after feasibility](../handoff/C-002.md) | B-004 and FE-002 | 3 | Deferred under DEC-055 |
+| [C-003 Connect identity and allowance funding](../handoff/C-003.md) | B-007 and FE-003 | 3 | Deferred under DEC-055 |
+| [C-004 Connect photo purchase, approval and merchant claim](../handoff/C-004.md) | B-010 and FE-004 | 5 | Deferred under DEC-055 |
+| [C-005 Connect weekly lifecycle, private funds and withdrawal](../handoff/C-005.md) | B-013 and FE-006 | 5 | Deferred under DEC-055 |
+| [C-006 Submission and reproducible demo](../handoff/C-006.md) | C-005 | 5 | Deferred under DEC-055 |
 
 ## Shared-edit protocol
 

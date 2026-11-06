@@ -1,6 +1,20 @@
 # PadalaPocket MVP product spec
 
-Draft for review, derived from [DEC-006–DEC-029](decision-ledger.md). Concept/demo scope accepted; proposed defaults below are not team decisions. Application implementation has not been authorized.
+Draft for review, derived from [DEC-006–DEC-029](decision-ledger.md). Concept/demo scope accepted; proposed defaults below are not team decisions. The reduced submission build is authorized under DEC-055.
+
+## Five-hour submission MVP
+
+DEC-055 narrows the current delivery target to one provisioned parent, student and fixed demonstration seller. The broader scope and feature table below remain the post-deadline roadmap wherever they exceed this section.
+
+Recording journey: parent signs in and funds a Needs allowance with confirmed Testnet backing; student signs in, supplies a photo and price; real AI identifies the item; server checks the fixed allowed categories, cap and available funds; a permitted purchase uses Noir authorization and merchant claim. Show the actual statuses and both transaction hashes. Preserve dual simulated-PHP/Testnet-XLM display and accepted rounding. Configure a small finite allowance/cap during provisioning; no settings editor is required.
+
+Above-cap, disallowed-category, uncertain-photo and insufficient-funds requests are blocked with an explanation; no parent override exists in this slice. Unknown payment outcomes remain pending until reconciled. Duplicate submissions cannot create a second payment. Parent/student roles are enforced by the server; no self-selected production role.
+
+Demonstrate Velo separately through its existing bounded checkout/status path and identify exactly what it does. Do not describe it as sponsoring Noir gas. Prior anchor, exception and multi-bucket proofs may be linked as dated feasibility evidence; they are not integrated app features.
+
+Deferred: Wants funding/screens, parent approval queue and exceptions, Savings, My Money, weekly clock/rollover/reminders, in-app anchor withdrawal, signup/reset flows, additional families/sellers, and layout expansion. Existing approved screen components may be reused; human designer owns changes. No empty deferred screen should imply a working feature.
+
+Acceptance requires the public deployment to complete this real journey with provisioned accounts, durable operations and secret-free browser assets; then pass a recording rehearsal. A collection of historical proofs alone does not satisfy this reduced MVP.
 
 ## Users and purpose
 

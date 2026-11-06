@@ -1,6 +1,6 @@
 # PadalaPocket
 
-A planning workspace for developing the PadalaPocket idea before implementing an MVP.
+PadalaPocket is in MVP implementation. The current target is the [five-hour submission build](docs/implementation-plan.md#five-hour-submission-build--dec-055), with [reduced scope](docs/product-spec.md#five-hour-submission-mvp) under DEC-055.
 The focused MVP concept is accepted; specifications distinguish team decisions from proposals and unverified technical claims.
 
 Start with [the playbook](Playbook.md). Agents must first read [AGENTS.md](AGENTS.md) and [routing](AGENT_ROUTING.md).
@@ -15,12 +15,12 @@ Start with [the playbook](Playbook.md). Agents must first read [AGENTS.md](AGENT
 
 Interviews are not required. Unknowns and assumptions may remain explicit. The team chooses when the concept is concrete enough to specify.
 
-## Build later
+## Build
 
 The [architecture](docs/architecture.md) owns the working stack and component diagram; the [technical spec](docs/technical-spec.md) owns proposed API/data contracts and integration checks. Review them together, confirm [design ownership](docs/design-brief.md), then use [the implementation plan](docs/implementation-plan.md) and [task template](handoff/TASK-000-template.md).
-S-001, S-002 and C-001 are accepted; see the implementation plan for canonical status. See [development setup](docs/development.md) for install, run and check commands. Product UI is not implemented. B-001 adds a protected Testnet proof experiment using direct Noir submission and a separate Velo checkout/status role under DEC-042; the earlier Gas attempt is preserved. SDK versions remain pinned with a scoped axios security override under DEC-043. See [proof instructions](docs/development.md#b-001-operator-proof) and [actual integration evidence and limitations](handoff/B-001.md).
+S-001, S-002 and C-001 are accepted; see the implementation plan for canonical status. See [development setup](docs/development.md) for install, run and check commands. A mock frontend shell is merged; the real product journey remains to implement. B-001 adds a protected Testnet proof experiment using direct Noir submission and a separate Velo checkout/status role under DEC-042; the earlier Gas attempt is preserved. SDK versions remain pinned with a scoped axios security override under DEC-043. See [proof instructions](docs/development.md#b-001-operator-proof) and [actual integration evidence and limitations](handoff/B-001.md).
 
-B-002 adds a local isolated cap-exception experiment under DEC-044; see [its packet](handoff/B-002.md) for results and security limits. Product currency and wallet topology remain undecided.
+B-002 adds a local isolated cap-exception experiment under DEC-044; see [its packet](handoff/B-002.md) for results and security limits. Money mapping and bucket topology are accepted under DEC-049; the reduced release uses Needs only.
 
 ## Guides and agent skills
 

@@ -1,5 +1,9 @@
 # Project context
 
+## Current deadline scope — DEC-055
+
+The founder authorized a five-hour reduced submission build on 2026-11-07. The [product scope](../docs/product-spec.md#five-hour-submission-mvp) and [implementation schedule](../docs/implementation-plan.md#five-hour-submission-build--dec-055) supersede broader delivery expectations below. The original concept remains the roadmap. The frontend shell and backend feasibility proofs exist; a complete product journey still needs integration.
+
 Updated 2026-11-06. This is the project orientation and constraint summary. Product rules, architecture, detailed interfaces, evidence and task progress have separate canonical homes below. Competition statements describe the supplied handbook, not independently confirmed organizer amendments.
 
 ## Current direction and document map
