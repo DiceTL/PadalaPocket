@@ -5,10 +5,11 @@ import config from '../vite.config.js';
 test('development API requests use the same-origin API prefix', () => {
   assert.equal(config.server.proxy['/api'], 'http://127.0.0.1:3001');
 });
-test('workspace entry has language, charset and viewport without product UI', async () => {
+test('workspace entry has language, charset, viewport and application mount point', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   assert.match(html, /lang="en"/);
   assert.match(html, /charset="UTF-8"/);
   assert.match(html, /name="viewport"/);
-  assert.match(html, /<body><\/body>/);
+  assert.match(html, /id="app"/);
+  assert.match(html, /src="\/src\/main\.js"/);
 });

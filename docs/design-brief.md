@@ -8,7 +8,7 @@
 * **Figma Design Approval:** Approved by Tyrone and Founder
 * **Frontend Implementation Responsibility:** Hedrix
 * **Backend / API Responsibility:** Tyrone
-* **Revision note (FE-001, 2026-11-07):** The 9-page PDF export was reviewed against the product spec, technical spec and S-002 fixture guide. The items under "Corrections to the current layouts" and "Design gaps and pending layouts" are proposed changes. They are **not yet confirmed** by the human design owner and founder, and not all are in Figma. Each needs reconfirmation before the task that builds it (see "Reconfirmation needed").
+* **Revision note (FE-001, 2026-11-07):** The 9-page PDF export was reviewed against the product spec, technical spec and S-002 fixture guide. The items under "Corrections to the current layouts" and "Design gaps and pending layouts" are proposals except where later confirmation is recorded below. They are not all in Figma; see "Reconfirmation needed" for open items.
 
 ## Design references
 
@@ -130,14 +130,17 @@ The human design owner (Hedrix) confirms visual/layout choices; the founder conf
 
 | Item | Needed before |
 |---|---|
-| Sidebar-to-top-bar behavior, breakpoints, Student Home placeholder | FE-002 |
-| Sign-in page (no changes) | FE-002 |
+| Parent sidebar behavior below the 1280px target viewport | FE-003 |
 | Funding-wallet balance, Allowance rules and Deposit screens | FE-003 |
 | Purchase Status and Pay a Seller corrections (3, 6, 8, 9), merchant claim (4) | FE-004 |
 | Demo clock move, reminder timing, notifications list (1, 7) | FE-005 |
 | Withdrawal correction (2) | FE-006 |
 
 ## Unresolved questions for confirmation
+
+**FE-002 review note (2026-11-07):** The supplied PDF remains the reference for sign-in and the 390px student / 1280px parent targets. It specifies a fixed student bottom bar, so FE-002 uses that placement for the student shell. The PDF does not show Student Home content or define non-target viewport behavior. The shell therefore shows an explicitly unapproved empty preview route.
+
+**FE-002 confirmation (2026-11-07):** The user reports that the human design owner confirms the current Student Home placeholder and its behavior at non-target viewport sizes. The existing implementation is accepted for those student-shell choices. Parent sidebar behavior below 1280px remains an open design question for FE-003; FE-002's parent review is limited to the 1280px target. See [DEC-045](decision-ledger.md#dec-045) and [DEC-046](decision-ledger.md#dec-046).
 
 Proposed answers are suggestions, not decisions.
 
