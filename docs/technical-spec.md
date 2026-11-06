@@ -1,6 +1,6 @@
 # PadalaPocket MVP technical spec
 
-Draft shared developer contract, authorized by [DEC-030](decision-ledger.md). The stack below is the working baseline; interfaces and implementation choices are proposals until reviewed. No application has been scaffolded. Requirements live in [product spec](product-spec.md); task status lives only in [implementation plan](implementation-plan.md).
+Draft shared developer contract, authorized by [DEC-030](decision-ledger.md). The stack below is the working baseline; interfaces and implementation choices are proposals until reviewed. S-001 infrastructure is implemented; product routes below remain unimplemented. Requirements live in [product spec](product-spec.md); task status lives only in [implementation plan](implementation-plan.md).
 
 ## Architecture reference
 
@@ -112,7 +112,7 @@ If Velo sponsorship cannot support the Noir envelope, test a different documente
 
 ## Handoff and verification
 
-Frontend owner consumes the HTTP contract, Auth and restricted uploads; backend owner supplies routes, SQL/permissions, AI, signing and reconciliation. Agree response samples together before dependent implementation. UI structure/appearance remains outside this draft's authority.
+Frontend owner consumes the HTTP contract, Auth and restricted uploads; backend owner supplies routes, SQL/permissions, AI, signing and reconciliation. Backend approves response samples under DEC-037 before dependent implementation; frontend may provide feedback. UI structure/appearance remains outside this draft's authority.
 
 Before application build tasks: review this draft, accept or resolve blocking product defaults, establish UI authority, confirm service credentials/remaining hours, and authorize scoped implementation. First proposed build slice is the smallest deployed Noir/Velo payment-and-claim proof, not the full interface.
 
@@ -125,3 +125,13 @@ Verification required during authorized implementation:
 - Demo time processes each due event once and preserves real ledger time; bucket changes reconcile with backing transfers. Withdrawal reaches the anchor's actual status with simulated payout disclosure.
 
 Record actual results in scoped task packets/evidence, and progress only in the implementation plan. These checks are planned, not passed.
+
+## S-002 development contract revision
+
+Backend accepts `s002-v1` under DEC-038 for synthetic development examples. [Fixture guide and endpoint map](../handoff/api-examples/README.md) defines the stable subset and explicitly missing reads. `cases.json` wraps each HTTP body with MOCK/revision/scenario metadata; that wrapper is a fixture format, not an added live API envelope. Generic error fixtures use `null` method/path metadata to mean unspecified, not an endpoint mapping. Successful bodies remain direct resource objects; technical errors retain `{error:{code,message,retryable}}`.
+
+Stable identity projection: UUID `userId`, UUID `familyId`, and trusted `role` (`parent` or `student`). This is the minimal `/api/me` projection; balances and settings are deliberately not settled here. Identity must ultimately come from server-validated authentication, not fixture metadata.
+
+Stable purchase summary: UUID `id`, positive integer `revision`, `status` from the execution states above, `bucket` (`needs`, `wants`, `my_money`), positive integer decimal-string `priceMinor`, nullable `reason`, nullable UTC `expiresAt`. `priceMinor` represents the student-entered illustrative PHP centavo price; it does not establish a Testnet conversion. `awaiting_parent` requires an expiry; the fixture summaries omit it in other states without changing server expiry/audit requirements. Known business reasons are `AI_UNCERTAIN`, `CAP_EXCEEDED`, `CATEGORY_CONFLICT`, `RESTRICTED_ITEM`, `INSUFFICIENT_FUNDS`, `PARENT_REJECTED`, `APPROVAL_EXPIRED`. `reason: null` means no exception reason is recorded; it does not mean that decision checks were skipped. Business rejection remains a successful read of the persisted outcome, distinct from an HTTP error. Unknown submission must display uncertainty and must not enable blind repayment.
+
+Parent samples allow only allowance summaries; My Money balance/purchases and nested private fields are rejected. Student-only My Money must never enter photo/parent-review states. AI evidence, photos, ledger amounts, hashes, seller/wallet identifiers and balances are absent from this stable summary, not invented placeholders. Success-state MOCK examples are display scenarios only; they contain no transaction proof. Empty approvals use `{items:[]}`; nonempty approval item contracts remain missing. C-002 must finalize dependent fields and examples before live integration.

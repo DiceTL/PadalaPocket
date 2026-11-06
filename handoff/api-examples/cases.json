@@ -1,0 +1,428 @@
+[
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "parent-identity",
+    "caller": "parent",
+    "method": "GET",
+    "path": "/api/me",
+    "httpStatus": 200,
+    "kind": "identity",
+    "body": {
+      "userId": "00000000-0000-4000-8000-000000000001",
+      "familyId": "00000000-0000-4000-8000-000000000002",
+      "role": "parent"
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "student-identity",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/me",
+    "httpStatus": 200,
+    "kind": "identity",
+    "body": {
+      "userId": "00000000-0000-4000-8000-000000000004",
+      "familyId": "00000000-0000-4000-8000-000000000002",
+      "role": "student"
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-assessing",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "assessing",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-needs_photo",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "needs_photo",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": "AI_UNCERTAIN",
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-awaiting_parent",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "awaiting_parent",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": "CAP_EXCEEDED",
+      "expiresAt": "2026-11-06T00:10:00.000Z"
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-ready",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "ready",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-rejected",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "rejected",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": "INSUFFICIENT_FUNDS",
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-expired",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "expired",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": "APPROVAL_EXPIRED",
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-submitting",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "submitting",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-merchant_pending",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "merchant_pending",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-failed",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "failed",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-unknown",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "unknown",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "purchase-claimed",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "claimed",
+      "bucket": "needs",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "parent-purchase",
+    "caller": "parent",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "merchant_pending",
+      "bucket": "wants",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "student-purchase",
+    "caller": "student",
+    "method": "GET",
+    "path": "/api/purchases/00000000-0000-4000-8000-000000000003",
+    "httpStatus": 200,
+    "kind": "purchase",
+    "body": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "revision": 1,
+      "status": "merchant_pending",
+      "bucket": "my_money",
+      "priceMinor": "7500",
+      "reason": null,
+      "expiresAt": null
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "empty-approvals",
+    "caller": "parent",
+    "method": "GET",
+    "path": "/api/approvals",
+    "httpStatus": 200,
+    "kind": "empty-approvals",
+    "body": {
+      "items": []
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-INVALID_INPUT",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 400,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "INVALID_INPUT",
+        "message": "Synthetic error example: INVALID_INPUT",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-UNAUTHENTICATED",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 401,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "UNAUTHENTICATED",
+        "message": "Synthetic error example: UNAUTHENTICATED",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-FORBIDDEN",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 403,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "FORBIDDEN",
+        "message": "Synthetic error example: FORBIDDEN",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-NOT_FOUND",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 404,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Synthetic error example: NOT_FOUND",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-STALE_REVISION",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 409,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "STALE_REVISION",
+        "message": "Synthetic error example: STALE_REVISION",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-APPROVAL_EXPIRED",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 409,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "APPROVAL_EXPIRED",
+        "message": "Synthetic error example: APPROVAL_EXPIRED",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-IDEMPOTENCY_CONFLICT",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 409,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "IDEMPOTENCY_CONFLICT",
+        "message": "Synthetic error example: IDEMPOTENCY_CONFLICT",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "error-PROVIDER_UNAVAILABLE",
+    "caller": "student",
+    "method": null,
+    "path": null,
+    "httpStatus": 503,
+    "kind": "error",
+    "body": {
+      "error": {
+        "code": "PROVIDER_UNAVAILABLE",
+        "message": "Synthetic error example: PROVIDER_UNAVAILABLE",
+        "retryable": true
+      }
+    }
+  }
+]

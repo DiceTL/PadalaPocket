@@ -15,7 +15,7 @@ In a second terminal run `npm run dev:web`. Vite prints its web address; `/api` 
 
 Run all local/CI checks with `npm run check`; individual commands are `npm test`, `npm run check:contracts` and `npm run build`. Workspace tests can run with `npm run test --workspace @padalapocket/web` or `npm run test --workspace @padalapocket/api`. Node's built-in test runner is the initial test tool. Current web checks cover infrastructure, not browser interactions; select/install the actual browser test tool before FE implementation. API build is syntax verification because this is plain JavaScript. Web build uses pinned Vite.
 
-S-001 has no API fixtures: contract checking explicitly reports not applicable and fails closed if JSON fixtures appear without the S-002 validator. It must be replaced with real fixture validation in S-002. No provider test runs in ordinary PR checks.
+S-002 adds [MOCK API fixtures](../handoff/api-examples/README.md) and strict fixture validation with negative tests through `npm run check:contracts`. This checks the development contract only, not live endpoint compatibility. No provider test runs in ordinary PR checks.
 
 ## Ownership and Git
 

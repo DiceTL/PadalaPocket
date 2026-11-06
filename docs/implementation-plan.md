@@ -74,7 +74,7 @@ Shared fixtures are data files, not a new runtime shared library. Add shared exe
 | Task / packet | Dependency | Effort points | State |
 |---|---|---|---|
 | [S-001 Shared workspace and Git foundation](../handoff/S-001.md) | Build authorization and stack review; acceptance evidence recorded | 5 | Done |
-| [S-002 API contracts and development fixtures](../handoff/S-002.md) | S-001 accepted at `58f4b6c` | 3 | Planned |
+| [S-002 API contracts and development fixtures](../handoff/S-002.md) | S-001 accepted at `58f4b6c`; local checks pass; remote checks and merge evidence outstanding | 3 | Review |
 
 ## Backend sequence
 
