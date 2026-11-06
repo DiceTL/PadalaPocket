@@ -132,4 +132,16 @@ flowchart LR
 
 ## R-001 identity implementation — DEC-057
 
-The API validates bearer tokens with Supabase Auth and loads server-provisioned membership. Postgres RLS limits membership reads and synthetic gate records to their owner. The browser uses only publishable configuration; in-memory SDK sessions refresh while the page is open and require sign-in after reload. The operator provisioning script alone requires a server secret. Legacy operator proof HTTP routing is removed; proof CLIs remain separate. Hosted acceptance evidence belongs in [R-001](../handoff/R-001.md).
+The API validates bearer tokens with Supabase Auth and loads server-provisioned membership. Postgres RLS limits membership reads and synthetic gate records to their owner. The browser uses only publishable configuration; SDK sessions persist and restore after reload under DEC-058. The operator provisioning script alone requires a server secret. Legacy operator proof HTTP routing is removed; proof CLIs remain separate. Hosted acceptance evidence belongs in [R-001](../handoff/R-001.md).
+
+## R-002 funding — DEC-058
+
+Parent browser → authenticated funding API → server-only Postgres operation journal → owner-signed Noir Needs escrow transfer. Unique unresolved family operations serialize source signing; persisted exact envelopes support hash reconciliation after uncertainty. Status/credited balance is read from durable records after ledger and escrow confirmation. Auth sessions now persist across refresh; browser storage never contains service keys or Stellar signers.
+
+DEC-060 disables DEC-059 setup closure. The CLI and compatibility export always refuse without database or ledger access; interrupted setup retains its journal and unresolved family lock. Existing deployments do not enforce a shared dispatch fence. Investigation limits live in [R-002](../handoff/R-002.md#manual-recovery-for-interrupted-setup--dec-059).
+
+DEC-061 purchase flow: authenticated student → private validated photo/journal → one bounded Groq assessment → server rules/atomic Needs reservation → persisted Noir policy/authorization envelopes → explicit single-admission merchant claim. Server-only Postgres photo storage replaces the proposed signed object-upload route for this bounded demo; no image URL is public. Exact-hash status reads never dispatch. Rules and contract live in technical-spec; observed evidence belongs in R-002.
+
+AI assessment failures are terminal blocked outcomes only before reservation/envelope creation; all evidence stays in the purchase journal. Payment uncertainty retains reservations and prevents new work. The DEC-060 funding recovery refusal is unchanged.
+
+The purchase claim-admission flag also guards authorization reconciliation. A claim without a saved envelope stays pending/unknown while its admitted writer prepares it; concurrent GETs cannot move it backward or dispatch work. Conditional writes match expected status and, for pre-claim outcomes, require admission still unset. This is a local correctness fix pending review/CI/deployment, not a change to DEC-060's disabled funding recovery.

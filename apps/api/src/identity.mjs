@@ -17,22 +17,7 @@ export function createIdentityHandler({ env = process.env, clientFactory = creat
         res.setHeader('Allow', allowed.join(', '));
         throw fail(405, 'METHOD_NOT_ALLOWED', 'Method not allowed.');
       }
-      const token = /^Bearer (\S+)$/.exec(req.headers.authorization ?? '')?.[1];
-      if (!token) throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
-      if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
-      const client = clientFactory(env.SUPABASE_URL, env.SUPABASE_PUBLISHABLE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false },
-        global: { headers: { Authorization: `Bearer ${token}` } },
-      });
-      const { data: auth, error: authError } = await client.auth.getUser(token);
-      if (authError) {
-        if (authError.status >= 500) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
-        throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
-      }
-      if (!auth?.user) throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
-      const { data: member, error: memberError } = await client.from('family_members').select('user_id,family_id,role').eq('user_id', auth.user.id).maybeSingle();
-      if (memberError) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
-      if (!member || !['parent', 'student'].includes(member.role)) throw fail(403, 'FORBIDDEN', 'Account is not provisioned.');
+      const { client, member } = await authenticateMember(req, env, clientFactory);
       if (path === '/api/me') return send(200, { userId: member.user_id, familyId: member.family_id, role: member.role });
       if (recordId) {
         if (!UUID.test(recordId) || path !== `/api/identity-records/${recordId}`) throw fail(400, 'INVALID_INPUT', 'Invalid record identifier.');
@@ -67,4 +52,24 @@ export function createIdentityHandler({ env = process.env, clientFactory = creat
       send(error.status ?? 503, { error: { code: error.code ?? 'PROVIDER_UNAVAILABLE', message: error.status ? error.message : 'Service unavailable.', retryable: !error.status || error.status >= 500 } });
     }
   };
+}
+
+export async function authenticateMember(req, env = process.env, clientFactory = createClient) {
+  const token = /^Bearer (\S+)$/.exec(req.headers.authorization ?? '')?.[1];
+  if (!token) throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
+  if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
+  const client = clientFactory(env.SUPABASE_URL, env.SUPABASE_PUBLISHABLE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+  const { data: auth, error: authError } = await client.auth.getUser(token);
+  if (authError) {
+    if (authError.status >= 500) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
+    throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
+  }
+  if (!auth?.user) throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
+  const { data: member, error: memberError } = await client.from('family_members').select('user_id,family_id,role').eq('user_id', auth.user.id).maybeSingle();
+  if (memberError) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
+  if (!member || !['parent', 'student'].includes(member.role)) throw fail(403, 'FORBIDDEN', 'Account is not provisioned.');
+  return { client, member };
 }

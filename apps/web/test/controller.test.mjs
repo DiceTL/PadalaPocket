@@ -61,3 +61,30 @@ test('duplicate submits while loading do not call auth twice', async () => {
   resolve({ mock: true, user: { role: 'parent' } });
   await first;
 });
+
+test('late purchase history cannot restore private shell after sign-out', async () => {
+  let finishHistory, calls = 0;
+  const api = { mode: 'live', getMe: async () => ({ userId: 'student-1', role: 'student' }), purchases: () => ++calls === 1 ? Promise.resolve({ purchases: [] }) : new Promise(resolve => { finishHistory = resolve; }) };
+  const controller = createAppController({ auth: { mode: 'live', signIn: async () => ({ user: { userId: 'student-1', role: 'student' } }), signOut: async () => {} }, api });
+  await controller.restore();
+  const loading = controller.refreshPurchases();
+  await controller.signOut();
+  finishHistory({ purchases: [{ id: 'private' }] });
+  await loading;
+  assert.equal(controller.getState().screen, 'signin');
+  assert.equal(controller.getState().user, null);
+  assert.equal(controller.getState().purchaseHistory, undefined);
+});
+
+test('late funding response cannot publish after sign-out', async () => {
+  let finishFunding, calls = 0;
+  const api = { mode: 'live', getMe: async () => ({ userId: 'parent-1', role: 'parent' }), funding: () => ++calls === 1 ? Promise.resolve({ operations: [] }) : new Promise(resolve => { finishFunding = resolve; }) };
+  const controller = createAppController({ auth: { mode: 'live', signIn: async () => ({ user: { userId: 'parent-1', role: 'parent' } }), signOut: async () => {} }, api });
+  await controller.restore();
+  const loading = controller.refreshFunding();
+  await controller.signOut();
+  finishFunding({ operations: [{ id: 'private' }] });
+  await loading;
+  assert.equal(controller.getState().screen, 'signin');
+  assert.equal(controller.getState().funding, undefined);
+});

@@ -36,6 +36,13 @@ export function validateFixture(f) {
     assert.equal(f.path, f.method === 'POST' ? '/api/identity-records' : `/api/identity-records/${f.body.id}`);
     return;
   }
+  if (f.kind === 'funding-history') {
+    assert.equal(f.caller, 'parent'); assert.equal(f.path, '/api/needs-funding');
+    assert.equal(f.method, 'GET'); assert.equal(f.httpStatus, 200);
+    keys(f.body, 'operations confirmedNeedsStroops fundingPriceMinor fundingAmountStroops');
+    assert.deepEqual(f.body.operations, []); assert.equal(f.body.confirmedNeedsStroops, '0');
+    assert.equal(f.body.fundingPriceMinor, '968'); assert.equal(f.body.fundingAmountStroops, '10000000'); return;
+  }
   assert.equal(f.method, 'GET');
   assert.equal(f.httpStatus, 200);
   if (f.kind === 'identity') {

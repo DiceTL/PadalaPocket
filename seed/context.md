@@ -105,3 +105,9 @@ The handbook confirms mandatory Noir/Velo use, with stricter SDK/deployment requ
 B-003 backing design is proposed under DEC-047; current transfer evidence and limitations live in [its packet](../handoff/B-003.md). DEC-046 accepts the fixed snapshot conversion for simultaneous simulated-PHP/Testnet-XLM display; [technical details](../docs/technical-spec.md#b-003-money-mapping-and-backing-proof) remain distinct from verified implementation.
 
 R-001 uses the existing Supabase/Vercel stack under DEC-057; implementation and hosted acceptance are tracked in [R-001](../handoff/R-001.md).
+
+DEC-058 fixes the explicit demo funding request at simulated ₱9.68 / 1 Testnet XLM; see the canonical technical contract.
+
+DEC-060 disables interrupted funding setup closure; see [R-002 investigation limits](../handoff/R-002.md#manual-recovery-for-interrupted-setup--dec-059). No enforced deployment-wide dispatch fence is claimed.
+
+DEC-061 accepts the reduced purchase slice and fixed demo rules; see docs/technical-spec.md for the contract and apps/api/src/purchase-rules.mjs for future rule edits. Existing purchases retain their snapshots.

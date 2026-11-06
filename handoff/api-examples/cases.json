@@ -454,5 +454,21 @@
     "method": "GET",
     "path": "/api/identity-records/00000000-0000-4000-8000-000000000005",
     "httpStatus": 200
+  },
+  {
+    "mock": "MOCK",
+    "revision": "s002-v1",
+    "name": "needs-funding-empty",
+    "caller": "parent",
+    "method": "GET",
+    "path": "/api/needs-funding",
+    "httpStatus": 200,
+    "kind": "funding-history",
+    "body": {
+      "operations": [],
+      "confirmedNeedsStroops": "0",
+      "fundingPriceMinor": "968",
+      "fundingAmountStroops": "10000000"
+    }
   }
 ]

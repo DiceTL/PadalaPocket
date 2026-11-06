@@ -83,3 +83,8 @@ button:disabled { cursor: wait; opacity: .72; }
 .role-student .page-description { margin-bottom: 23px; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation: none !important; } }
+
+.transaction-evidence { overflow-wrap: anywhere; max-width: 100%; }
+.preview-panel > .signin-form { width: 100%; min-width: 0; text-align: left; }
+.preview-panel .field-input { min-width: 0; max-width: 100%; }
+.preview-panel > article { min-width: 0; width: 100%; }

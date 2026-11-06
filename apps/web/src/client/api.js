@@ -33,6 +33,19 @@ export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-i
       if (!response.ok) throw new ApiError(body?.error, response.status);
       return body;
     },
+    async funding(method = 'GET', key) {
+      const token = await getAccessToken();
+      const response = await fetchImpl('/api/needs-funding', { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(method === 'POST' ? { body: JSON.stringify({ priceMinor: '968' }) } : {}) });
+      const body = await response.json();
+      if (!response.ok) throw new ApiError(body.error, response.status);
+      return body;
+    },
+    async purchases(method = 'GET', payload, key, suffix = '') {
+      if (mode === 'mock') throw new Error('Purchase flow is available only with the live API.');
+      const token = await getAccessToken();
+      const response = await fetchImpl('/api/purchases' + suffix, { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(payload ? { body: JSON.stringify(payload) } : {}) });
+      const body = await response.json(); if (!response.ok) throw new ApiError(body?.error, response.status); return body;
+    },
     // S-002 errors have no endpoint mapping. This injector is for deterministic UI state review only.
     async injectExampleError(name = 'error-PROVIDER_UNAVAILABLE') {
       const fixture = getFixture(name, 'error');

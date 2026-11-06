@@ -35,3 +35,9 @@ Read the [extracted competition builder handbook](seed/sources/velo-noir-builder
 B-003 investigates wallet backing and escrow withdrawal; [its packet](handoff/B-003.md) records actual results and open acceptance items. [The technical spec](docs/technical-spec.md#b-003-money-mapping-and-backing-proof) defines the fixed simulated PHP/Testnet-XLM mapping and proposed rounding/reserve treatment.
 
 R-001 identity setup: see [released contract](docs/technical-spec.md#r-001-released-identity-and-persistence-contract--dec-057) and [verification evidence](handoff/R-001.md). Provisioning credentials stay in ignored `.env.local` / `.env.r001-accounts.json`; only publishable configuration reaches the browser.
+
+R-002 funding uses the [frozen funding contract](docs/technical-spec.md#r-002-frozen-funding-contract--dec-058); progress and observed results belong in [R-002](handoff/R-002.md).
+
+Interrupted funding setup closure is disabled under DEC-060. See the [R-002 investigation limits](handoff/R-002.md#manual-recovery-for-interrupted-setup--dec-059); operations stay blocked.
+
+The DEC-061 purchase slice uses versioned [server rules](apps/api/src/purchase-rules.mjs); its current API contract is in docs/technical-spec.md. Provider/payment behavior requires deployed verification.
