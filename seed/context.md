@@ -20,6 +20,8 @@ The team accepted a focused PadalaPocket Testnet demo for one OFW parent, one st
 
 Read the handbook extract first for competition details. It preserves the original content, including historical SDK advice; corrections belong in evidence/current specs. The [original DOCX](sources/velo-noir-builder-handbook.docx) remains the source artifact. A handbook example does not prove installed SDK behavior, a working Noir/Velo connection or organizer approval of a particular integration.
 
+B-002 investigates an isolated owner-approved exception device/agent under DEC-044 using a local proof CLI. This does not select the product currency or wallet topology; see [experiment scope/results](../handoff/B-002.md) and [execution/security boundaries](../docs/technical-spec.md#b-002-exception-proof-contract--dec-044).
+
 ## Confirmed team constraints
 
 - Two builders: frontend and backend.
