@@ -17,14 +17,19 @@ class Surface {
 
 test('install failures recover, installed tools hide, and update notices remain singular', async () => {
   const window = new Surface(), body = new Surface();
+  let isSigninPage = true, observePageChange;
+  const appRoot = { querySelector: selector => selector === '.signin-page' && isSigninPage ? {} : null };
+  class Observer { constructor(callback) { observePageChange = callback; } observe() {} }
+  window.MutationObserver = Observer;
   const registration = new Surface();
   registration.installing = new Surface();
   registration.waiting = null;
   const navigator = { onLine: true, serviceWorker: { controller: {}, register: async () => registration } };
   const source = await readFile(new URL('../src/pwa.js', import.meta.url), 'utf8');
   vm.runInNewContext(source.replace('export function', 'function') + '\nsetupPwa();', {
-    document: { body, createElement: () => new Surface() },
-    window, navigator, matchMedia: () => Object.assign(new Surface(), { matches: false }),
+    document: { body, createElement: () => new Surface(), querySelector: () => appRoot },
+    window, navigator, MutationObserver: Observer,
+    matchMedia: () => Object.assign(new Surface(), { matches: false }),
   });
   await new Promise(resolve => setImmediate(resolve));
   const panel = body.children[0];
@@ -40,6 +45,12 @@ test('install failures recover, installed tools hide, and update notices remain 
   await install.fire('click');
   assert.equal(help.hidden, false);
   assert.equal(install.disabled, false);
+  isSigninPage = false;
+  observePageChange();
+  assert.equal(install.hidden, true);
+  isSigninPage = true;
+  observePageChange();
+  assert.equal(install.hidden, false);
   await window.fire('appinstalled');
   assert.equal(panel.hidden, true);
   navigator.onLine = false;
