@@ -11,7 +11,7 @@ Evidence snapshot: **2026-11-07**. Current implementation: one provisioned paren
 - [x] Durable application records survive a refresh/new request.
 - [x] Server signing keys and provider secrets stay outside browser code.
 - [ ] Parent can create a real account with email/password through the app, verify email ownership and sign in afterward; no seeded credentials are needed.
-- [ ] Parent can create or initiate creation of a separate linked child account; the child can sign in independently. Exact credential/invitation mechanics require a scoped contract before implementation.
+- [ ] Parent can create or initiate creation of a separate linked child account; the child can sign in independently. Separate email/password credentials and email-bound setup codes are specified in [L-008](../handoff/L-008.md); mailbox delivery remains unverified.
 - [ ] New families receive their own authorized records and money resources; signup cannot attach them to the existing demo family or reuse its private balances/signing authority.
 - [ ] Duplicate email, invalid credentials, pending verification, expired verification and delivery failures have clear outcomes and a retry path.
 - [ ] Normal registration, sign-in and dashboards use the real family's information and truthful empty states, with no example-parent identities or sample balances.
@@ -149,3 +149,5 @@ Push notifications and queued offline payments are not part of this goal. Schedu
 - [ ] Record/rehearse the two-minute demo and fill in its URL. Video URL and Discord handles are intentionally blank for now.
 
 Evidence and setup: [README](../README.md), [R-004](../handoff/R-004.md). No production-money readiness or independent security audit is claimed.
+
+Account implementation evidence: [L-008](../handoff/L-008.md) adds signup, confirmation resend, verified-email family enrollment and student linking. Actual Supabase confirmation was checked with generated links and synthetic accounts, without sending mail. Keep signup acceptance open until SMTP/inbox delivery is verified; new-family financial acceptance remains open until independent wallets are provisioned.

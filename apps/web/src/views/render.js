@@ -1,3 +1,4 @@
+import { renderAccountSetup, renderFamilySetup } from './accounts.js';
 import { renderWeekly } from './weekly.js';
 import { renderDashboard, renderUnavailable } from './live-layout.js';
 import { getPageTitle, getRoleView, MOCK_BADGE_TEXT, MOCK_DISCLOSURE } from './model.js';
@@ -32,7 +33,8 @@ function renderSignIn(root, state, controller) {
 
   card.append(el('p', 'eyebrow', 'A clearer way to manage allowance'));
   card.append(el('h1', 'brand-title', 'PadalaPocket'));
-  const signinHeading = el('h2', 'signin-heading', 'Sign in');
+  const signup=state.authMode==='signup';
+  const signinHeading = el('h2', 'signin-heading', signup?'Create your account':'Sign in');
   signinHeading.id = 'signin-title';
   card.append(signinHeading);
   card.append(el('p', 'muted intro', 'Your account decides whether you see the parent or student view.'));
@@ -42,6 +44,7 @@ function renderSignIn(root, state, controller) {
   const emailLabel = el('label', 'field-label', 'Email address');
   emailLabel.htmlFor = 'email';
   const email = el('input', 'field-input');
+  email.value=state.signupEmail??'';
   email.id = 'email'; email.name = 'email'; email.type = 'email'; email.autocomplete = 'email'; email.placeholder = 'you@example.com'; email.required = true;
   emailLabel.append(email);
   const passwordLabel = el('label', 'field-label', 'Password');
@@ -56,15 +59,18 @@ function renderSignIn(root, state, controller) {
   if (state.status === 'loading') {
     submit.append(el('span', 'spinner'));
     submit.append(document.createTextNode('Signing in…'));
-  } else submit.textContent = 'Sign in';
+  } else submit.textContent = signup?'Create account':'Sign in';
   submit.type = 'submit'; submit.disabled = state.status === 'loading';
   if (state.status === 'loading') submit.setAttribute('aria-busy', 'true');
   form.append(submit);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    void controller.signIn({ email: email.value, password: password.value });
+    void controller[signup?'signUp':'signIn']({ email: email.value, password: password.value });
   });
   card.append(form);
+  if(state.signupMessage)card.append(el('p','notice',state.signupMessage));
+  if(!state.mock){const toggle=el('button','button button-secondary',signup?'Back to sign in':'Create an account');toggle.onclick=()=>controller.toggleSignup();card.append(toggle);if(signup){password.minLength=8;password.autocomplete='new-password';const resend=el('button','button button-quiet','Resend confirmation email');resend.onclick=()=>controller.resendConfirmation(email.value);card.append(resend);}}
+
   const layouts = el('a', 'layout-entry', 'Explore the nine Figma layouts');
   layouts.href = '/?layout=parent';
   card.append(layouts);
@@ -118,6 +124,7 @@ function renderShell(root, state, controller) {
   const title = el('h1', 'page-title', page); title.id = 'page-title';
   content.append(title);
   content.append(el('p', 'muted page-description', !state.mock && state.activePage === 'Approvals' ? 'Review purchases that need your decision and track approved payments.' : !state.mock && state.activePage === 'Deposit' ? 'Top up your parent wallet through Velo on Stellar Testnet.' : !state.mock && state.activePage === 'Activity' ? 'Your submitted purchases and private item photos.' : !state.mock && state.activePage === 'Allowance rules' ? 'Manage the rules for future Needs purchases.' : !state.mock && state.user.role === 'parent' ? 'Distribute allowance into Needs and Wants on Stellar Testnet. Peso amounts are simulated.' : !state.mock && state.user.role === 'student' ? 'Submit a product photo and price, then track the real purchase status.' : view.message));
+  if(!state.mock && state.user.walletReady===false){renderFamilySetup(content,state,controller);main.append(content);shell.append(sidebar,main);root.replaceChildren(shell);return;}
   const dashboardOnly = !state.mock && renderDashboard(content,state,controller);
   if (!state.mock && (renderWeekly(content,state,controller) || renderUnavailable(content,state,controller) || dashboardOnly || renderFamilyPage(content, state, controller))) {
     // The family view owns its loaded/empty/error states.
@@ -215,5 +222,6 @@ function renderShell(root, state, controller) {
 export function renderApp(root, state, controller) {
   clearFamilyPhotos();
   if (state.screen === 'shell' && state.user) renderShell(root, state, controller);
+  else if(state.screen==='setup')renderAccountSetup(root,state,controller);
   else renderSignIn(root, state, controller);
 }

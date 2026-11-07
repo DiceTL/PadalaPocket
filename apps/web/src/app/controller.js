@@ -40,6 +40,7 @@ export function createAppController({ auth, api }) {
     if (mockMode || !state.user) return;
     const epoch = sessionEpoch, userId = state.user.userId;
     const jobs = [];
+    if(state.user.role==='parent' && api.accountAction)jobs.push((async()=>{try{const result=await api.accountAction('status');if(currentSession(epoch,userId))state={...state,studentLinked:result.studentLinked};}catch{}})());
     if(state.user.role==='parent' && api.approvals)jobs.push((async()=>{try{const approvals=await api.approvals();if(currentSession(epoch,userId))state={...state,approvals,approvalError:null};}catch(e){if(currentSession(epoch,userId))state={...state,approvalError:e.message};}})());
     if (state.user.role === 'parent' && typeof api.veloTopups === 'function') jobs.push(loadTopups());
     for (const [method, field, errorField] of [['weekly','weekly','weeklyError'],['familyRules','familyRules','rulesError'],['activity','activity','activityError']]) {
@@ -54,6 +55,12 @@ export function createAppController({ auth, api }) {
   }
   return {
     getState,
+    reportAuthError(){state={...state,screen:'signin',status:'error',error:{message:'The confirmation link is invalid or expired. Request another confirmation email from Create an account.'}};publish();},
+    toggleSignup(){state={...state,authMode:state.authMode==='signup'?'signin':'signup',error:null,signupMessage:null};publish();},
+    async signUp(credentials){if(pending)return;pending=true;const epoch=sessionEpoch;state={...state,status:'loading',error:null,signupEmail:credentials.email};publish();try{const result=await auth.signUp(credentials);if(epoch===sessionEpoch)state={...state,status:'ready',signupMessage:result.message};}catch(e){if(epoch===sessionEpoch)state={...state,status:'error',error:{message:e.message}};}finally{pending=false;if(epoch===sessionEpoch)publish();}},
+    async resendConfirmation(email){if(pending)return;pending=true;const epoch=sessionEpoch;try{await auth.resend(email);if(epoch!==sessionEpoch)return;state={...state,signupMessage:'Confirmation requested. Check your inbox.',error:null};}catch(e){state={...state,error:{message:e.message}};}finally{pending=false;publish();}},
+    async enrollAccount(role,code){if(pending)return;pending=true;const epoch=sessionEpoch;state={...state,status:'loading',error:null};publish();try{await api.accountAction('enroll',role==='student'?{role,code}:{role});const user=await api.getMe();if(epoch!==sessionEpoch)return;state={screen:'shell',status:'ready',user,activePage:initialPage(user),mock:false};await loadFunding();await loadPurchases();await loadFamily();}catch(e){if(epoch===sessionEpoch)state={...state,status:'error',error:{message:e.message}};}finally{pending=false;if(epoch===sessionEpoch)publish();}},
+    async createStudentCode(email){if(state.accountBusy)return;const epoch=sessionEpoch;state={...state,accountBusy:true,accountError:null};publish();try{const result=await api.accountAction('student-code',{email});if(epoch===sessionEpoch)state={...state,studentCode:result.code};}catch(e){if(epoch===sessionEpoch)state={...state,accountError:e.message};}finally{if(epoch===sessionEpoch){state={...state,accountBusy:false};publish();}}},
     async saveWeeklySchedule(weekday,time) {
       if(state.weeklyBusy || !state.weekly)return;
       const epoch=sessionEpoch,userId=state.user?.userId;
@@ -156,7 +163,7 @@ export function createAppController({ auth, api }) {
     async restore() {
       if (mockMode) return;
       const epoch = ++sessionEpoch;
-      try { const user = await api.getMe(); if (epoch !== sessionEpoch) return; state = { ...state, screen: 'shell', status: 'ready', user, activePage: initialPage(user) }; publish(); await loadFunding(); await loadPurchases(); await loadFamily(); } catch {}
+      try { const user = await api.getMe(); if (epoch !== sessionEpoch) return; state = { ...state, screen: 'shell', status: 'ready', user, activePage: initialPage(user) }; publish(); await loadFunding(); await loadPurchases(); await loadFamily(); } catch(e) {if(epoch===sessionEpoch && e.code==='ACCOUNT_SETUP_REQUIRED'){state={...state,screen:'setup',status:'ready'};publish();}}
     },
     refreshFunding: loadFunding,
     async fundNeeds() {
@@ -188,6 +195,7 @@ export function createAppController({ auth, api }) {
         if (mockMode) await new Promise((resolve) => setTimeout(resolve, MOCK_FEEDBACK_DELAY_MS));
         const result = await auth.signIn(credentials);
         if (epoch !== sessionEpoch) return;
+        if(result.needsSetup){state={screen:'setup',status:'ready',mock:false};return;}
         state = { screen: 'shell', status: 'ready', user: result.user, error: null, activePage: initialPage(result.user), mock: result.mock };
         await loadFunding(); await loadPurchases(); await loadFamily();
       } catch (error) {

@@ -17,6 +17,7 @@ const api = createApiClient({ mode: mockMode ? 'mock' : 'live', identityFixtureN
 const auth = createAuthBoundary({ mode: mockMode ? 'mock' : 'live', api, supabase });
 const controller = createAppController({ auth, api });
 const root = document.querySelector('#app');
+if(new URLSearchParams(location.hash.slice(1)).has('error')){controller.reportAuthError();history.replaceState({},'',location.pathname+location.search);}
 
 // Existing layout bookmarks now open their connected page. Design samples require explicit opt-in.
 const address = new URL(location.href);

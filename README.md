@@ -189,3 +189,7 @@ L-002 parent approvals are implemented locally under [DEC-084](docs/decision-led
 ### Weekly demo configuration (L-004)
 
 The combined weekly flow additionally requires a separate funded Testnet `STUDENT_SECRET` on the API server. It must differ from OWNER_SECRET, AGENT_SECRET and MERCHANT_SECRET. Keep it out of browser variables and git. Apply the weekly lifecycle migration before running this code. Parent Overview has required PHT weekday/time settings and **Advance to next week (test)**. This control submits actual Testnet rollover/allocation transactions while advancing only application demo time. It shows a pending state if confirmation is uncertain. Savings release, My Money spending and a production scheduler remain unfinished. See [L-004](handoff/L-004.md) for verification and release limits.
+
+### New-account signup (L-008)
+
+Use Create an account with a separate email and password for each role. Confirm the email, sign in, then create the parent family or join as Student using the parent-generated setup code. The code expires after 24 hours and is bound to the supplied student email. Supabase Authentication must have email confirmation enabled, the deployed app URL allowed under URL Configuration, and custom SMTP configured for users outside the project team. Signup email delivery has not yet been verified. New families cannot transact until independent wallets are provisioned; they never inherit the demo family’s funds or signers. Account setup is separate from the deferred tutorial.

@@ -24,6 +24,7 @@ export function getFixture(name, expectedKind) {
 export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-identity', fetchImpl = globalThis.fetch, getAccessToken = async () => null } = {}) {
   return {
     mode,
+    async accountAction(action,payload){const token=await getAccessToken();const response=await fetchImpl('/api/accounts/'+action,{method:action==='status'?'GET':'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...(payload?{body:JSON.stringify(payload)}:{})});const body=await response.json();if(!response.ok)throw new ApiError(body.error,response.status);return body;},
     async weekly(method='GET',payload,key) {
       const token=await getAccessToken();
       const response=await fetchImpl(method==='POST'?'/api/demo/advance':'/api/weekly',{method,headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json',...(key?{'Idempotency-Key':key}:{})},...(payload?{body:JSON.stringify(payload)}:{})});

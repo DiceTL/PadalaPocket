@@ -18,7 +18,7 @@ export function createIdentityHandler({ env = process.env, clientFactory = creat
         throw fail(405, 'METHOD_NOT_ALLOWED', 'Method not allowed.');
       }
       const { client, member } = await authenticateMember(req, env, clientFactory);
-      if (path === '/api/me') return send(200, { userId: member.user_id, familyId: member.family_id, role: member.role });
+      if (path === '/api/me') return send(200, { userId: member.user_id, familyId: member.family_id, role: member.role, ...(member.wallet_ready===false?{walletReady:false}:{}) });
       if (recordId) {
         if (!UUID.test(recordId) || path !== `/api/identity-records/${recordId}`) throw fail(400, 'INVALID_INPUT', 'Invalid record identifier.');
         const { data, error } = await client.from('identity_records').select('id,value,created_at').eq('id', recordId).eq('user_id', member.user_id).maybeSingle();
@@ -68,8 +68,9 @@ export async function authenticateMember(req, env = process.env, clientFactory =
     throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
   }
   if (!auth?.user) throw fail(401, 'UNAUTHENTICATED', 'Sign in required.');
-  const { data: member, error: memberError } = await client.from('family_members').select('user_id,family_id,role').eq('user_id', auth.user.id).maybeSingle();
+  const { data: member, error: memberError } = await client.from('family_members').select('user_id,family_id,role,wallet_ready').eq('user_id', auth.user.id).maybeSingle();
   if (memberError) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
-  if (!member || !['parent', 'student'].includes(member.role)) throw fail(403, 'FORBIDDEN', 'Account is not provisioned.');
+  if (!member || !['parent', 'student'].includes(member.role)) throw fail(403, 'ACCOUNT_SETUP_REQUIRED', 'Complete your account setup.');
+  if(member.wallet_ready===false && /^\/api\/(needs-funding|allowance-funding|velo-topups|purchases|weekly|demo)(?:[/?]|$)/.test(req.url??''))throw fail(409,'WALLET_SETUP_REQUIRED','Your family’s wallets are not ready yet.');
   return { client, member };
 }

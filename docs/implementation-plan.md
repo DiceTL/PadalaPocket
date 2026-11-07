@@ -239,3 +239,9 @@ DEC-075 supersedes the order below: bounded L-003A allowance distribution comes 
 | Packet | Scope | State |
 |---|---|---|
 | [L-007 Everyday product categories](../handoff/L-007.md) | 15 product categories, shared AI/API definitions and versioned fresh-produce permission; checks and mobile/desktop controls verified. Deployment remains | Review |
+
+## Self-service accounts — DEC-089
+
+| Packet | Scope | State |
+|---|---|---|
+| [L-008 Separate-email account creation](../handoff/L-008.md) | Parent signup, verified-email enrollment and email-bound student linking; isolated new-family records. SMTP delivery and independent wallet provisioning remain required for the full new-family journey | In progress |

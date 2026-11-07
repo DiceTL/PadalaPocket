@@ -101,3 +101,5 @@ These reduce further question-by-question planning; each remains a proposal:
 ## Decision and evidence ownership
 
 Requirements live here; accepted choices and supersessions live in [decision ledger](decision-ledger.md); research and limitations live in [evidence ledger](../work/evidence-ledger.md). Task status lives only in [implementation plan](implementation-plan.md). This draft records acceptance criteria, not completed implementation or verification.
+
+Account credentials decision (DEC-089): parent and student use separate email/password identities and verify their emails. A parent creates a family and an email-bound expiring setup code; the student redeems it after their own verification. New-family payment access requires independent wallet provisioning; it cannot reuse demo custody. Tutorials remain the last planned onboarding work.
