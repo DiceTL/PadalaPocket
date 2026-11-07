@@ -1,4 +1,7 @@
+import { renderDashboard, renderUnavailable } from './live-layout.js';
 import { getPageTitle, getRoleView, MOCK_BADGE_TEXT, MOCK_DISCLOSURE } from './model.js';
+import { createCameraButton } from './camera.js';
+import { clearFamilyPhotos, renderFamilyPage } from './family.js';
 
 const el = (tag, className, text) => {
   const node = document.createElement(tag);
@@ -61,6 +64,9 @@ function renderSignIn(root, state, controller) {
     void controller.signIn({ email: email.value, password: password.value });
   });
   card.append(form);
+  const layouts = el('a', 'layout-entry', 'Explore the nine Figma layouts');
+  layouts.href = '/?layout=parent';
+  card.append(layouts);
   if (state.mock) card.append(el('p', 'mock-note', MOCK_DISCLOSURE));
   const liveRegion = el('p', 'sr-only', state.status === 'loading' ? 'Signing in' : '');
   liveRegion.setAttribute('aria-live', 'polite');
@@ -78,7 +84,7 @@ function renderShell(root, state, controller) {
   sidebar.append(el('div', 'role-chip', view.title));
   const nav = el('nav', 'navigation');
   nav.setAttribute('aria-label', `${view.title} navigation`);
-  for (const item of state.mock ? view.navigation : view.navigation.filter(item => item === (state.user.role === 'parent' ? 'Overview' : 'Home'))) {
+  for (const item of view.navigation) {
     const button = el('button', `nav-item${state.activePage === item ? ' is-active' : ''}`, item);
     button.type = 'button';
     button.setAttribute('aria-current', state.activePage === item ? 'page' : 'false');
@@ -87,6 +93,9 @@ function renderShell(root, state, controller) {
   }
   sidebar.append(nav);
   const account = el('div', 'sidebar-bottom');
+  const layouts = el('a', 'layout-entry', 'Explore Figma layouts');
+  layouts.href = '/?layout=parent';
+  account.append(layouts);
   if (state.mock) account.append(mockBadge());
   const signOut = el('button', 'button button-quiet signout', 'Sign out');
   signOut.type = 'button'; signOut.addEventListener('click', () => controller.signOut());
@@ -107,41 +116,55 @@ function renderShell(root, state, controller) {
   content.append(el('p', 'eyebrow', view.title));
   const title = el('h1', 'page-title', page); title.id = 'page-title';
   content.append(title);
-  content.append(el('p', 'muted page-description', !state.mock && state.user.role === 'parent' ? 'Needs funding on Stellar Testnet. Peso amounts are simulated.' : !state.mock && state.user.role === 'student' ? 'Submit a product photo and price, then track the real purchase status.' : view.message));
-  if (!state.mock && state.user.role === 'parent') {
+  content.append(el('p', 'muted page-description', !state.mock && state.activePage === 'Deposit' ? 'Top up your parent wallet through Velo on Stellar Testnet.' : !state.mock && state.activePage === 'Activity' ? 'Your submitted purchases and private item photos.' : !state.mock && state.activePage === 'Allowance rules' ? 'Manage the rules for future Needs purchases.' : !state.mock && state.user.role === 'parent' ? 'Distribute allowance into Needs and Wants on Stellar Testnet. Peso amounts are simulated.' : !state.mock && state.user.role === 'student' ? 'Submit a product photo and price, then track the real purchase status.' : view.message));
+  const dashboardOnly = !state.mock && renderDashboard(content,state,controller);
+  if (!state.mock && (renderUnavailable(content,state,controller) || dashboardOnly || renderFamilyPage(content, state, controller))) {
+    // The family view owns its loaded/empty/error states.
+  } else if (!state.mock && state.user.role === 'parent') {
     const panel = el('div', 'preview-panel');
-    panel.append(el('h2', '', 'Student Needs funding'));
-    panel.append(el('p', '', 'Fund simulated ₱9.68 · 1 Testnet XLM'));
+    panel.append(el('h2', '', 'Distribute allowance'));
+    if (state.familyRules) { const settings = state.familyRules.settings; panel.append(el('p', '', `Distribute ₱${Number(settings.weeklyAmountMinor)/100} (simulated): ${settings.needsPercent}% Needs · ${100-settings.needsPercent}% Wants. Uses your saved allowance settings.`)); }
     if (state.funding) {
-      panel.append(el('p', '', `Confirmed funding credits: ${Number(state.funding.confirmedNeedsStroops) / 10000000} Testnet XLM`));
+      panel.append(el('p', '', `Confirmed allocations — Needs: ${Number(state.funding.confirmedNeedsStroops) / 10000000} XLM · Wants: ${Number(state.funding.confirmedWantsStroops??0)/10000000} XLM (Testnet)`));
+      const history = el('details','live-funding-history'); history.append(el('summary','',`Allocation history (${state.funding.operations.length})`)); panel.append(history);
       for (const operation of state.funding.operations) {
-        panel.append(el('p', '', `Funding status: ${operation.status}`));
-        if (operation.transactionHash) panel.append(el('p', '', `Transaction: ${operation.transactionHash}`));
+        history.append(el('p', '', `Funding status: ${operation.status}`));
+        history.append(el('p', '', `Needs: ${Number(operation.amountStroops)/10000000} XLM · Wants: ${Number(operation.wantsStroops??0)/10000000} XLM`));
+        if (operation.wantsTransactionHash) history.append(el('p', '', `Wants transaction: ${operation.wantsTransactionHash}`));
+        if (operation.transactionHash) history.append(el('p', '', `Transaction: ${operation.transactionHash}`));
       }
     }
     if (state.fundingError) panel.append(el('p', '', state.fundingError));
-    const fund = el('button', 'button button-primary', state.fundingBusy ? 'Funding…' : 'Fund Needs');
-    fund.type = 'button'; fund.disabled = Boolean(state.fundingBusy || state.funding?.operations.length);
+    const fund = el('button', 'button button-primary', state.fundingBusy ? 'Funding…' : 'Distribute to Needs and Wants');
+    fund.type = 'button'; fund.disabled = Boolean(state.fundingBusy || !state.familyRules || state.funding?.operations.some(op=>['processing','unknown'].includes(op.status)));
     fund.addEventListener('click', () => controller.fundNeeds()); panel.append(fund);
     const refresh = el('button', 'button button-secondary', 'Refresh funding status');
     refresh.type = 'button'; refresh.addEventListener('click', () => controller.refreshFunding()); panel.append(refresh);
-    content.append(panel);
+    const dashboard=content.querySelector('.live-dashboard');
+    if(dashboard)dashboard.insertBefore(panel,dashboard.querySelector('.live-rules-summary'));else content.append(panel);
   } else if (!state.mock && state.user.role === 'student') {
     const panel = el('section', 'preview-panel');
     panel.append(el('h2', '', 'Pay the demo seller'));
     panel.append(el('p', '', 'Use your Needs balance. Peso amounts are simulated; payments use Stellar Testnet.'));
     const available = state.purchaseHistory?.availableNeedsStroops;
     if (available !== undefined) panel.append(el('p', '', `Available Needs: ${Number(available) / 10000000} Testnet XLM`));
+    if (state.purchaseHistory?.availableWantsStroops !== undefined) panel.append(el('p', '', `Funded Wants: ${Number(state.purchaseHistory.availableWantsStroops)/10000000} Testnet XLM. Wants spending is not enabled yet.`));
     const rules = state.purchaseHistory?.rules;
     if (rules) panel.append(el('p', '', `Purchase limit: ₱${Number(rules.capMinor) / 100}. Allowed: ${rules.allowedCategories.join(', ').replaceAll('_', ' ')}.`));
     const form = el('form', 'signin-form');
     const photoLabel = el('label', 'field-label', 'Product photo (PNG or JPEG, up to 2 MiB)');
-    const photo = el('input', 'field-input'); photo.type = 'file'; photo.accept = 'image/png,image/jpeg'; photo.required = true; photoLabel.append(photo);
+    const photo = el('input', 'field-input'); photo.type = 'file'; photo.accept = 'image/png,image/jpeg'; photo.hidden = true; photoLabel.append(photo);
+    const choosePhoto = el('button', 'camera-trigger', 'Choose a photo'); choosePhoto.type = 'button'; choosePhoto.addEventListener('click', () => photo.click());
+    let selectedPhoto;
+    const photoSelection = el('p', 'photo-selection', 'Take a photo of the item. If the camera does not work during the demo, choose a photo instead.'); photoSelection.setAttribute('role', 'status');
+    photo.addEventListener('change', () => { selectedPhoto = photo.files[0]; photoSelection.textContent = selectedPhoto ? `Selected: ${selectedPhoto.name}` : 'Choose a photo or use the camera.'; });
+    const camera = createCameraButton({ onPhoto(file) { selectedPhoto = file; photo.value = ''; photoSelection.textContent = 'Camera photo selected. Submit purchase when you are ready.'; }, onError(message) { photoSelection.textContent = message; } });
     const priceLabel = el('label', 'field-label', 'Price in simulated pesos');
     const price = el('input', 'field-input'); price.type = 'text'; price.inputMode = 'decimal'; price.required = true; price.placeholder = '0.00'; priceLabel.append(price);
     const submit = el('button', 'button button-primary', state.purchaseBusy ? 'Checking purchase…' : 'Submit purchase');
     submit.type = 'submit'; submit.disabled = Boolean(state.purchaseBusy || state.purchaseHistory?.purchases.some(p => !['blocked','claimed','failed'].includes(p.status)));
-    form.append(photoLabel, priceLabel, submit); form.addEventListener('submit', event => { event.preventDefault(); void controller.submitPurchase(photo.files[0], price.value); }); panel.append(form);
+    const photoActions = el('div', 'photo-actions'); photoActions.append(camera, choosePhoto);
+    form.append(photoLabel, photoActions, photoSelection, priceLabel, submit); form.addEventListener('submit', event => { event.preventDefault(); if (!selectedPhoto) { photoSelection.textContent = 'Take or choose a product photo first.'; return; } void controller.submitPurchase(selectedPhoto, price.value); }); panel.append(form);
     if (state.purchaseError) { const error = el('p', '', state.purchaseError); error.setAttribute('role', 'alert'); panel.append(error); }
     const refresh = el('button', 'button button-secondary', 'Refresh purchase status'); refresh.type = 'button'; refresh.addEventListener('click', () => controller.refreshPurchases()); panel.append(refresh);
     for (const purchase of state.purchaseHistory?.purchases || []) {
@@ -182,6 +205,7 @@ function renderShell(root, state, controller) {
 }
 
 export function renderApp(root, state, controller) {
+  clearFamilyPhotos();
   if (state.screen === 'shell' && state.user) renderShell(root, state, controller);
   else renderSignIn(root, state, controller);
 }

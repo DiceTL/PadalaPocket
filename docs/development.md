@@ -1,5 +1,11 @@
 # Shared development setup
 
+## Connected local app — L-001
+
+The app now uses real Auth/API behavior by default, including development. Start the API from the repository root with `node --env-file=.env.local apps/api/src/dev.mjs`, then the frontend with `npm run dev --workspace @padalapocket/web`. The Vite proxy forwards `/api` to port 3001. Vite explicitly maps only Supabase URL and publishable key from root configuration; all signing/service/provider secrets remain server-only. Provisioned credentials stay in ignored local files. For the old labeled mock shell, explicitly set `VITE_APP_MODE=mock` in development; production always uses live mode. `?layout=...` routes remain separate sample previews.
+
+Saved rules and private activity require the L-001 database migration. Existing reduced Needs funding/purchases are real Testnet operations; weekly scheduling, Wants funding and wallet lifecycle remain later stages until their delivery evidence is recorded.
+
 S-001 establishes infrastructure only. The web entry is intentionally blank pending human design authority. `GET /api/health` reports runtime and Testnet configuration without provider calls. B-001 adds a separately protected operator proof route; it is disabled by default.
 
 ## Local commands
@@ -74,3 +80,7 @@ Anchor follow-up under DEC-051: `retry-initiation` is an explicit operator exper
 DEC-052 correction: `recover` recovers transaction identity and its **information** URL only; that URL is not an interactive-form link. A one-time `new-unpaid-session` archives the original incomplete unpaid session and captures a genuine new initiation response. Never pay the archived session. The reference UI business server `/start` exchanges the genuine interactive token for a private session ID; `/submit` accepts synthetic demo fields. These endpoints were verified directly from its served source bundle, not inferred from the information URL.
 
 `node --env-file=.env.local apps/api/scripts/anchor-transfer.mjs` performs one fixed 1-XLM Testnet merchant payment only after a fresh authenticated anchor lookup and matching returned/UI destination, memo and amount. It journals the signed envelope/hash before dispatch, uses a 120-second validity period and bounds the fee. If a hash is already stored, it only observes that hash through Testnet Horizon; missing/unknown results never prepare or submit another transfer. No other merchant operation may run concurrently. `anchor-proof.mjs status` reports anchor status independently of ledger transfer confirmation.
+
+## Velo parent wallet setup — DEC-076/077
+
+The Velo project owner must be the app's existing parent Testnet public wallet, displayed on parent Deposit. Velo's in-house checkout pays the project owner; there is no arbitrary receiver argument in SDK 0.1.0-alpha.4. Connect that wallet in Velo, select/create its project, and generate a Testnet API key. Store that key in ignored .env.local as VELO_API_KEY (host secret configuration for deployment), then restart the API. Preserve OWNER_SECRET because existing escrows belong to it. Never paste Stellar secret keys into a checkout, chat or repository. If the parent demo wallet needs importing into a wallet extension, its owner must perform that secret entry locally. Create a fresh checkout after the API key change; old sessions retain their receiver. Verify paid through Refresh Velo status; the browser redirect cannot establish payment.

@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import { DEFAULT_SETTINGS } from '../src/family.mjs';
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import { purchases } from '../src/purchases.mjs';
@@ -31,7 +32,7 @@ function fixture({ role = 'student', ai = { productName: 'Notebook', category: '
   } };
   let pending = 0n;
   const ledger = { merchantPublicKey: 'fixed-merchant', status: async () => ({ status }), escrow: async () => 10000000n, pending: async () => pending, check: async () => ({ ok: true }), prepare: async stage => { calls.prepare.push(stage); return { signed: `${stage}-envelope`, hash: `${stage}-hash` }; }, submit: async signed => { assert.ok(rows[0].steps[calls.prepare.at(-1)]); calls.submit.push(signed); if (signed === 'authorize-envelope') pending = 2500000n; if (signed === 'claim-envelope') pending = 0n; } };
-  const deps = { authenticate: async () => ({ member: { role, user_id: student, family_id: 'family' } }), database: () => db, validate: async () => {}, identify: async () => { calls.ai++; return { ai, usage: { total_tokens: 1 } }; }, ledger: () => ledger };
+  const deps = { loadRules: async () => ({ revision: 0, settings: structuredClone(DEFAULT_SETTINGS) }), authenticate: async () => ({ member: { role, user_id: student, family_id: 'family' } }), database: () => db, validate: async () => {}, identify: async () => { calls.ai++; return { ai, usage: { total_tokens: 1 } }; }, ledger: () => ledger };
   const request = async (method = 'POST', body = payload, url = '/api/purchases', requestKey = key) => { const res = { setHeader() {}, end(raw) { this.body = Buffer.isBuffer(raw) ? raw : JSON.parse(raw); } }; await purchases({ method, url, body, headers: { 'idempotency-key': requestKey } }, res, deps); return res; };
   return { calls, rows, deps, request, ledger, setStatus(value) { status = value; } };
 }
@@ -40,6 +41,10 @@ test('unauthenticated purchase fails before privileged access', async () => {
   const res = await f.request(); assert.equal(res.statusCode, 401); assert.equal(f.calls.db, 0);
 });
 test('parent cannot submit a purchase', async () => { const f = fixture({ role: 'parent' }); assert.equal((await f.request()).statusCode, 403); assert.equal(f.calls.db, 0); });
+test('new purchases enforce persisted category/cap rules, not fixture defaults', async () => {
+  const f = fixture(); f.deps.loadRules = async () => ({ revision: 2, settings: { ...DEFAULT_SETTINGS, capMinor: '100', needsCategories: ['school_supplies'] } });
+  const result = await f.request(); assert.equal(result.body.reason, 'CAP_EXCEEDED'); assert.equal(f.calls.submit.length, 0); assert.equal(f.rows[0].rules.version, 'family-v1-2');
+});
 for (const [name, ai, reason] of [
   ['uncertain', { productName: null, category: 'unknown', uncertain: true }, 'AI_UNCERTAIN'],
   ['category', { productName: 'Toy', category: 'toys_collectibles', uncertain: false }, 'CATEGORY_DISALLOWED'],

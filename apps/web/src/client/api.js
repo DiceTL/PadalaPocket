@@ -24,6 +24,36 @@ export function getFixture(name, expectedKind) {
 export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-identity', fetchImpl = globalThis.fetch, getAccessToken = async () => null } = {}) {
   return {
     mode,
+    async veloTopups(method = 'GET', key, expectedRevision) {
+      const token = await getAccessToken();
+      const response = await fetchImpl('/api/velo-topups', { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(method === 'POST' ? { body: JSON.stringify({ expectedRevision }) } : {}) });
+      const body = await response.json(); if (!response.ok) throw new ApiError(body.error, response.status); return body;
+    },
+    async familyRules(settings, expectedRevision) {
+      if (mode !== 'live') throw new Error('Saved rules require the live API.');
+      const token = await getAccessToken();
+      const response = await fetchImpl('/api/family/rules', { method: settings ? 'PUT' : 'GET', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, ...(settings ? { body: JSON.stringify({ settings, expectedRevision }) } : {}) });
+      const body = await response.json();
+      if (!response.ok) throw new ApiError(body.error);
+      return body;
+    },
+    async activity() {
+      if (mode !== 'live') throw new Error('Activity requires the live API.');
+      const token = await getAccessToken();
+      const response = await fetchImpl('/api/family/activity', { headers: { Authorization: `Bearer ${token}` } });
+      const body = await response.json();
+      if (!response.ok) throw new ApiError(body.error);
+      return body;
+    },
+    async purchasePhoto(id, signal) {
+      if (mode !== 'live' || !/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(id)) throw new Error('Invalid photo request.');
+      const token = await getAccessToken();
+      const response = await fetchImpl(`/api/purchases/${id}/photo`, { headers: { Authorization: `Bearer ${token}` }, signal });
+      if (!response.ok) throw new Error('Photo unavailable.');
+      const blob = await response.blob();
+      if (!['image/png','image/jpeg'].includes(blob.type) || blob.size > 2097152) throw new Error('Invalid photo response.');
+      return blob;
+    },
     async getMe() {
       if (mode === 'mock') return structuredClone(getFixture(identityFixtureName, 'identity').body);
       if (typeof fetchImpl !== 'function') throw new Error('Fetch is unavailable.');
@@ -33,9 +63,9 @@ export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-i
       if (!response.ok) throw new ApiError(body?.error, response.status);
       return body;
     },
-    async funding(method = 'GET', key) {
+    async funding(method = 'GET', key, expectedRevision) {
       const token = await getAccessToken();
-      const response = await fetchImpl('/api/needs-funding', { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(method === 'POST' ? { body: JSON.stringify({ priceMinor: '968' }) } : {}) });
+      const response = await fetchImpl('/api/allowance-funding', { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(method === 'POST' ? { body: JSON.stringify({ expectedRevision }) } : {}) });
       const body = await response.json();
       if (!response.ok) throw new ApiError(body.error, response.status);
       return body;

@@ -1,0 +1,16 @@
+<div class="parent-page">
+  <header class="parent-page-heading"><span class="parent-tag">SAMPLE RULES</span><h1>Allowance rules</h1><p>Plan Mia’s weekly allowance and spending limits.</p></header>
+  <div class="parent-page-columns">
+    <form id="parent-rules-form" class="parent-card">
+      <h2>Weekly allowance</h2><p class="parent-muted">Try a different split. These settings stay in this preview.</p>
+      <label for="weekly-amount">Weekly amount in simulated pesos</label><input id="weekly-amount" name="weekly" type="number" min="1" max="100000" step="1" value="1500" required>
+      <div class="parent-form-row"><div><label for="needs-share">Needs share (%)</label><input id="needs-share" name="needs" type="number" min="0" max="100" step="1" value="60" required></div><div><label for="purchase-cap">Purchase cap (₱)</label><input id="purchase-cap" name="cap" type="number" min="1" max="100000" step="1" value="500" required></div></div>
+      <p class="parent-muted">The remaining percentage goes to Wants.</p>
+      <div id="parent-category-groups" class="parent-category-groups"></div>
+      <p class="parent-muted">Choose allowed categories for each bucket. Sample selections only; these do not change the connected demo’s server rules.</p>
+      <div class="parent-actions"><button class="parent-primary" type="submit">Update preview</button><button id="parent-rules-reset" class="parent-secondary" type="reset">Reset</button></div>
+      <p id="parent-rules-result" class="parent-result" role="status" hidden></p>
+    </form>
+    <div class="parent-stack"><section class="parent-card"><h2>How the sample is split</h2><div class="parent-summary-row"><span>Needs · 60%</span><strong>₱900</strong></div><div class="parent-summary-row"><span>Wants · 40%</span><strong>₱600</strong></div><p class="parent-muted">These are the original Figma sample values. Use Update preview to calculate another split.</p></section><section class="parent-card"><h2>Before you change a rule</h2><p>Allowance settings and approval workflows are deferred in the reduced demo. This preview does not change a student’s permissions or balance.</p><a class="parent-text-link" href="?layout=approvals">View sample approvals →</a></section></div>
+  </div>
+</div>

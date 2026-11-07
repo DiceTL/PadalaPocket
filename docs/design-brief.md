@@ -15,6 +15,7 @@
 Founder-specified money display: follow [the product money-display rule](product-spec.md#demo-journey), accepted under DEC-045. The frontend design references below do not override the accepted dual simulated-PHP/Testnet-XLM display and mapping rules.
 
 * **Figma Source:** [PadalaPocket – FE-002 to FE-006 layouts](https://www.figma.com/design/aHBonOuy1uw5kCO0Ih0oxl/PadalaPocket-%E2%80%93-FE-002-to-FE-006-layouts?node-id=0-1&t=sUwbNSRyZ1JCxZnm-1)
+* **Direct access update (UI-001, 2026-11-07):** All nine frames were read directly through Figma design context and screenshots after the invited account accepted file access. UI-001 transcribes these approved layouts as labeled sample pages under DEC-062; the earlier PDF review remains historical evidence. This does not accept the open correction proposals below.
 * **Visual Reference Export:** `PadalaPocket – Initial Web App Layout.pdf` (9 pages: FE-003 parent dashboard, FE-004/005 approvals, FE-002 sign-in, FE-004 Pay a seller, FE-004 Purchase status, FE-005 Savings, FE-005 My Money, FE-005 Week-end recap, FE-006 Withdrawal). All pages are labeled "final draft" and use sample data.
 * **Review basis (2026-11-07):** The 9-page PDF export supplied in this conversation was inspected visually and compared with the current product spec, technical spec and S-002 fixtures. The user confirmed that the web-app layout has not changed since export, so this PDF is the current visual reference for FE-001. The Figma file itself was not inspected directly; the proposed changes below still need review by the human design owner.
 
@@ -33,6 +34,8 @@ Founder-specified money display: follow [the product money-display rule](product
 | **Withdrawal & Payout** (FE-006) | Parent acting as demo operator (proposal per technical spec; confirmation pending) | Run the demo seller's test-anchor withdrawal after a confirmed merchant claim, with simulated fiat payout disclosed | "Simulated payout" banner, withdrawal detail, status, mock/live config label | Open anchor step, Refresh status | Pending, Completed (Done, real confirmation only), Error (Failed, Retry), Fake or unverified completion (rejected, shown as error) | Anchor withdrawal ID and status, claim status |
 
 ## Layout and responsiveness
+
+**Responsive implementation update — DEC-065:** Founder explicitly delegated responsive design across every page. All ten previews now use fluid widths. At 760px and below, parent navigation becomes a compact grid, review/operator workspaces stack, and student navigation stays at the bottom. Above 760px, student views use a sidebar and wider content grids; parent balances adapt at 1050px. Sign-in uses a bounded card. This supersedes the earlier unresolved parent-breakpoint restriction for UI-001. The original Figma files remain the visual source at their target widths; the responsive adaptations are web implementation decisions. Local evidence is in UI-001.
 
 * **Target Viewports:** Student mobile at 390px and parent desktop at 1280px, as shown in the PDF export. Intermediate breakpoints are not shown.
 * **Layout Structure:** Card-based modular layout on a light gray background, white rounded cards, clear hierarchy.
@@ -117,6 +120,12 @@ Found in the PDF export. All are proposed changes needing reconfirmation.
 Kept as designed: Wants purple/indigo, Declined and Failed red, Paid and Done green, solid navy pill buttons, bottom navigation targets at least 44px.
 
 ## Design gaps and pending layouts
+
+**Web preview update — DEC-066:** The founder requested completing parent navigation. UI-001 now includes web-only parent Allowance rules, Activity, Savings and Deposit previews, plus persistent parent navigation through Overview and Approvals. The new screens reuse existing sample data and do not establish deferred API contracts. Rules editing is local to the preview; Activity filtering is local. The original Figma gap inventory below remains historical source review, not the current web-preview inventory.
+
+**Categories and camera — DEC-067:** Rules now has separate Needs/Wants selections for the six DEC-028 photo-demo categories. Selections and updates are local preview behavior. Pay a seller now offers Choose photo and Take photo; camera capture is also available in the connected student form. Camera access requires an explicit user action and browser permission. Capturing selects a photo; it does not submit a purchase. No new backend policy or API contract is implied.
+
+**Activity photos and capture controls — DEC-068:** Parent Activity previews available sample pictures as thumbnails with full-size viewing and explicit missing-sample notices. A live parent history feed remains unimplemented. Pay a seller now uses exactly Take a photo and Choose a photo for selecting the item picture; Choose a photo is the demo fallback. The redundant Replace, Scan again and manual category controls were removed from that preview. The fixed seller, price, AI outcome and explicit submit remain.
 
 **Screens not yet designed (not in the PDF)**
 * Student Home and Parent Activity. Both are in navigation. For FE-002, Student Home can be a placeholder route.

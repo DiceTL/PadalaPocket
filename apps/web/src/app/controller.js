@@ -9,9 +9,17 @@ export function createAppController({ auth, api }) {
 
   const currentSession = (epoch, userId) => epoch === sessionEpoch && state.screen === 'shell' && state.user?.userId === userId;
 
+  const initialPage = (user, requested=typeof location !== 'undefined'?new URLSearchParams(location.search).get('page'):null) => { const allowed=user.role==='parent'?['Overview','Allowance rules','Approvals','Activity','Savings','Deposit','Withdrawal']:['Home','Pay a seller','Activity','Savings','My Money','Week-end recap']; return allowed.includes(requested)?requested:allowed[0]; };
   const getState = () => ({ ...state, user: state.user && { ...state.user } });
   const publish = () => listeners.forEach((listener) => listener(getState()));
 
+  async function loadTopups() {
+    if (mockMode || state.user?.role !== 'parent' || !api.veloTopups) return;
+    const epoch = sessionEpoch, userId = state.user.userId;
+    try { const topups = await api.veloTopups(); if (currentSession(epoch,userId)) state = { ...state, topups, topupError: null }; }
+    catch(e) { if (currentSession(epoch,userId)) state = { ...state, topupError: e.message }; }
+    if (currentSession(epoch,userId)) publish();
+  }
   async function loadFunding() {
     if (!mockMode && state.user?.role === 'parent') {
       const epoch = sessionEpoch, userId = state.user.userId;
@@ -28,8 +36,50 @@ export function createAppController({ auth, api }) {
       publish();
     }
   }
+  async function loadFamily() {
+    if (mockMode || !state.user) return;
+    const epoch = sessionEpoch, userId = state.user.userId;
+    const jobs = [];
+    if (state.user.role === 'parent' && typeof api.veloTopups === 'function') jobs.push(loadTopups());
+    for (const [method, field, errorField] of [['familyRules','familyRules','rulesError'],['activity','activity','activityError']]) {
+      if (typeof api[method] !== 'function') continue;
+      jobs.push((async () => {
+        try { const value = await api[method](); if (currentSession(epoch, userId)) state = { ...state, [field]: value, [errorField]: null }; }
+        catch (error) { if (currentSession(epoch, userId)) state = { ...state, [errorField]: error.message }; }
+      })());
+    }
+    if (!jobs.length) return;
+    await Promise.all(jobs); if (currentSession(epoch, userId)) publish();
+  }
   return {
     getState,
+    refreshTopups: loadTopups,
+    async createTopup() {
+      if (state.topupBusy || !state.familyRules || state.user?.role !== 'parent') return;
+      const epoch=sessionEpoch, userId=state.user.userId;
+      const storageKey='veloTopup:'+userId;
+      let saved; try { saved=JSON.parse(localStorage.getItem(storageKey)); } catch {}
+      saved ||= { key:crypto.randomUUID(), revision:state.familyRules.revision };
+      localStorage.setItem(storageKey,JSON.stringify(saved));
+      state={...state,topupBusy:true,topupError:null};publish();
+      try { await api.veloTopups('POST',saved.key,saved.revision); localStorage.removeItem(storageKey); await loadTopups(); }
+      catch(e) { if(e.code==='RULES_CHANGED')localStorage.removeItem(storageKey); if(currentSession(epoch,userId))state={...state,topupError:e.message}; }
+      finally { if(currentSession(epoch,userId)){state={...state,topupBusy:false};publish();} }
+    },
+    refreshFamily: loadFamily,
+    fetchPurchasePhoto: (id, signal) => api.purchasePhoto(id, signal),
+    async saveFamilyRules(settings) {
+      if (state.rulesBusy || state.user?.role !== 'parent' || !state.familyRules) return;
+      const epoch = sessionEpoch, userId = state.user.userId;
+      state = { ...state, rulesBusy: true, rulesError: null, rulesDraft: settings, rulesSaved: false }; publish();
+      try {
+        const saved = await api.familyRules(settings, state.familyRules.revision);
+        if (!currentSession(epoch, userId)) return;
+        state = { ...state, familyRules: { ...state.familyRules, ...saved }, rulesDraft: null, rulesSaved: true };
+        await loadPurchases(); await loadFamily();
+      } catch (error) { if (currentSession(epoch, userId)) state = { ...state, rulesError: error.code === 'RULES_CHANGED' ? 'Rules changed in another session. Refresh to load the latest version before saving again.' : error.message }; }
+      finally { if (currentSession(epoch, userId)) { state = { ...state, rulesBusy: false }; publish(); } }
+    },
     refreshPurchases: loadPurchases,
     async submitPurchase(file, price) {
       if (state.purchaseBusy || !file) return;
@@ -48,7 +98,7 @@ export function createAppController({ auth, api }) {
         const priorTerminal = state.purchaseHistory?.purchases.some(p => p.requestKey === saved?.key && p.status === 'blocked');
         const key = saved?.digest === digest && !priorTerminal ? saved.key : crypto.randomUUID();
         localStorage.setItem(storageKey, JSON.stringify({ digest, key }));
-        await api.purchases('POST', payload, key); if (!currentSession(epoch, userId)) return; await loadPurchases();
+        await api.purchases('POST', payload, key); if (!currentSession(epoch, userId)) return; await loadPurchases(); await loadFamily();
       } catch (e) { if (currentSession(epoch, userId)) state = { ...state, purchaseError: e.message }; }
       finally { if (currentSession(epoch, userId)) { state = { ...state, purchaseBusy: false }; publish(); } }
     },
@@ -56,24 +106,27 @@ export function createAppController({ auth, api }) {
       if (state.purchaseBusy) return;
       const epoch = sessionEpoch, userId = state.user?.userId;
       state = { ...state, purchaseBusy: true }; publish();
-      try { await api.purchases('POST', {}, undefined, '/' + id + '/claim'); if (!currentSession(epoch, userId)) return; await loadPurchases(); }
+      try { await api.purchases('POST', {}, undefined, '/' + id + '/claim'); if (!currentSession(epoch, userId)) return; await loadPurchases(); await loadFamily(); }
       catch (e) { if (currentSession(epoch, userId)) state = { ...state, purchaseError: e.message }; }
       finally { if (currentSession(epoch, userId)) { state = { ...state, purchaseBusy: false }; publish(); } }
     },
     async restore() {
       if (mockMode) return;
       const epoch = ++sessionEpoch;
-      try { const user = await api.getMe(); if (epoch !== sessionEpoch) return; state = { ...state, screen: 'shell', status: 'ready', user, activePage: user.role === 'parent' ? 'Overview' : 'Home' }; publish(); await loadFunding(); await loadPurchases(); } catch {}
+      try { const user = await api.getMe(); if (epoch !== sessionEpoch) return; state = { ...state, screen: 'shell', status: 'ready', user, activePage: initialPage(user) }; publish(); await loadFunding(); await loadPurchases(); await loadFamily(); } catch {}
     },
     refreshFunding: loadFunding,
     async fundNeeds() {
-      if (state.fundingBusy) return;
+      if (state.fundingBusy || !state.familyRules) return;
       const epoch = sessionEpoch, userId = state.user?.userId;
-      const key = localStorage.getItem('needsFundingKey') || crypto.randomUUID();
-      localStorage.setItem('needsFundingKey', key);
+      const key = localStorage.getItem('allowanceFundingKey:' + userId) || crypto.randomUUID();
+      const savedRevision = localStorage.getItem('allowanceFundingRevision:' + userId);
+      const allocationRevision = savedRevision === null ? state.familyRules.revision : Number(savedRevision);
+      localStorage.setItem('allowanceFundingRevision:' + userId, String(allocationRevision));
+      localStorage.setItem('allowanceFundingKey:' + userId, key);
       state = { ...state, fundingBusy: true, fundingError: null }; publish();
-      try { await api.funding('POST', key); if (!currentSession(epoch, userId)) return; await loadFunding(); await loadPurchases(); }
-      catch (e) { if (currentSession(epoch, userId)) state = { ...state, fundingError: e.message }; }
+      try { const result = await api.funding('POST', key, allocationRevision); if (result.status === 'confirmed' || result.status === 'failed') { localStorage.removeItem('allowanceFundingKey:' + userId); localStorage.removeItem('allowanceFundingRevision:' + userId); } if (!currentSession(epoch, userId)) return; await loadFunding(); await loadPurchases(); await loadFamily(); }
+      catch (e) { if (e.code === 'RULES_CHANGED') { localStorage.removeItem('allowanceFundingKey:' + userId); localStorage.removeItem('allowanceFundingRevision:' + userId); } if (currentSession(epoch, userId)) state = { ...state, fundingError: e.message }; }
       finally { if (currentSession(epoch, userId)) { state = { ...state, fundingBusy: false }; publish(); } }
     },
     subscribe(listener) {
@@ -92,8 +145,8 @@ export function createAppController({ auth, api }) {
         if (mockMode) await new Promise((resolve) => setTimeout(resolve, MOCK_FEEDBACK_DELAY_MS));
         const result = await auth.signIn(credentials);
         if (epoch !== sessionEpoch) return;
-        state = { screen: 'shell', status: 'ready', user: result.user, error: null, activePage: result.user.role === 'parent' ? 'Overview' : 'Home', mock: result.mock };
-        await loadFunding(); await loadPurchases();
+        state = { screen: 'shell', status: 'ready', user: result.user, error: null, activePage: initialPage(result.user), mock: result.mock };
+        await loadFunding(); await loadPurchases(); await loadFamily();
       } catch (error) {
         if (epoch !== sessionEpoch) return;
         state = { ...state, screen: 'signin', status: 'error', error: { code: error.code || 'SIGN_IN_FAILED', message: error.message, retryable: Boolean(error.retryable) } };
@@ -117,7 +170,9 @@ export function createAppController({ auth, api }) {
       state = { ...state, status: 'ready', error: null };
       publish();
     },
-    navigate(page) {
+    navigate(page, recordHistory = true) {
+      if (state.user && initialPage(state.user,page) !== page) return;
+      if (!mockMode && recordHistory) { const url=new URL(location.href); url.searchParams.set('page',page); url.searchParams.delete('layout'); history.pushState({},'',url); }
       state = { ...state, status: 'ready', activePage: page, error: null };
       publish();
     },

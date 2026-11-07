@@ -194,3 +194,38 @@ Product IDs F-001–F-008 are unchanged; frontend task packets use FE-001 onward
 | PLAN-002 Product spec | Draft ready | Proposed defaults still need relevant decisions |
 | PLAN-003 Technical scope | Draft ready | Architecture/contracts; EV-025 local imports only |
 | PLAN-004 Plan/packets | Revised draft ready | DEC-032–DEC-034; relative effort points and document checks, no build executed |
+
+
+## Figma layout implementation — DEC-062/DEC-063
+
+| Task / packet | Scope | State |
+|---|---|---|
+| [UI-001 Implement Figma layouts and delegated screens](../handoff/UI-001.md) | Fourteen responsive previews and role shells under DEC-062–DEC-069. Local checks pass; full repository check also passes outside the sandbox under L-001. Team review/merge remain | Review |
+
+
+## Connected-function delivery — DEC-070
+
+User authorizes implementation of the broader functions after the UI previews. Original deferred tasks retain their acceptance scope. These stages do not imply completion of the original tasks or deployment.
+
+| Packet | Scope | State |
+|---|---|---|
+| [L-001 Durable rules and private activity](../handoff/L-001.md) | Migration applied; local real-account save/reload, activity/private photos and full checks pass. Review, merge and production deployment remain | Review |
+| [L-003A Parent allowance distribution](../handoff/L-003A.md) | Immediate priority under DEC-075: manual saved-amount Needs/Wants distribution; migration applied, real 0.6/0.4 XLM split and replay verified, parent/student UI checked. Production deployment remains | Review |
+| [L-002 Parent purchase decisions](../handoff/L-002.md) | Priority 1: ten-minute expiry, exact-request parent decisions, isolated exception execution and live approval UI | Planned |
+| [L-003 Backed family-wallet flows](../handoff/L-003.md) | Priority 2: backed Wants allocation/purchases, Savings release to private My Money and student-only My Money spending | Planned |
+| L-004 Weekly lifecycle | Deferred by DEC-074: parent-chosen schedule, backed repeat allocation/rollover, reminders and demo clock | Deferred |
+| L-005 Interactive withdrawal | Deferred by DEC-074: authenticated anchor initiation/reconciliation and frontend wiring | Deferred |
+
+DEC-075 supersedes the order below: bounded L-003A allowance distribution comes first, per founder correction. Other L-003 flows and L-002 remain planned. DEC-074 originally prioritized L-002 and L-003. The two-hour window is a prioritization constraint, not a promise that complex payment/accounting delivery gates will fit. If checks or live evidence do not fit, preserve the verified state and report the unfinished criteria; do not relabel partial work as delivered. Manual funding is the temporary demo operation; do not portray static data as an automated weekly transfer.
+
+## Velo integration — DEC-076
+
+| Packet | Scope | State |
+|---|---|---|
+| [L-006 Velo parent wallet top-ups](../handoff/L-006.md) | Authenticated native Testnet checkout in parent Deposit, durable session journal, receiver validation and server status. Real create/replay/status and role UI verified; checks pass. Parent-owned Velo project configured and activated; verified matching-receiver ready checkout. Paid top-up and production deployment remain | Review |
+
+## Live layout conversion — DEC-079
+
+| Packet | Scope | State |
+|---|---|---|
+| [UI-002 Live application layouts](../handoff/UI-002.md) | Preview visual system applied to connected role pages, real dashboards, native controls and explicit unfinished states; full checks and mobile/desktop navigation/private-photo verification pass. Review/deployment remain | Review |

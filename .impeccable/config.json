@@ -1,0 +1,108 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "apps/web/src/layouts/pages.css",
+          "apps/web/src/styles.css"
+        ],
+        "createdAt": "2026-11-07T00:47:20.748Z",
+        "reason": "User requested copying the existing Figma layouts; all nine directly inspected frames use Inter. DEC-062 and handoff/UI-001.md retain that approved typography."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/withdrawal.html"
+        ],
+        "createdAt": "2026-11-07T00:47:20.865Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/recap.html"
+        ],
+        "createdAt": "2026-11-07T00:47:20.973Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/my-money.html"
+        ],
+        "createdAt": "2026-11-07T00:47:21.084Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/savings.html"
+        ],
+        "createdAt": "2026-11-07T00:47:21.192Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/purchase-status.html"
+        ],
+        "createdAt": "2026-11-07T00:47:21.307Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/pay.html"
+        ],
+        "createdAt": "2026-11-07T00:47:21.419Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/sign-in.html"
+        ],
+        "createdAt": "2026-11-07T00:47:21.530Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/approvals.html"
+        ],
+        "createdAt": "2026-11-07T00:47:21.639Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "apps/web/src/layouts/parent.html"
+        ],
+        "createdAt": "2026-11-07T00:47:21.747Z",
+        "reason": "User requested a faithful copy of the approved Figma frames (DEC-062). These native templates retain the source fixed-height flex-centered inputs/buttons and compact status pills. All nine rendered screenshots were inspected under UI-001; their deliberate centering and padding match Figma. Static no-inset warnings do not account for those layouts."
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "apps/web/src/views/live-layout.css"
+        ],
+        "createdAt": "2026-11-07T02:50:53.701Z",
+        "reason": "Existing approved Figma/preview typography is Inter; DEC-079 requires preserving the incumbent visual system."
+      }
+    ]
+  }
+}

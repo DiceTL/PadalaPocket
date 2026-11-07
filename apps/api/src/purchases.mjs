@@ -2,13 +2,14 @@ import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'node:crypto';
 import { authenticateMember } from './identity.mjs';
 import { phpToStroops } from './money-mapping.mjs';
-import { PURCHASE_RULES, decidePurchase } from './purchase-rules.mjs';
+import { decidePurchase } from './purchase-rules.mjs';
 import { validatePhoto, identifyPhoto, purchaseLedger } from './purchase-providers.mjs';
+import { readFamilyRules, purchaseRulesFromSettings } from './family.mjs';
 const fail = (status, code) => Object.assign(Error(code), { status, code });
 const uuid = /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const purchaseProjection = row => ({ id: row.id, requestKey: row.request_key, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), rules: row.rules, ai: row.ai, createdAt: row.created_at, transactions: Object.fromEntries(Object.entries(row.steps).map(([name, step]) => [name, { hash: step.hash }])), evidence: row.evidence });
-export async function purchases(req, res, { authenticate = authenticateMember, database = createClient, validate = validatePhoto, identify = identifyPhoto, ledger = purchaseLedger } = {}) {
+export async function purchases(req, res, { authenticate = authenticateMember, database = createClient, validate = validatePhoto, identify = identifyPhoto, ledger = purchaseLedger, loadRules = readFamilyRules } = {}) {
   res.setHeader('Cache-Control', 'no-store'); res.setHeader('Content-Type', 'application/json');
   const send = (status, body) => { res.statusCode = status; res.end(JSON.stringify(body)); };
   try {
@@ -85,17 +86,17 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       const result = await table().select('*').eq('student_id', member.user_id).eq('family_id', member.family_id).order('created_at', { ascending: false });
       if (result.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
       for (const row of result.data) await reconcile(row);
-      const funding = await db.from('needs_funding').select('amount_stroops').eq('family_id', member.family_id).eq('status', 'confirmed');
+      const funding = await db.from('needs_funding').select('amount_stroops,wants_stroops').eq('family_id', member.family_id).eq('status', 'confirmed');
       if (funding.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
       const credits = funding.data.reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
       const held = result.data.filter(row => row.reserved).reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
-      return send(200, { purchases: result.data.map(purchaseProjection), rules: PURCHASE_RULES, availableNeedsStroops: (credits - held).toString() });
+      return send(200, { purchases: result.data.map(purchaseProjection), rules: purchaseRulesFromSettings(await loadRules(db, member.family_id)), availableNeedsStroops: (credits - held).toString(), availableWantsStroops: funding.data.reduce((sum,r)=>sum+BigInt(r.wants_stroops??'0'),0n).toString() });
     }
     const key = req.headers['idempotency-key']; if (!uuid.test(key ?? '')) throw fail(400, 'INVALID_INPUT');
     let body = req.body;
     if (body === undefined) { let raw = ''; for await (const part of req) { raw += part; if (Buffer.byteLength(raw) > 3000000) throw fail(400, 'INVALID_INPUT'); } try { body = JSON.parse(raw); } catch { throw fail(400, 'INVALID_INPUT'); } }
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch { throw fail(400, 'INVALID_INPUT'); } }
-    if (!body || Object.keys(body).sort().join(',') !== 'mime,photoBase64,priceMinor,sellerId' || body.sellerId !== PURCHASE_RULES.sellerId || typeof body.priceMinor !== 'string' || !/^[1-9][0-9]{0,8}$/.test(body.priceMinor) || !['image/png','image/jpeg'].includes(body.mime) || typeof body.photoBase64 !== 'string' || body.photoBase64.length > 2796204) throw fail(400, 'INVALID_INPUT');
+    if (!body || Object.keys(body).sort().join(',') !== 'mime,photoBase64,priceMinor,sellerId' || body.sellerId !== 'demo-seller' || typeof body.priceMinor !== 'string' || !/^[1-9][0-9]{0,8}$/.test(body.priceMinor) || !['image/png','image/jpeg'].includes(body.mime) || typeof body.photoBase64 !== 'string' || body.photoBase64.length > 2796204) throw fail(400, 'INVALID_INPUT');
     const bytes = Buffer.from(body.photoBase64, 'base64');
     if (!bytes.length || bytes.length > 2097152 || bytes.toString('base64') !== body.photoBase64) throw fail(400, 'INVALID_PHOTO');
     const fingerprint = hash(JSON.stringify([body.sellerId, body.priceMinor, body.mime, hash(bytes)]));
@@ -103,7 +104,8 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
     if (existing.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
     if (existing.data) { if (existing.data.fingerprint !== fingerprint) throw fail(409, 'IDEMPOTENCY_CONFLICT'); await reconcile(existing.data); return send(200, purchaseProjection(existing.data)); }
     try { await validate(bytes, body.mime); } catch { throw fail(400, 'INVALID_PHOTO'); }
-    const inserted = await table().insert({ family_id: member.family_id, student_id: member.user_id, request_key: key, fingerprint, seller_id: body.sellerId, price_minor: body.priceMinor, amount_stroops: phpToStroops(body.priceMinor), photo_base64: body.photoBase64, photo_mime: body.mime, photo_hash: hash(bytes), rules: { ...PURCHASE_RULES, capStroops: phpToStroops(PURCHASE_RULES.capMinor) } }).select('*').single();
+    const savedRules = purchaseRulesFromSettings(await loadRules(db, member.family_id));
+    const inserted = await table().insert({ family_id: member.family_id, student_id: member.user_id, request_key: key, fingerprint, seller_id: body.sellerId, price_minor: body.priceMinor, amount_stroops: phpToStroops(body.priceMinor), photo_base64: body.photoBase64, photo_mime: body.mime, photo_hash: hash(bytes), rules: savedRules }).select('*').single();
     if (inserted.error) {
       if (inserted.error.code !== '23505') throw fail(503, 'PROVIDER_UNAVAILABLE');
       const replay = await table().select('*').eq('student_id', member.user_id).eq('request_key', key).maybeSingle();

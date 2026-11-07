@@ -88,3 +88,76 @@ button:disabled { cursor: wait; opacity: .72; }
 .preview-panel > .signin-form { width: 100%; min-width: 0; text-align: left; }
 .preview-panel .field-input { min-width: 0; max-width: 100%; }
 .preview-panel > article { min-width: 0; width: 100%; }
+
+/* Approved Figma palette and type, shared by the connected application. */
+:root { font-family: Inter, sans-serif; color: #19253c; background: #f6f7f4; --navy: #15223d; --ink: #19253c; --muted: #59616d; --line: #e2e5df; --teal: #21655f; }
+.signin-page { display: block; padding: 0; background: #f6f7f4; }
+.signin-card { width: min(100%, 390px); min-height: 844px; margin: 0 auto; padding: 20px; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+.brand-title, .brand-lockup, .mobile-brand, .signin-heading, .page-title { font-family: Inter, sans-serif; color: #19253c; letter-spacing: normal; }
+.brand-title { margin: 20px 0 14px; font-size: 28px; font-weight: 700; line-height: 1.25; }
+.signin-heading { margin-top: 0; font-size: 24px; }
+.signin-card .eyebrow { display: none; }
+.intro { font-size: 16px; line-height: 1.35; margin: 0 0 16px; }
+.signin-form { gap: 16px; }
+.field-label { gap: 8px; color: #59616d; font-size: 12px; font-weight: 400; }
+.field-input { min-height: 44px; border-color: #bcc2b7; border-radius: 10px; font-size: 16px; padding: 10px 12px; }
+.field-input::placeholder { color: #59616d; }
+.button { min-height: 44px; padding: 10px 18px; border-radius: 10px; font-weight: 500; }
+.button-primary { margin-top: 0; background: #15223d; }
+.button-primary:hover { background: #233455; }
+.button-secondary { color: #19253c; border-color: #bcc2b7; }
+.layout-entry { display: inline-block; margin-top: 24px; color: #21655f; font-size: 13px; text-underline-offset: 3px; }
+.app-shell { grid-template-columns: 260px minmax(0, 1fr); }
+.sidebar { padding: 20px; background: #f6f7f4; }
+.brand-lockup { padding: 0 0 20px; font-size: 18px; font-weight: 700; }
+.nav-item { padding: 0 14px; min-height: 44px; font-size: 15px; font-weight: 400; color: #19253c; }
+.nav-item.is-active { background: #d7efeb; color: #21655f; }
+.role-parent .page-content { width: 100%; padding: 24px; }
+.page-title { font-size: 26px; }
+.topbar { padding: 16px 24px; background: #f6f7f4; }
+.preview-panel { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 12px; min-height: 0; padding: 16px; border: 1px solid #e2e5df; border-radius: 14px; text-align: left; color: #19253c; }
+.preview-panel > h2, .preview-panel > h3, .preview-panel > p { margin: 0; }
+.preview-panel > h2 { font-size: 20px; }
+.preview-panel > h3 { font-size: 16px; }
+.preview-panel > .button { align-self: flex-start; }
+.preview-panel .button-secondary { margin-top: 0; }
+.role-student .page-content { max-width: 430px; }
+::selection { background: #d7efeb; color: #19253c; }
+input { caret-color: #21655f; }
+.live-category-group { border: 1px solid var(--line); border-radius: 10px; padding: 12px; min-width: 0; }
+.live-category-group legend { font-size: 13px; padding: 0 6px; }
+.live-category-choice { min-height: 44px; display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.live-category-choice input { width: 18px; height: 18px; accent-color: #21655f; }
+.live-activity-row { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.live-activity-details { min-width: 0; }.live-activity-details h3 { margin: 0; font-size: 16px; }.live-activity-details p { margin: 7px 0; font-size: 13px; }
+.live-photo-button { flex-shrink: 0; width: 88px; height: 88px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; padding: 0; color: #59616d; background: #fff; font: inherit; font-size: 11px; }
+.live-photo-button img { width: 100%; height: 100%; object-fit: cover; }
+.live-photo-dialog { width: min(100% - 32px, 900px); padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); max-height: calc(100dvh - 32px); overflow: auto; }
+.live-photo-dialog::backdrop { background: #15223dbb; }.live-photo-dialog img { display: block; width: 100%; max-height: 70dvh; object-fit: contain; margin-top: 16px; }
+
+/* Connected app follows the same responsive role layouts. */
+.topbar { flex-wrap: wrap; }
+.preview-panel p { overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+ .app-shell.role-parent { display: block; }
+ .role-parent .sidebar { position: static; width: 100%; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 16px; }
+ .role-parent .sidebar > .role-chip { padding: 0 0 12px; }
+ .role-parent .navigation { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+ .role-parent .nav-item { padding: 8px; }
+ .role-parent .sidebar-bottom { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 0 0; }
+ .role-parent .layout-entry { margin: 0; }
+ .role-parent .page-content { padding: 24px 16px; }
+ .role-parent .topbar { padding: 12px 16px; }
+}
+@media (min-width: 761px) {
+ .signin-page { display: grid; place-items: center; padding: 48px 24px; }
+ .signin-card { width: 440px; min-height: 0; padding: 32px; background: white; border: 1px solid var(--line); border-radius: 18px; }
+ .app-shell.role-student { display: grid; grid-template-columns: 230px minmax(0, 1fr); padding-bottom: 0; }
+ .role-student .sidebar { position: sticky; inset: auto; top: 0; width: auto; height: 100vh; padding: 24px 16px; border-right: 1px solid var(--line); border-top: 0; box-shadow: none; }
+ .role-student .sidebar > .brand-lockup, .role-student .sidebar > .role-chip, .role-student .sidebar-bottom { display: block; }
+ .role-student .navigation { display: grid; gap: 6px; }
+ .role-student .nav-item { min-height: 44px; text-align: left; padding: 12px; font-size: 14px; }
+ .role-student .mobile-brand, .role-student .mobile-signout { display: none; }
+ .role-student .page-content { max-width: 1000px; padding: 32px; }
+ .role-student .preview-panel > .signin-form { max-width: 620px; }
+}

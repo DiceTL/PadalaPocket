@@ -1,6 +1,6 @@
 const navigation = {
-  parent: ['Overview', 'Allowance rules', 'Approvals', 'Activity', 'Savings', 'Deposit'],
-  student: ['Home', 'Activity', 'Savings', 'My Money'],
+  parent: ['Overview', 'Allowance rules', 'Approvals', 'Activity', 'Savings', 'Deposit', 'Withdrawal'],
+  student: ['Home', 'Pay a seller', 'Activity', 'Savings', 'My Money', 'Week-end recap'],
 };
 
 export const MOCK_BADGE_TEXT = 'MOCK DATA · development mode';

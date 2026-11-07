@@ -4,13 +4,13 @@ import { getRoleView, MOCK_BADGE_TEXT, MOCK_DISCLOSURE } from '../src/views/mode
 
 test('parent shell navigation excludes private My Money', () => {
   const view = getRoleView({ role: 'parent' });
-  assert.deepEqual(view.navigation, ['Overview', 'Allowance rules', 'Approvals', 'Activity', 'Savings', 'Deposit']);
+  assert.deepEqual(view.navigation, ['Overview', 'Allowance rules', 'Approvals', 'Activity', 'Savings', 'Deposit', 'Withdrawal']);
   assert.equal(view.navigation.includes('My Money'), false);
 });
 
 test('student shell exposes its own My Money view from the student identity', () => {
   const view = getRoleView({ role: 'student' });
-  assert.deepEqual(view.navigation, ['Home', 'Activity', 'Savings', 'My Money']);
+  assert.deepEqual(view.navigation, ['Home', 'Pay a seller', 'Activity', 'Savings', 'My Money', 'Week-end recap']);
   assert.match(view.message, /no approved layout/);
 });
 

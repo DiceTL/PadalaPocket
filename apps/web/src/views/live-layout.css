@@ -1,0 +1,30 @@
+/* DEC-079: bring the approved preview visual system into the connected application. */
+:root { font-family: Inter, sans-serif; color:#19253c; background:#f6f7f4; --surface:#fff; --line:#e2e5df; --teal:#21655f; --teal-dark:#174d48; }
+body,button,input,select,textarea { font-family:Inter,sans-serif; }
+.brand-title,.brand-lockup,.mobile-brand { font-family:Inter,sans-serif; letter-spacing:-.03em; }
+.app-shell .sidebar { background:#f6f7f4; }.app-shell .nav-item.is-active { background:#d7efeb; color:#21655f; }
+.app-shell .sidebar-bottom .layout-entry { display:none; }
+.app-shell .page-content { max-width:1180px; padding:36px 40px 64px; margin:auto; }
+.app-shell .page-content > .eyebrow { display:none; }
+.app-shell .page-title { font-size:32px; letter-spacing:-.035em; margin:0 0 12px; }
+.app-shell .page-description { margin:0 0 28px; max-width:65ch; }
+.app-shell .preview-panel { padding:24px; border:1px solid #e2e5df; border-radius:20px; background:#fff; }
+.app-shell .preview-panel h2,.app-shell .live-dashboard h2 { margin:0 0 14px; font-size:20px; letter-spacing:-.025em; }
+.app-shell .button { border-radius:12px; }.app-shell .button-primary { background:#21655f; }
+.app-shell .button-secondary { background:#fff; border:1px solid #bcc2b7; color:#19253c; }
+.live-dashboard { display:grid; gap:24px; margin-bottom:28px; }.live-welcome { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; color:#59616d; font-size:14px; }
+.live-testnet { font-size:12px; }.live-balances { display:grid; grid-template-columns:1fr 1fr; gap:20px; }.live-balance { padding:28px; border-radius:24px; }.live-balance.needs { background:#d7efeb; }.live-balance.wants { background:#e9e1f6; }
+.live-balance h2 { font-size:16px!important; }.live-balance-amount { font-size:42px; font-weight:650; letter-spacing:-.035em; margin:18px 0 8px; font-variant-numeric:tabular-nums; }.live-balance p:last-child { font-size:14px; margin-bottom:0; }
+.live-subnote { margin:-10px 0 0; color:#59616d; font-size:13px; line-height:1.6; }.live-actions { display:flex; gap:12px; flex-wrap:wrap; }.live-actions .button { min-width:150px; }
+.live-rules-summary,.live-recent,.live-pocket { background:#fff; border:1px solid #e2e5df; border-radius:20px; padding:24px; }.live-rules-summary p { margin:8px 0; line-height:1.6; }
+.live-pockets { display:grid; grid-template-columns:1fr 1fr; gap:20px; }.live-pocket p { color:#59616d; }.live-section-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; }.live-section-heading h2 { margin:0!important; }
+.live-recent-row { display:flex; justify-content:space-between; gap:16px; padding:18px 0; border-bottom:1px solid #e2e5df; }.live-recent-row:last-child { border-bottom:0; padding-bottom:0; }.live-recent-row h3 { margin:0; font-size:15px; }.live-recent-row p { font-size:13px; color:#59616d; margin:8px 0 0; }.live-recent-row>div:last-child { text-align:right; }.live-status { text-transform:capitalize; }
+.live-unavailable { max-width:680px; padding:36px; border:1px solid #e2e5df; border-radius:24px; background:white; }.live-unavailable h2 { font-size:24px; margin:20px 0 12px; }.live-unavailable p { line-height:1.7; color:#59616d; }.live-availability { display:inline-block; padding:8px 12px; border-radius:8px; background:#eee9f5; color:#544267; font-size:13px; }
+.signin-page { background:#f6f7f4; }.signin-card { border-radius:24px; box-shadow:none; }.brand-title { color:#19253c; }.signin-heading { font-family:Inter,sans-serif; }
+@media(min-width:1000px){.app-shell.role-student { display:grid; grid-template-columns:248px minmax(0,1fr); padding-bottom:0; }.role-student .sidebar { position:sticky; height:100vh; }.role-student .navigation { display:grid; }}
+@media(max-width:999px){.app-shell .page-content { padding:28px 20px 110px; }.live-balance { padding:22px; }.live-balance-amount { font-size:34px; }.app-shell .navigation { gap:6px; }.app-shell .nav-item { white-space:nowrap; }}
+@media(max-width:480px){.app-shell .page-title { font-size:28px; }.live-balances,.live-pockets { gap:12px; }.live-balance { padding:20px 16px; border-radius:20px; }.live-balance-amount { font-size:28px; }.live-balance p:last-child { font-size:12px; }.live-recent,.live-pocket,.app-shell .preview-panel { padding:20px; }.live-section-heading { align-items:flex-start; }.live-section-heading .button { font-size:12px; padding:0 10px; }.live-unavailable { padding:24px; }.live-actions .button { flex:1; }}
+
+.live-funding-history { margin:20px 0; }.live-funding-history summary { cursor:pointer; padding:12px 0; color:#21655f; font-weight:600; }.live-funding-history p { font-size:13px; }
+@media(min-width:1000px){.role-student .nav-item { width:100%; }.role-student .navigation { justify-content:stretch; }}
+@media(max-width:999px){.role-student .navigation { overflow-x:auto; justify-content:flex-start; scrollbar-width:thin; }.role-student .nav-item { flex:0 0 auto; padding:10px 14px; min-height:48px; }.role-student .sidebar { background:#f6f7f4; }}

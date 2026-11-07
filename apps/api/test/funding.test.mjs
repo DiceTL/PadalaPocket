@@ -72,3 +72,17 @@ test('fresh request recovers a previously unknown hash only after SUCCESS and ba
   assert.equal(second.body.confirmedNeedsStroops, '10000000');
   assert.deepEqual(f.hashes, ['exact-stored-hash', 'exact-stored-hash']);
 });
+
+test('split allocation credits neither bucket until both saved transfers succeed', async()=>{
+ const f=fixture({ledgerStatus:'SUCCESS',balance:10000000n});
+ Object.assign(f.row,{amount_stroops:'6000000',wants_stroops:'4000000',total_stroops:'10000000',rules_revision:1,wants_device_hash:'wants'});
+ let response=res(); await funding({method:'GET'},response,f.deps);
+ assert.equal(f.row.status,'unknown'); assert.equal(response.body.confirmedNeedsStroops,'0'); assert.equal(response.body.confirmedWantsStroops,'0');
+ f.row.steps.wantsFund={hash:'wants-hash'};
+ response=res(); await funding({method:'GET'},response,f.deps);
+ assert.equal(f.row.status,'confirmed'); assert.equal(response.body.confirmedNeedsStroops,'6000000'); assert.equal(response.body.confirmedWantsStroops,'4000000');
+});
+test('failed second allocation transfer retains the unresolved journal',async()=>{
+ const f=fixture({ledgerStatus:'FAILED'});Object.assign(f.row,{wants_stroops:'4000000',rules_revision:1,steps:{fund:{hash:'needs'},wantsFund:{hash:'wants'}}});
+ const response=res();await funding({method:'GET'},response,f.deps);assert.equal(f.row.status,'unknown');assert.equal(response.body.confirmedWantsStroops,'0');
+});
