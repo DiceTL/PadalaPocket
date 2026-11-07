@@ -244,4 +244,4 @@ DEC-075 supersedes the order below: bounded L-003A allowance distribution comes 
 
 | Packet | Scope | State |
 |---|---|---|
-| [L-008 Separate-email account creation](../handoff/L-008.md) | Parent signup, verified-email enrollment and email-bound student linking; isolated new-family records. SMTP delivery and independent wallet provisioning remain required for the full new-family journey | In progress |
+| [L-008 Separate-email account creation](../handoff/L-008.md) | Parent/Student choice at signup, verified-email enrollment and email-bound student linking; canonical production confirmation redirect. Supabase URL allowlist, corrected inbox-link check and independent wallet provisioning remain required for the full new-family journey | In progress |

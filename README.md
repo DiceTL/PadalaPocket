@@ -111,11 +111,11 @@ Use a fresh Supabase project and Testnet-only accounts. Existing production sign
    npx supabase db push
    ```
    These commands target your own Supabase project; they do not deploy the web app. The CLI may request its database password. Do not reset a populated database to try this demo.
-5. **Provision the demo parent/student accounts:**
+5. **Create accounts:** In the app, choose **Create an account**, select **Parent** or **Student (child)**, and enter a separate email and password for each person. Confirm each email, then complete setup. A parent creates the family and shares a time-limited setup code with the student; the student uses that code to join. New families are not yet provisioned with independent wallets, so their payment features remain unavailable. The script below is for isolated demo/test accounts only:
    ```sh
    node --env-file=.env.local apps/api/scripts/provision-identity.mjs
    ```
-   Open the generated, ignored `.env.r001-accounts.json` privately for the two login emails/passwords. Do not commit it. The app has no self-service signup; roles come from trusted family membership, not a browser role switch.
+   Open the generated, ignored `.env.r001-accounts.json` privately for the two login emails/passwords. Do not commit it. Account type selected at signup is only a navigation/setup hint; trusted family membership is assigned after email confirmation by the server.
 6. **Start the API from the repository root:**
    ```sh
    node --env-file=.env.local apps/api/src/dev.mjs
@@ -140,6 +140,7 @@ Required live values go in ignored `.env.local` locally and server environment s
 | `SUPABASE_SECRET_KEY` | Server-only privileged database/provisioning key | Supabase API settings |
 | `VITE_SUPABASE_URL` | Optional explicit public browser URL override | Same Supabase project URL |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Optional explicit public browser key override | Same publishable key; never use a secret key |
+| `VITE_PUBLIC_APP_URL` | Optional canonical public app origin for email confirmation redirects | Production defaults to `https://padalapocket.vercel.app`; set this for a different production domain or a preview deployment |
 | `OWNER_SECRET` | Testnet parent funding signer | Your newly created funded Stellar Testnet account |
 | `AGENT_SECRET` | Separate Testnet purchase agent signer | Your second funded Testnet account |
 | `MERCHANT_SECRET` | Fixed demo seller signer | Your third funded Testnet account |

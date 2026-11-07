@@ -1,14 +1,20 @@
-export function createAuthBoundary({ mode = 'mock', api, supabase }) {
+export function createAuthBoundary({ mode = 'mock', api, supabase, redirectBase }) {
+  const signupRedirect = (role) => {
+    const url = new URL('/', redirectBase || location.origin);
+    url.searchParams.set('accountType', role);
+    return url.toString();
+  };
   return {
     mode,
-    async signUp({email,password}) {
+    async signUp({email,password,role}) {
       if(!supabase)throw Error('Signup service unavailable.');
       if(!email?.trim() || typeof password!=='string' || password.length<8)throw Error('Enter your email and a password of at least 8 characters.');
-      const {error}=await supabase.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:location.origin+'/'}});
+      if(!['parent','student'].includes(role))throw Error('Choose whether this account is for a parent or student.');
+      const {error}=await supabase.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:signupRedirect(role)}});
       if(error)throw Error(error.message);
-      return {message:'Check your email to confirm your account, then sign in. If you already have an account, sign in instead.'};
+      return {message:`Check your email to confirm your account. After confirmation, continue as ${role==='parent'?'Parent':'Student'}; you can change this choice before setup.`};
     },
-    async resend(email){if(!supabase)throw Error('Signup service unavailable.');const {error}=await supabase.auth.resend({type:'signup',email:email.trim(),options:{emailRedirectTo:location.origin+'/'}});if(error)throw Error(error.message);},
+    async resend(email,role){if(!supabase)throw Error('Signup service unavailable.');if(!['parent','student'].includes(role))throw Error('Choose whether this account is for a parent or student.');const {error}=await supabase.auth.resend({type:'signup',email:email.trim(),options:{emailRedirectTo:signupRedirect(role)}});if(error)throw Error(error.message);},
     async signOut() { if (supabase) await supabase.auth.signOut({ scope: 'local' }); },
     async signIn({ email, password }) {
       if (!email?.trim() || !password) {

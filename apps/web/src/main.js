@@ -14,7 +14,8 @@ const identityFixtureName = ['parent-identity', 'student-identity'].includes(req
 const supabase = !mockMode && import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
   ? createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: true } }) : null;
 const api = createApiClient({ mode: mockMode ? 'mock' : 'live', identityFixtureName, getAccessToken: async () => (await supabase?.auth.getSession())?.data.session?.access_token });
-const auth = createAuthBoundary({ mode: mockMode ? 'mock' : 'live', api, supabase });
+const authRedirectBase = import.meta.env.VITE_PUBLIC_APP_URL || (import.meta.env.PROD ? 'https://padalapocket.vercel.app' : location.origin);
+const auth = createAuthBoundary({ mode: mockMode ? 'mock' : 'live', api, supabase, redirectBase: authRedirectBase });
 const controller = createAppController({ auth, api });
 const root = document.querySelector('#app');
 if(new URLSearchParams(location.hash.slice(1)).has('error')){controller.reportAuthError();history.replaceState({},'',location.pathname+location.search);}
@@ -30,6 +31,6 @@ controller.subscribe((state) => {
   if (!renderLayoutPage(root)) renderApp(root, state, controller);
 });
 
-if (requestedLayout() === null) void controller.restore();
+if (requestedLayout() === null) void controller.restore(new URLSearchParams(location.search).get('accountType'));
 
 window.addEventListener('popstate',()=>{ const state=controller.getState(); if(state.user)controller.navigate(new URLSearchParams(location.search).get('page') || (state.user.role==='parent'?'Overview':'Home'),false); });

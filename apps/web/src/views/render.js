@@ -37,10 +37,19 @@ function renderSignIn(root, state, controller) {
   const signinHeading = el('h2', 'signin-heading', signup?'Create your account':'Sign in');
   signinHeading.id = 'signin-title';
   card.append(signinHeading);
-  card.append(el('p', 'muted intro', 'Your account decides whether you see the parent or student view.'));
+  card.append(el('p', 'muted intro', signup?'Choose Parent or Student now. You will confirm your email before completing account setup.':'Sign in to your parent or student account.'));
 
   const form = el('form', 'signin-form');
   form.noValidate = true;
+  let accountType;
+  if(signup){
+    const roleLabel=el('label','field-label','Create account as');
+    accountType=el('select','field-input');accountType.name='accountType';accountType.required=true;
+    const placeholder=el('option','','Choose Parent or Student');placeholder.value='';placeholder.disabled=true;placeholder.selected=!state.signupRole;accountType.append(placeholder);
+    for(const [value,label] of [['parent','Parent'],['student','Student (child)']]){const option=el('option','',label);option.value=value;option.selected=state.signupRole===value;accountType.append(option);}
+    roleLabel.append(accountType);form.append(roleLabel);
+    form.append(el('p','muted','After confirming your email, parents create a family. Students need a setup code from their parent.'));
+  }
   const emailLabel = el('label', 'field-label', 'Email address');
   emailLabel.htmlFor = 'email';
   const email = el('input', 'field-input');
@@ -65,7 +74,7 @@ function renderSignIn(root, state, controller) {
   form.append(submit);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    void controller[signup?'signUp':'signIn']({ email: email.value, password: password.value });
+    void controller[signup?'signUp':'signIn']({ email: email.value, password: password.value, ...(signup?{role:accountType.value}:{}) });
   });
   card.append(form);
   if(state.signupMessage)card.append(el('p','notice',state.signupMessage));
