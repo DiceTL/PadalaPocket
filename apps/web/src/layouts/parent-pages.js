@@ -1,3 +1,4 @@
+import { CATEGORY_CATALOG } from '../../../api/src/purchase-categories.mjs';
 import './parent-pages.css';
 import { createSamplePhoto } from './sample-photo.js';
 
@@ -24,14 +25,14 @@ export function mountParentPages(canvas, page, explain) {
 
   const rules = canvas.querySelector('#parent-rules-form');
   const categoryGroups = canvas.querySelector('#parent-category-groups');
-  const categories = ['Meals', 'Snacks and sweets', 'Drinks', 'School supplies', 'Books and learning materials', 'Toys and collectibles'];
+  const categories = CATEGORY_CATALOG.map(category => category.label);
   if (categoryGroups) for (const bucket of ['Needs', 'Wants']) {
     const group = document.createElement('fieldset');
     const legend = document.createElement('legend'); legend.textContent = `${bucket} · allowed categories`; group.append(legend);
     for (const [index, category] of categories.entries()) {
       const label = document.createElement('label'), checkbox = document.createElement('input');
       checkbox.type = 'checkbox'; checkbox.name = `${bucket.toLowerCase()}Categories`; checkbox.value = category;
-      checkbox.defaultChecked = bucket === 'Needs' ? [0, 3, 4].includes(index) : [1, 2, 5].includes(index);
+      checkbox.defaultChecked = bucket === 'Needs' ? ['meals','fruits_vegetables','drinking_water','school_supplies','books'].includes(CATEGORY_CATALOG[index].id) : ['snacks','drinks','toys_collectibles'].includes(CATEGORY_CATALOG[index].id);
       label.append(checkbox, document.createTextNode(category)); group.append(label);
     }
     categoryGroups.append(group);

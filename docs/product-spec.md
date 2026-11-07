@@ -16,6 +16,18 @@ Deferred: Wants funding/screens, parent approval queue and exceptions, Savings, 
 
 Acceptance requires the public deployment to complete this real journey with provisioned accounts, durable operations and secret-free browser assets; then pass a recording rehearsal. A collection of historical proofs alone does not satisfy this reduced MVP.
 
+## Account creation, guidance and visual assets — DEC-083
+
+The intended connected MVP must support real parent email registration and creation/linking of a separate child account, with independent sign-in and trusted family permissions. This supersedes the reduced build's provisioned-only identity limitation as a target; provisioned accounts remain the current implementation. The bounded family still has one child. Account verification, family isolation and independently provisioned money resources must be resolved before public signup is called functional; credential delivery/linking and wallet architecture are not selected here.
+
+The normal product journey uses actual family information and honest empty states instead of example parents. A first-run information board explains the separate accounts and setup order. A tutorial runs for each newly created account, with account-specific progress, rather than every sign-in. Implement the information board/tutorial last, after the functional journeys are finished. Add purposeful, coherent visual assets under existing human design authority. Observable criteria live in the [feature checklist](mvp-feature-checklist.md).
+
+Weekly testing must expose an explicit **Advance to next week (test)** button for the real, duplicate-safe application lifecycle in the authorized demo context. It must report actual results and preserve real network time and purchase-approval expiry. A visual date change alone does not satisfy this requirement.
+
+## PWA goal — DEC-082
+
+The MVP should be usable as an installable Progressive Web App on supported mobile and desktop browsers. Acceptance includes app identity/icons and standalone launch, responsive installed layouts, clear offline/unavailable behavior and safe app updates. Payments, funding and parent decisions require an online server-confirmed result; offline actions must never imply settlement. Push notifications and offline financial submission are not required by this goal. Implementation approach remains undecided. See the [feature checklist](mvp-feature-checklist.md) for observable criteria and current evidence; task status remains in the [implementation plan](implementation-plan.md).
+
 ## Users and purpose
 
 For students aged 13+ receiving allowance from an OFW parent, PadalaPocket provides spending within agreed parental boundaries alongside personal money the student controls. Parent visibility and peace of mind are desired outcomes; demand, reduced stress and improved financial independence are not validated effects. See [problem capture](../work/problem-capture.md).

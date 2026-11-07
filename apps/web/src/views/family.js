@@ -28,7 +28,7 @@ function renderRules(content, state, controller) {
     const group = el('fieldset', 'live-category-group'); group.append(el('legend', '', title));
     for (const category of state.familyRules.categories) {
       const label = el('label', 'live-category-choice'), checkbox = el('input'); checkbox.type = 'checkbox'; checkbox.name = key; checkbox.value = category.id; checkbox.checked = settings[key].includes(category.id); checkbox.disabled = Boolean(state.rulesBusy);
-      label.append(checkbox, document.createTextNode(category.label)); group.append(label);
+      const copy=el('span','live-category-copy',category.label); if(category.examples)copy.append(el('small','',category.examples)); label.append(checkbox,copy); group.append(label);
     }
     form.append(group);
   }

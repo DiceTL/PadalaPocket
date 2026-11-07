@@ -1,5 +1,9 @@
 # Implementation plan
 
+Feature acceptance/evidence snapshot: [MVP feature checklist](mvp-feature-checklist.md). PWA support is an accepted goal under DEC-082; implementation is not started or authorized by the checklist alone and requires a scoped handoff. Task status remains here.
+
+DEC-083 adds real email signup/linked child setup, purposeful visual assets and explicit next-week testing to the target. Prepare scoped handoffs before implementation; existing R/L/UI acceptance is not extended automatically. Build the information board and per-new-account tutorial last, after the functional journeys are complete. These additions are not delivered features.
+
 Revised 2026-11-07 under [DEC-034/DEC-042–DEC-049](decision-ledger.md). This is the only task-status source. S-001 is accepted at implementation commit `58f4b6c`: fresh committed-clone checks and deployed health verification passed; remote CI is green per founder report. Evidence and limitations live in [S-001](../handoff/S-001.md). S-002 is Done; see its acceptance packet. C-001 is Done: backend acceptance and reported green branch/PR/main CI are recorded in its packet. B-001 is merged as `e1382f0`; founder confirms passing PR/main CI. B-002 is accepted and merged with passing branch/main CI per founder confirmation. B-003 is Done: separate bucket backing verified, backend review accepted, founder reports branch/main CI passed; merged as `5c9f034` (B-003 branch commit `0a41be6`). B-004 is Done. DEC-055 supersedes the original remaining sequence with the deadline plan below. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
 
 S tasks and C-001–C-006 are implemented, verified and accepted solely by backend under [DEC-039](decision-ledger.md). Frontend feedback and personal workspace evidence are optional. Backend runs checkpoint integration checks against completed FE work; existing FE dependencies and human UI design ownership remain in force.
@@ -229,3 +233,9 @@ DEC-075 supersedes the order below: bounded L-003A allowance distribution comes 
 | Packet | Scope | State |
 |---|---|---|
 | [UI-002 Live application layouts](../handoff/UI-002.md) | Preview visual system applied to connected role pages, real dashboards, native controls and explicit unfinished states; full checks and mobile/desktop navigation/private-photo verification pass. Review/deployment remain | Review |
+
+## Everyday categories — DEC-080
+
+| Packet | Scope | State |
+|---|---|---|
+| [L-007 Everyday product categories](../handoff/L-007.md) | 15 product categories, shared AI/API definitions and versioned fresh-produce permission; checks and mobile/desktop controls verified. Deployment remains | Review |

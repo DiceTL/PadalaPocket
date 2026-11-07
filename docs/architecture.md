@@ -1,5 +1,9 @@
 # PadalaPocket architecture
 
+![Submission architecture overview](architecture-overview.svg)
+
+This shared overview image is also embedded in the event README. Detailed ownership, contracts and implementation boundaries follow below.
+
 ## Connected-function extension — DEC-070/071
 
 L-001 extends the existing Node/Supabase design with server-only versioned family rules and a role-filtered Needs activity read. Purchase rows retain immutable policy snapshots; private photos stay in the existing protected purchase journal. No new service, client database grants, money custody or ledger routing is introduced. L-002–L-005 cover pending approvals, backed wallets, weekly lifecycle and anchor UI; they remain unimplemented until their evidence says otherwise. Existing deadline sections below describe the earlier reduced release. Status is canonical in the implementation plan.

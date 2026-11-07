@@ -1,5 +1,9 @@
 # Design brief
 
+## Latest requested additions — DEC-083
+
+Real parent/child account setup, a first-run account information board, per-new-account tutorials, purposeful visual assets and an explicit **Advance to next week (test)** control are accepted target additions; see the [feature checklist](mvp-feature-checklist.md) for criteria. Implement onboarding last, after functional journeys are complete. Normal product pages must use actual family information and truthful empty states instead of example parents. Existing human design authority governs visual choices; this records requirements, not finished layouts.
+
 ## Design authority
 
 * **Status:** Confirmed

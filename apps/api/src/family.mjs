@@ -2,13 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import { authenticateMember } from './identity.mjs';
 import { phpToStroops, MONEY_MAPPING } from './money-mapping.mjs';
 
-export const CATEGORY_CATALOG = Object.freeze([
-  { id: 'meals', label: 'Meals' }, { id: 'snacks', label: 'Snacks and sweets' },
-  { id: 'drinks', label: 'Drinks' }, { id: 'school_supplies', label: 'School supplies' },
-  { id: 'books', label: 'Books and learning materials' }, { id: 'toys_collectibles', label: 'Toys and collectibles' },
-]);
-const categoryIds = CATEGORY_CATALOG.map(c => c.id);
-export const DEFAULT_SETTINGS = Object.freeze({ weeklyAmountMinor: '968', needsPercent: 60, capMinor: '484', needsCategories: ['meals', 'school_supplies', 'books'], wantsCategories: [] });
+export { CATEGORY_CATALOG } from './purchase-categories.mjs';
+import { CATEGORY_CATALOG, CATEGORY_IDS as categoryIds } from './purchase-categories.mjs';
+export const DEFAULT_SETTINGS = Object.freeze({ weeklyAmountMinor: '968', needsPercent: 60, capMinor: '484', needsCategories: ['meals', 'fruits_vegetables', 'drinking_water', 'school_supplies', 'books'], wantsCategories: [] });
 const fail = (status, code) => Object.assign(Error(code), { status, code });
 const positiveMinor = value => typeof value === 'string' && /^[1-9][0-9]{0,8}$/.test(value);
 export function validSettings(value) {
@@ -23,7 +19,7 @@ export async function readFamilyRules(db, familyId) {
   return { revision: Number(result.data.revision), settings: result.data.settings, updatedAt: result.data.updated_at };
 }
 export function purchaseRulesFromSettings({ revision, settings }) {
-  return { version: revision ? `family-v1-${revision}` : 'needs-demo-v1', capMinor: settings.capMinor, capStroops: phpToStroops(settings.capMinor), allowedCategories: settings.needsCategories, sellerId: 'demo-seller', mappingVersion: MONEY_MAPPING.version };
+  return { version: revision ? `family-v1-${revision}` : 'needs-demo-v2', capMinor: settings.capMinor, capStroops: phpToStroops(settings.capMinor), allowedCategories: settings.needsCategories, sellerId: 'demo-seller', mappingVersion: MONEY_MAPPING.version };
 }
 const activityColumns = 'id,student_id,status,reason,seller_id,price_minor,amount_stroops,ai,created_at,reserved';
 export async function family(req, res, { authenticate = authenticateMember, database = createClient } = {}) {

@@ -1,10 +1,12 @@
 # Shared development setup
 
+For a fresh live setup, follow the ordered [root README instructions](../README.md#run-it-locally). The S-001 sections below include historical infrastructure-only commands; their no-service-key assumptions do not apply to the connected app.
+
 ## Connected local app — L-001
 
 The app now uses real Auth/API behavior by default, including development. Start the API from the repository root with `node --env-file=.env.local apps/api/src/dev.mjs`, then the frontend with `npm run dev --workspace @padalapocket/web`. The Vite proxy forwards `/api` to port 3001. Vite explicitly maps only Supabase URL and publishable key from root configuration; all signing/service/provider secrets remain server-only. Provisioned credentials stay in ignored local files. For the old labeled mock shell, explicitly set `VITE_APP_MODE=mock` in development; production always uses live mode. `?layout=...` routes remain separate sample previews.
 
-Saved rules and private activity require the L-001 database migration. Existing reduced Needs funding/purchases are real Testnet operations; weekly scheduling, Wants funding and wallet lifecycle remain later stages until their delivery evidence is recorded.
+Saved rules and private activity require the L-001 database migration. Existing reduced Needs funding/purchases are real Testnet operations; Needs/Wants manual distribution is connected under L-003A; weekly scheduling, Wants spending and wallet lifecycle remain unfinished.
 
 S-001 establishes infrastructure only. The web entry is intentionally blank pending human design authority. `GET /api/health` reports runtime and Testnet configuration without provider calls. B-001 adds a separately protected operator proof route; it is disabled by default.
 

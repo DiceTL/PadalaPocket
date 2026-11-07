@@ -37,9 +37,11 @@ One parent, one student and one demo seller; demonstrate weekly funding, AI-assi
 
 ## Category catalog
 
-Accepted under DEC-028. Initial photo-based demo subset: **Meals; Snacks and sweets; Drinks; School supplies; Books and learning materials; Toys and collectibles**. Parent assigns allowed categories to Needs/Wants; these names do not determine an item's purpose by themselves.
+Historical initial subset accepted under DEC-028: **Meals; Snacks and sweets; Drinks; School supplies; Books and learning materials; Toys and collectibles**. Parent assigns allowed categories to Needs/Wants; these names do not determine an item's purpose by themselves.
 
-Remaining catalog for later purchase-type support:
+DEC-080 expands the current photo-product catalog; its canonical IDs, labels and examples live in [purchase-categories.mjs](../apps/api/src/purchase-categories.mjs). Fresh produce is distinct from sweets, juices and electronics. Parents select permissions per bucket; services and digital-only purchases remain unsupported by this photo flow.
+
+Original broader catalog proposals:
 
 - Transportation
 - School fees and activities
