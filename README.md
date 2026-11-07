@@ -4,28 +4,47 @@ An allowance payment agent for OFW parents and students: identify a purchase fro
 
 **Live website:** https://padalapocket.vercel.app
 
-**Demo video (2 min):**
+**Demo video:** [Watch the demo recording](https://drive.google.com/file/d/14gQ-MQvnK1MfgcNfNNv3pcjtBruWhRYn/view)
 
-**Team:** Tyrone Louis V. Teemer (Discord: ), Hedrix Bryan E. Barcelona (Discord: ), James Paul C. Soliven (Discord: ), Christian Louianne B. Lili (Discord: ). [Team roles](docs/team-roles.md).
+**Team:** [Roles and responsibilities](docs/team-roles.md).
+
+| Name | Discord handle |
+|---|---|
+| Tyrone Louis V. Teemer | `patience6941` |
+| Hedrix Bryan E. Barcelona | `dri._.xxz` |
+| James Paul C. Soliven | `mori_jin4112` |
+| Christian Louianne B. Lili | `adxboo` |
 
 > Testnet prototype for one parent, one student and one fixed seller. PHP values are simulated at the frozen ₱9.68/XLM mapping; Testnet XLM has no redeemable peso value. No real GCash payout. The public API health endpoint was checked on 2026-11-07; full parity of the latest local changes with production has not been reverified. The [implementation plan](docs/implementation-plan.md) owns task status.
 
 ## Problem
 
-OFW parents sending a student allowance may want visibility into allowance purchases and limits they can agree on with their child. Students need a usable way to pay for everyday items within those boundaries. PadalaPocket explores that workflow; user demand and improved financial outcomes have not been validated.
+PadalaPocket focuses on students aged 13 and above receiving an allowance from a parent working abroad. The problem we explore is what happens after the parent sends the allowance: how can the family agree on what it covers, keep essential and discretionary spending within separate budgets, and review an unexpected purchase while living apart?
+
+A transfer records that money moved, but does not by itself explain the items a student intends to buy or apply the family's spending agreement. Relying on messages and individual permission requests can also make everyday purchases depend on the parent being available. The student needs room to make routine choices within a budget, while the parent needs enough context to decide when a purchase falls outside the agreed rules.
+
+Our prototype brings allowance allocation, purchase review and payment into one workflow. Its intended outcomes are clearer spending boundaries, visibility into allowance use and a consistent treatment of weekly leftovers. These are product hypotheses: the team has not yet validated demand across OFW families or measured improvements in trust, saving or financial independence. [Problem context and assumptions](work/problem-capture.md).
 
 ## Solution
 
-The parent signs in, saves an allowance amount, Needs/Wants split, purchase cap and allowed categories, and explicitly distributes Testnet funds into separate backed escrows. The student submits a product photo and price; the agent identifies the item and applies the selected bucket’s saved rules before attempting payment. Both roles can view actual allowance activity and authorized purchase photos.
+PadalaPocket is an allowance payment agent with separate parent and student views. The parent defines the spending agreement; the agent checks each submitted allowance purchase against it and coordinates the Testnet payment. The working demo follows this journey:
 
-Parent Deposit integrates Velo checkout for a top-up to the parent wallet before a separate Noir allocation. Matching-receiver checkout creation and status retrieval are verified; a paid parent top-up has not yet been observed. Wants purchases now have a connected local implementation with isolated rules, reservations and escrow selection; release evidence is tracked in [L-003](handoff/L-003.md). Parent approvals now have a connected local implementation with ten-minute expiry, immutable request review and isolated exception payments. A bounded Testnet exception was claimed and revoked with the routine policy unchanged. Savings releases, private My Money spending, weekly automation and in-app withdrawals remain unavailable. Approval release evidence remains in [L-002](handoff/L-002.md).
+1. **Set and distribute the allowance.** The parent saves a weekly amount, an adjustable Needs/Wants split, allowed product categories for each bucket and a purchase cap. An explicit distribution action transfers funds from the parent wallet into separate Noir escrows. The student sees confirmed available balances; choosing a ratio alone does not create money.
+2. **Make a purchase within the agreement.** The student chooses Needs or Wants, takes or uploads a product photo, and enters the price for the fixed demo seller. AI identifies the pictured product; server rules then check the selected bucket's categories, cap and available funds. Eligible purchases proceed without a new parent decision. A category match alone does not authorize payment.
+3. **Review exceptions with context.** Over-cap or category-conflict requests can enter parent review with the photo, product assessment and amount. The parent has ten minutes to approve or reject. Rejection or expiry releases the reserved funds; approval permits that specific purchase through an isolated payment path. Uncertain identification and insufficient funds block payment instead of being silently approved.
+4. **Pay and monitor the result.** The Noir SDK authorizes the purchase and the demo seller claims the funds. Parent and student activity show purchase photos, status and transaction evidence. A purchase is shown as paid only after confirmation; a pending operation is not a successful payment.
+5. **Carry weekly leftovers forward.** The explicit **Advance to next week (test)** control moves confirmed leftover Needs into Savings and leftover Wants into student-private My Money, then attempts the next allowance allocation. It advances application demo time while submitting actual Testnet transactions. A background weekly scheduler, Savings releases and My Money purchases remain unfinished. [Weekly-flow evidence](handoff/L-004.md).
+
+**Velo and Noir have distinct roles in the funding journey:** Velo checkout accepts a Testnet top-up into the parent wallet; a separate Noir allocation distributes funds into the allowance buckets. Matching-receiver checkout creation and status retrieval are verified, but a paid top-up into the current parent wallet remains unverified. [Velo evidence](handoff/L-006.md), [allowance distribution](handoff/L-003A.md), [purchase approvals](handoff/L-002.md), [Wants payments](handoff/L-003.md).
+
+**Current scope:** financial flows serve the provisioned demo family and one fixed seller. Separate-email signup and parent/student linking are implemented, but newly registered families cannot transact until independent wallets are provisioned. AI identification can be uncertain or unavailable, and sequential ledger confirmations can take minutes or require investigation after a stall. A photo does not verify the entered price, actual delivery or the item ultimately received. This is a Testnet prototype, with simulated peso values and no real GCash payout.
 
 ## How the agentic payment works
 
 1. **Fund:** The parent distributes the saved allowance total. Integer rounding conserves the total; the Needs share and Wants remainder go to separate parent-owned Noir escrows. Neither allocation credit is available until both transfers confirm.
 2. **Request:** The student chooses or captures a product photo, enters the price, and explicitly submits to the fixed demo seller. Price is supplied by the student, not inferred from the photo.
 3. **Identify:** Groq vision returns a product name, supported category, uncertainty and restricted-item flags. Image text is untrusted. The [category catalog](apps/api/src/purchase-categories.mjs) separates produce, staple groceries, water and other everyday products from sweets and electronics.
-4. **Decide:** Server rules check identification, parent-selected Needs categories, cap and sufficient available funds. Uncertain images and insufficient funds block payment. New over-cap/category-conflict requests reserve funds and wait up to ten minutes for a parent decision. Rejection/expiry releases the hold; approval uses an isolated exception escrow without increasing the routine cap. Payment advances through separately admitted transaction stages.
+4. **Decide:** Server rules check identification, the selected bucket’s parent-defined categories, cap and sufficient available funds. Uncertain images and insufficient funds block payment. New over-cap/category-conflict requests reserve funds and wait up to ten minutes for a parent decision. Rejection/expiry releases the hold; approval uses an isolated exception escrow without increasing the routine cap. Payment advances through separately admitted transaction stages.
 5. **Pay:** Reserve the amount, check actual escrow backing and policy, then use the Noir SDK to authorize exactly the mapped Testnet amount for the configured merchant. The recorded notebook purchase was ₱2.42 simulated / 0.25 XLM.
 6. **Claim:** The server-held demo seller signer claims the authorized funds. Claimed requires ledger confirmation and a zero merchant-pending readback. Authorization alone is not seller receipt.
 7. **Observe:** Save signed envelopes/hashes before submission, preserve reservations for unknown outcomes, and reconcile existing hashes without blindly replacing transactions. Photos and activity remain authenticated and family-scoped.
@@ -164,10 +183,11 @@ Actual signed-in **local Testnet** views, captured during verification. These ar
 
 ## What's next
 
-- Record and link the required two-minute demo, add registered Discord handles, and rehearse the public deployment.
+- Rehearse the public deployment and check that judges can access the linked demo recording.
 - Verify a paid Velo parent-wallet top-up through hosted checkout and subsequent Noir distribution.
-- Complete release verification for Wants purchases; connect Savings releases and private My Money spending.
-- Connect Savings releases, private My Money spending, weekly scheduling/rollover and in-app test-anchor withdrawal.
+- Complete release verification for Wants purchases and the explicit weekly rollover flow.
+- Connect Savings releases, private My Money spending, background weekly scheduling and in-app test-anchor withdrawal.
+- Provision independent wallets for newly registered families and finish onboarding.
 - Improve progress feedback for sequential Testnet confirmations and establish safe operator recovery for interrupted operations.
 - Verify supported photo categories on real images; model identification is fallible and does not prove price, delivery or medical/health properties.
 
@@ -193,7 +213,7 @@ The combined weekly flow additionally requires a separate funded Testnet `STUDEN
 
 ### New-account signup (L-008)
 
-Use Create an account with a separate email and password for each role. Confirm the email, sign in, then create the parent family or join as Student using the parent-generated setup code. The code expires after 24 hours and is bound to the supplied student email. Supabase Authentication must have email confirmation enabled, the deployed app URL allowed under URL Configuration, and custom SMTP configured for users outside the project team. Signup email delivery has not yet been verified. New families cannot transact until independent wallets are provisioned; they never inherit the demo family’s funds or signers. Account setup is separate from the deferred tutorial.
+Use Create an account with a separate email and password for each role. Confirm the email, sign in, then create the parent family or join as Student using the parent-generated setup code. The code expires after 24 hours and is bound to the supplied student email. Supabase Authentication must have email confirmation enabled, the deployed app URL allowed under URL Configuration, and custom SMTP configured for users outside the project team. The founder confirmed signup email delivery, including a message arriving in spam; inbox placement and the complete new-family journey still need verification. New families cannot transact until independent wallets are provisioned; they never inherit the demo family’s funds or signers. Account setup is separate from the deferred tutorial.
 
 ## Install as an app
 
