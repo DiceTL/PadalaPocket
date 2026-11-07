@@ -245,3 +245,9 @@ DEC-075 supersedes the order below: bounded L-003A allowance distribution comes 
 | Packet | Scope | State |
 |---|---|---|
 | [L-008 Separate-email account creation](../handoff/L-008.md) | Parent/Student choice at signup, verified-email enrollment and email-bound student linking; canonical production confirmation redirect. Supabase URL allowlist, corrected inbox-link check and independent wallet provisioning remain required for the full new-family journey | In progress |
+
+## Installable app — DEC-091
+
+| Packet | Scope | State |
+|---|---|---|
+| [L-009 Installable PWA](../handoff/L-009.md) | Manifest/icons, installation help, public offline fallback and safe update lifecycle implemented; full checks and production-build Chromium privacy/offline/update tests pass. Deployment and real-device installation remain | Review |

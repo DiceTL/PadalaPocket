@@ -89,7 +89,7 @@ Evidence: [L-001](../handoff/L-001.md), [UI-002](../handoff/UI-002.md). An avail
 
 - [ ] Add a coherent set of purposeful assets for account setup, allowance/buckets, empty states and guidance, replacing the current largely text-and-card presentation where visuals help understanding.
 - [ ] Use a consistent illustration/icon style across parent and student pages, with final asset choices reviewed under the existing human design authority.
-- [ ] Supply app identity assets suitable for the PWA icons and installed launch experience.
+- [x] Supply app identity assets suitable for the PWA icons and installed launch experience; actual OS launch appearance remains to be checked.
 - [ ] Assets remain legible at mobile/desktop sizes, preserve useful text alternatives and avoid slowing the main purchase/funding journeys.
 - [ ] Record licenses/attribution for sourced assets; decorative artwork never substitutes for actual purchase photos or account data.
 
@@ -126,18 +126,19 @@ Scope: [L-003](../handoff/L-003.md), L-004/L-005 in the [implementation plan](im
 
 ## PWA goal — DEC-082
 
-**Goal, not implemented.** No app manifest or service-worker implementation was found in the current web source inspection. This decision selects desired behavior, not a caching library or architecture.
+Implemented locally under DEC-091; evidence in [L-009](../handoff/L-009.md). Deployment and physical-device installation remain unverified. Task status belongs in the implementation plan.
 
 - [ ] Supply app name, icons, launch URL, theme and standalone display metadata; verify browser-specific install requirements.
 - [ ] Install and launch successfully on supported Android/desktop browsers; document iOS Add to Home Screen behavior and any limitations.
 - [ ] Installed parent/student pages fit mobile and desktop screens, safe areas and keyboard changes without clipped controls.
-- [ ] Show a useful offline/unavailable state and reconnect path; never substitute fixture balances for unavailable live data.
-- [ ] Require connectivity and server confirmation for funding, purchases and parent decisions; never present an offline action as paid/approved.
-- [ ] Prevent private photos, authenticated API responses and credentials from leaking through any added cache; sign-out removes any private local artifacts introduced by PWA work.
+- [x] Show a useful offline/unavailable state and reconnect path; never substitute fixture balances for unavailable live data.
+- [x] Require connectivity and server confirmation for funding, purchases and parent decisions; never present an offline action as paid/approved.
+- [x] Prevent private photos, authenticated API responses and credentials from leaking through the PWA cache; only the public offline document is stored.
+- [ ] Verify sign-out from the installed app clears the signed-in view and blocks private reads. PWA work introduces no private cache artifacts to remove; existing browser Auth session cleanup remains required.
 - [ ] Handle updates without losing a purchase/checkout reference or resubmitting financial operations; refresh/relaunch restores durable status.
 - [ ] Verify installed launch, offline recovery, update behavior and sign-out on representative supported devices/browsers.
 
-Push notifications and queued offline payments are not part of this goal. Scheduling reminders does not itself imply push delivery. Implementation needs a scoped handoff and architecture/contracts before code work.
+Push notifications and queued offline payments are not part of this goal. Scheduling reminders does not itself imply push delivery. Implementation scope, architecture and verification are recorded in L-009.
 
 ## Release and submission gates
 

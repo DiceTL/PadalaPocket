@@ -194,3 +194,9 @@ The combined weekly flow additionally requires a separate funded Testnet `STUDEN
 ### New-account signup (L-008)
 
 Use Create an account with a separate email and password for each role. Confirm the email, sign in, then create the parent family or join as Student using the parent-generated setup code. The code expires after 24 hours and is bound to the supplied student email. Supabase Authentication must have email confirmation enabled, the deployed app URL allowed under URL Configuration, and custom SMTP configured for users outside the project team. Signup email delivery has not yet been verified. New families cannot transact until independent wallets are provisioned; they never inherit the demo family’s funds or signers. Account setup is separate from the deferred tutorial.
+
+## Install as an app
+
+After deploying the PWA changes over HTTPS, open the website and select **Install app**. Supporting browsers offer a native installation prompt; otherwise the button shows browser-menu instructions. On iPhone/iPad, use Safari → Share → Add to Home Screen. Installed launch uses the same accounts and online functions as the website; new-family wallet provisioning is still pending.
+
+Offline launch shows a connection/retry page. Loaded pages warn when offline; balances may be outdated. Reconnect and check an interrupted payment's status before retrying. Authenticated responses and photos are never saved by the PWA worker. Updates do not force a refresh during an action: finish the action, close all PadalaPocket windows, then reopen. No offline payments or background transaction queue is provided. Production-build Chromium offline/privacy/update checks passed locally; physical-device installation remains unverified. [PWA evidence](handoff/L-009.md).

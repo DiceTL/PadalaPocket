@@ -1,3 +1,4 @@
+import { setupPwa } from './pwa.js';
 import { createClient } from '@supabase/supabase-js';
 import './styles.css';
 import { createApiClient } from './client/api.js';
@@ -34,3 +35,5 @@ controller.subscribe((state) => {
 if (requestedLayout() === null) void controller.restore(new URLSearchParams(location.search).get('accountType'));
 
 window.addEventListener('popstate',()=>{ const state=controller.getState(); if(state.user)controller.navigate(new URLSearchParams(location.search).get('page') || (state.user.role==='parent'?'Overview':'Home'),false); });
+
+if (import.meta.env.PROD) setupPwa();

@@ -163,3 +163,9 @@ input { caret-color: #21655f; }
 }
 
 .live-category-copy { display:grid; gap:5px; }.live-category-copy small { font-size:12px; line-height:1.5; color:#59616d; font-weight:400; }
+
+.pwa-tools { padding: 8px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left)); background: var(--surface); border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 16px; }
+.pwa-tools p { margin: 0; max-width: 72ch; font-size: 14px; line-height: 1.5; }
+.pwa-tools [hidden] { display: none; }
+.pwa-tools[hidden] { display: none; }
+@media (display-mode: standalone) { body { padding-top: env(safe-area-inset-top); } }

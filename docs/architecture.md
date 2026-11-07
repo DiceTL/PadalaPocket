@@ -185,3 +185,7 @@ Server-only `weekly_clocks` and `weekly_events` join the existing Postgres admis
 Supabase owns email/password signup and verification. Verified users enroll through the Node API, which derives the user ID from Auth getUser and calls service-only transactional enrollment. Parent enrollment creates a new family. The parent generates a random student setup code bound to the student’s separate email; only its SHA-256 hash is stored, and verified-email redemption creates the single student membership. Codes expire after 24 hours and replacement revokes the preceding code. Membership never trusts user metadata. Existing memberships are preserved.
 
 New memberships have wallet_ready=false. The identity boundary denies funding, Velo, purchase and weekly routes for them, and the shell shows account/linking setup instead of demo financial controls. Existing demo memberships retain wallet_ready=true. Per-family wallet custody and Velo receiving ownership remain unresolved and are required before payments can be enabled for self-service families. This change creates no keys or balances for new accounts.
+
+## PWA delivery — DEC-091
+
+The Vite frontend registers a native service worker in production. Only the public offline document is cached. Application documents, scripts, authenticated APIs and photos are network-only. A failed non-API navigation shows the offline document; in-page connectivity changes show a notice. Updates activate after existing windows close, without forced replacement during a payment. Account/wallet provisioning remains unchanged.
