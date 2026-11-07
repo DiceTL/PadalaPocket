@@ -1,24 +1,29 @@
 # Market and alternatives
 
-State: research not started. No competitor capability or opportunity has been established by this setup.
-Use this summary to inform positioning and scope. Detailed evidence lives in [the evidence ledger](../work/evidence-ledger.md).
+State: initial desk research checked 2026-11-07. This is a comparison of documented offers and practical alternatives, not evidence of demand for PadalaPocket. Detailed claim sources and limits are in the [evidence ledger](../work/evidence-ledger.md#market-evidence).
 
 ## Comparison
 
-Include direct competitors, indirect alternatives, and everyday workarounds after identifying them through research.
-
 | Alternative | User and job addressed | What it does well | Relevant limitation and context | Source and check date | Evidence ID |
 |---|---|---|---|---|---|
-| Not researched | Unknown | Unknown | Unknown | Pending | Pending |
+| [GCash Jr.](https://help.gcash.com/hc/en-us/articles/39417503859737-How-do-I-create-a-GCash-Jr-account-for-my-child) | Philippine families giving minors access to everyday digital payments | Child account for ages 7–17; parent/guardian enrollment; receive money and QR payments, with additional services after verification. GCash publishes a Parent Dashboard and linked-account management. | Requires an eligible parent/guardian, child ID and birth certificate, and verification. Public pages reviewed describe account enrollment and management, but do not establish configurable Needs/Wants budgets, purchase-by-purchase parent approval, photo checks, or a private child-controlled spending balance. This is a documentation boundary, not proof those features are absent in every flow. | Official GCash Help Center, checked 2026-11-07 | EV-026 |
+| [Maya account for minors](https://support.maya.ph/s/article/Can-I-upgrade-my-account-even-though-I-am-a-minor-or-a-student) | Minors and families needing a standard digital wallet | Maya says ages 7–17 can apply for an upgraded account with parent/guardian consent and supporting documents. This is a route to a general-purpose wallet. | The cited process is account verification, not a purpose-built allowance-management flow. The reviewed sources do not establish allowance buckets, category controls, per-purchase approval, or the proposed privacy split. | Official Maya Help Center, checked 2026-11-07 | EV-027 |
+| [Cash, envelope/jar budgeting, or a shared household ledger](https://www.maya.ph/stories/a-family-friendly-guide-for-setting-spending-limits-with-e-wallets) | Families who already agree on an allowance and need a simple way to hand it over or divide it | Familiar, low setup burden; adults can explain rules directly and students can keep discretionary cash. These are common-sense alternatives to test with families, not measured findings from this research. | Physical cash and manual records require the family to track balances and enforce rules themselves; they may not give a parent abroad timely visibility. The Maya article discusses family budgeting and cashless tools but does not quantify prevalence or outcomes. | Maya family budgeting article; checked 2026-11-07 | EV-028 |
+| [Direct remittance / wallet transfer](https://help.gcash.com/hc/en-us/articles/28753833785241-GCash-Overseas-countries-and-services) | OFW sending money to a family member in the Philippines | GCash Overseas documents cash-in via international remittance partners and sending money to PH GCash users; it addresses cross-border transfer into an existing wallet. | Sending funds does not itself establish controls over how a student spends them. Sender/receiver eligibility, country availability, verification, fees and limits depend on the service and route. This may pair with GCash Jr. rather than compete with it. | Official GCash Help Center, checked 2026-11-07 | EV-029 |
+| [Greenlight](https://greenlight.com/learning-center/home-and-chores/how-does-a-debit-card-work) (U.S. reference) | U.S. families seeking a supervised child debit card and financial-learning tools | Greenlight describes parent-set limits, category blocks, spending alerts, recurring allowance, savings goals and chore-linked payments. It shows that family finance products can combine controls and learning features. | U.S.-focused payment/card context; the reviewed source does not establish availability, local payment rails, or fit for Philippine OFW households. Treat as a design/positioning reference, not a locally available substitute or proof of local demand. | Greenlight official Learning Center, checked 2026-11-07 | EV-030 |
 
-## Potential opportunities
+## Potential opportunities (hypotheses)
 
-For each candidate opportunity record the evidence, inference, counterargument, and decision it could affect.
-A feature missing from a competitor does not establish unmet demand. Lack of documentation is not proof that a capability is absent.
+1. **Allowance rules joined to remote family funding.** GCash Jr. provides a child wallet and parent-linked account management, while GCash Overseas supports cross-border cash-in/send routes. A workflow that connects regular funding with family-agreed spending rules may reduce coordination work. This is an inference from documented capabilities, not evidence that families experience this as a painful gap. Existing workarounds may be sufficient.
+2. **A protected discretionary balance alongside supervised allowance.** The concept separates rule-governed allowance from student-controlled My Money. That could offer a clearer autonomy boundary than one shared wallet, but the reviewed product pages do not establish that comparable products lack such a facility. The privacy model also applies only inside PadalaPocket; public-chain activity can reveal wallet relationships.
+3. **AI photo checks as purchase context.** A photo could help explain a purchase request to a parent who is not nearby. No reviewed competitor source establishes this as a differentiator, and photo-based identification cannot verify price, purchase completion, or goods received. It may add friction or classify items incorrectly.
 
-## Research boundaries
+These hypotheses could inform whether to test the parent/student journey and which alternatives to compare in more depth. They do not justify building more features or claiming validated demand. Market evidence should challenge the concept as well as support it.
 
-Begin from the problem being explored; allow findings to challenge the draft concept.
-Check official product sources first and distinguish marketed capabilities from observed behavior.
-Market sizing is optional unless it informs a decision or is required by the event.
-Create work/market-scan.md only when detailed notes become too large for this summary.
+## Research boundaries and next useful checks
+
+- Sources were official product/help pages where available; this is a small initial scan, not a comprehensive competitor review or user study.
+- Do not claim GCash Jr. or Maya lacks a capability just because it was not in the cited documentation. Confirm with a product walkthrough before making strong feature comparisons.
+- Availability and requirements can change. Recheck product pages before a pitch or implementation decision.
+- A useful next research question is whether OFW parents and students currently use one wallet, cash, multiple accounts, remittance plus informal rules, or another arrangement—and what specifically fails for them. Ask neutrally; no interview is required by project workflow.
+- No market-size estimate is included because it does not answer a current product decision.
