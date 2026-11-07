@@ -16,6 +16,8 @@ export function setupPwa() {
   update.hidden = true;
   update.setAttribute('role', 'status');
   update.textContent = 'An app update is ready. Finish your current action, then close all PadalaPocket windows and reopen the app.';
+  const appRoot = document.querySelector('#app');
+  const isDefaultPage = () => Boolean(appRoot?.querySelector('.signin-page'));
   const displayMode = matchMedia('(display-mode: standalone)');
   const standalone = () => displayMode.matches || navigator.standalone === true;
   const syncPanel = () => { panel.hidden = [...panel.children].every(child => child.hidden); };
@@ -24,8 +26,8 @@ export function setupPwa() {
   const refresh = () => {
     notice.hidden = navigator.onLine;
     notice.textContent = 'You’re offline. Balances may be outdated. Payments and approvals require a connection; check any interrupted action after reconnecting.';
-    install.hidden = installed || standalone();
-    if (installed || standalone()) help.hidden = true;
+    install.hidden = installed || standalone() || !isDefaultPage();
+    if (installed || standalone() || !isDefaultPage()) help.hidden = true;
     syncPanel();
   };
   window.addEventListener('online', refresh);
@@ -58,6 +60,9 @@ export function setupPwa() {
   panel.append(notice, install, help, update);
   document.body.prepend(panel);
   refresh();
+  if (appRoot && 'MutationObserver' in window) {
+    new MutationObserver(refresh).observe(appRoot, { childList: true, subtree: true });
+  }
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' }).then(registration => {
       const showUpdate = () => {

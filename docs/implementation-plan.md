@@ -250,4 +250,4 @@ DEC-075 supersedes the order below: bounded L-003A allowance distribution comes 
 
 | Packet | Scope | State |
 |---|---|---|
-| [L-009 Installable PWA](../handoff/L-009.md) | Manifest/icons, installation help, public offline fallback and safe update lifecycle implemented; full checks and production-build Chromium privacy/offline/update tests pass. Deployment and real-device installation remain | Review |
+| [L-009 Installable PWA](../handoff/L-009.md) | Manifest/icons, login-only installation help, public offline fallback and safe update lifecycle implemented; prior full checks and production-build Chromium privacy/offline/update tests pass. The latest logo/login UI follow-up still needs a fresh build/browser check; deployment and real-device installation remain | Review |

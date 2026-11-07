@@ -80,9 +80,6 @@ function renderSignIn(root, state, controller) {
   if(state.signupMessage)card.append(el('p','notice',state.signupMessage));
   if(!state.mock){const toggle=el('button','button button-secondary',signup?'Back to sign in':'Create an account');toggle.onclick=()=>controller.toggleSignup();card.append(toggle);if(signup){password.minLength=8;password.autocomplete='new-password';const resend=el('button','button button-quiet','Resend confirmation email');resend.onclick=()=>controller.resendConfirmation(email.value);card.append(resend);}}
 
-  const layouts = el('a', 'layout-entry', 'Explore the nine Figma layouts');
-  layouts.href = '/?layout=parent';
-  card.append(layouts);
   if (state.mock) card.append(el('p', 'mock-note', MOCK_DISCLOSURE));
   const liveRegion = el('p', 'sr-only', state.status === 'loading' ? 'Signing in' : '');
   liveRegion.setAttribute('aria-live', 'polite');
