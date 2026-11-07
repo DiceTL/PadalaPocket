@@ -42,7 +42,7 @@ export function createAppController({ auth, api }) {
     const jobs = [];
     if(state.user.role==='parent' && api.approvals)jobs.push((async()=>{try{const approvals=await api.approvals();if(currentSession(epoch,userId))state={...state,approvals,approvalError:null};}catch(e){if(currentSession(epoch,userId))state={...state,approvalError:e.message};}})());
     if (state.user.role === 'parent' && typeof api.veloTopups === 'function') jobs.push(loadTopups());
-    for (const [method, field, errorField] of [['familyRules','familyRules','rulesError'],['activity','activity','activityError']]) {
+    for (const [method, field, errorField] of [['weekly','weekly','weeklyError'],['familyRules','familyRules','rulesError'],['activity','activity','activityError']]) {
       if (typeof api[method] !== 'function') continue;
       jobs.push((async () => {
         try { const value = await api[method](); if (currentSession(epoch, userId)) state = { ...state, [field]: value, [errorField]: null }; }
@@ -54,6 +54,32 @@ export function createAppController({ auth, api }) {
   }
   return {
     getState,
+    async saveWeeklySchedule(weekday,time) {
+      if(state.weeklyBusy || !state.weekly)return;
+      const epoch=sessionEpoch,userId=state.user?.userId;
+      state={...state,weeklyBusy:true,weeklyError:null};publish();
+      try{await api.weekly('PUT',{weekday,time,expectedRevision:state.weekly.clock.revision});if(currentSession(epoch,userId))await loadFamily();}
+      catch(e){if(currentSession(epoch,userId))state={...state,weeklyError:e.message};}
+      finally{if(currentSession(epoch,userId)){state={...state,weeklyBusy:false};publish();}}
+    },
+    async advanceWeek() {
+      if(state.weeklyBusy || !state.weekly || state.user?.role!=='parent')return;
+      const epoch=sessionEpoch,userId=state.user.userId,storageKey='weeklyAdvance:'+userId;
+      const active=state.weekly.events.find(e=>['processing','unknown'].includes(e.status));
+      const saved=active?{key:active.id,revision:state.weekly.clock.revision}:JSON.parse(localStorage.getItem(storageKey)||'null') || {key:crypto.randomUUID(),revision:state.weekly.clock.revision};
+      localStorage.setItem(storageKey,JSON.stringify(saved));state={...state,weeklyBusy:true,weeklyError:null};publish();
+      try{
+        for(let i=0;i<8;i++){
+          if(!currentSession(epoch,userId))return;
+          const result=await api.weekly('POST',{expectedRevision:saved.revision},saved.key);
+          await loadFamily();
+          if(['confirmed','allocation_skipped'].includes(result.status)){localStorage.removeItem(storageKey);break;}
+          if(result.stageStarted || result.status==='unknown')break;
+        }
+        await loadFunding();await loadPurchases();
+      }catch(e){if(!active && ['CLOCK_CHANGED','RULES_CHANGED'].includes(e.code)){localStorage.removeItem(storageKey);await loadFamily();}if(currentSession(epoch,userId))state={...state,weeklyError:e.message};}
+      finally{if(currentSession(epoch,userId)){state={...state,weeklyBusy:false};publish();}}
+    },
     refreshTopups: loadTopups,
     async createTopup() {
       if (state.topupBusy || !state.familyRules || state.user?.role !== 'parent') return;

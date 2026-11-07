@@ -185,3 +185,7 @@ Existing exception, wallet-topology and anchor experiments are feasibility evide
 - Event requirements come from the supplied [Velo + Noir Builder Handbook](seed/sources/velo-noir-builder-handbook.md); its original DOCX is preserved in seed/sources/. [AGENTS.md](AGENTS.md), [routing](AGENT_ROUTING.md), [decision ledger](docs/decision-ledger.md) and [research](work/evidence-ledger.md) retain project context.
 
 L-002 parent approvals are implemented locally under [DEC-084](docs/decision-ledger.md); see [the packet](handoff/L-002.md) for current verification limits. The owner signs each isolated exception; routine agent policy remains unchanged.
+
+### Weekly demo configuration (L-004)
+
+The combined weekly flow additionally requires a separate funded Testnet `STUDENT_SECRET` on the API server. It must differ from OWNER_SECRET, AGENT_SECRET and MERCHANT_SECRET. Keep it out of browser variables and git. Apply the weekly lifecycle migration before running this code. Parent Overview has required PHT weekday/time settings and **Advance to next week (test)**. This control submits actual Testnet rollover/allocation transactions while advancing only application demo time. It shows a pending state if confirmation is uncertain. Savings release, My Money spending and a production scheduler remain unfinished. See [L-004](handoff/L-004.md) for verification and release limits.

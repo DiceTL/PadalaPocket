@@ -173,3 +173,9 @@ DEC-085 bounds each exception execution request to one transaction stage. Durabl
 ### Wants purchase extension — DEC-087
 
 The existing server-only purchase journal gains an immutable `bucket` (`needs` default, or `wants`). Snapshot categories, reservation totals, available balances and payment device selection follow that bucket; shared global serialization and exception admission are retained. Historical Needs bindings and request fingerprints remain compatible. Wants requests additionally bind the bucket in consent and idempotency. The historical `needs_defund` exception stage debits the selected bucket escrow. Savings and My Money are outside this extension. Implementation and verification evidence live in [L-003](../handoff/L-003.md).
+
+## Combined weekly rollover — DEC-088
+
+L-004 extends the existing server-custodied single-family Testnet topology with a separate server-only `STUDENT_SECRET`, using the existing B-003 student authority locally. Deterministic family device hashes identify Savings and My Money; their owners/agents are the parent and student respectively. No allowance agent receives authority over either destination. This remains a controlled demo, with public-ledger visibility as described under DEC-049.
+
+Server-only `weekly_clocks` and `weekly_events` join the existing Postgres admission lock. Six separately admitted stages register the destinations, withdraw/refund Needs into Savings, and withdraw/refund Wants into My Money. Each signed envelope is persisted before one dispatch. The existing funding journal then performs the next allocation using the weekly event UUID. The browser drives bounded requests; an interrupted admitted writer stays fenced. There is no background scheduler. Application simulated time advances only after allocation confirmation or a persisted insufficient-funds skip; ledger timestamps and purchase deadlines remain real. Implementation evidence and outstanding live verification belong to L-004.

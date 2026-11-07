@@ -109,19 +109,20 @@ Evidence: [L-006](../handoff/L-006.md). The historical paid Velo proof uses a se
 ## Remaining wallet and weekly lifecycle
 
 - [x] Wants can pay from its own confirmed balance without consuming Needs; one bounded live Testnet purchase verified both escrow balances.
-- [ ] Reconciled week-end Needs leftovers move to Savings; Wants leftovers move to My Money exactly once.
+- [x] Reconciled week-end Needs leftovers move to Savings; Wants leftovers move to My Money exactly once.
 - [ ] Student requests Savings release; parent approval transfers the approved amount to My Money, while rejection transfers nothing.
+- [x] Student sees confirmed rollover credits in private My Money; parent weekly projections exclude that balance.
 - [ ] My Money has a real student-controlled balance/history and spending without photo, parental approval or parental category/cap checks.
 - [ ] Parent APIs, views, notifications and totals exclude private My Money balances/purchases. Public-ledger anonymity is not promised.
 - [ ] Parent-chosen weekly schedule allocates once per due event; an insufficient parent balance skips the full allocation and notifies the parent.
 - [ ] Reminder appears 24 hours before the next allocation; recap reflects confirmed rollover results.
-- [ ] Provide an explicit **Advance to next week (test)** button in parent testing/demo tools, separate from normal scheduled funding.
+- [x] Provide an explicit **Advance to next week (test)** button in parent testing/demo tools, separate from normal scheduled funding.
 - [ ] Show the application test date and target week; run the real due-event sequence (reconcile/expire requests, rollover, then next allocation) exactly once, with visible pending, skipped, confirmed and failure results.
 - [ ] Repeated clicks, reloads and concurrent requests cannot repeat a rollover or allocation. Unresolved money operations block unsafe advancement.
-- [ ] Test advancement remains isolated to the authorized Testnet/demo context; it does not change Stellar time, transaction validity or the ten-real-minute purchase approval timeout.
+- [x] Test advancement remains isolated to the authorized Testnet/demo context; it does not change Stellar time, transaction validity or the ten-real-minute purchase approval timeout.
 - [ ] Withdrawals initiate and reconcile an authenticated test-anchor session in the app, showing actual returned status and disclosed simulated fiat payout.
 
-Scope: [L-003](../handoff/L-003.md), L-004/L-005 in the [implementation plan](implementation-plan.md), F-002/F-006–F-008 in the [product spec](product-spec.md). Savings, My Money, recap and Withdrawal currently have unavailable screens. Earlier wallet/anchor experiments are separate evidence.
+Scope: [L-003](../handoff/L-003.md), L-004/L-005 in the [implementation plan](implementation-plan.md), F-002/F-006–F-008 in the [product spec](product-spec.md). [L-004](../handoff/L-004.md) now connects Savings, private My Money credits, recap and the manual weekly test control; one real Testnet rollover/reallocation is verified locally. A background scheduler, 24-hour reminder, Savings release, private spending and Withdrawal remain unfinished. Vercel deployment requires the new student server signer. Earlier wallet/anchor experiments are separate evidence.
 
 ## PWA goal — DEC-082
 

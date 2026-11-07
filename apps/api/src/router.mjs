@@ -1,3 +1,4 @@
+import { weekly } from './weekly.mjs';
 import { veloTopups } from './velo-topups.mjs';
 import { purchases } from './purchases.mjs';
 import { family } from './family.mjs';
@@ -8,6 +9,7 @@ import { createIdentityHandler } from './identity.mjs';
 const identity = createIdentityHandler();
 export function handler(req, res) {
   const path = new URL(req.url, 'http://localhost').pathname;
+  if (path === '/api/weekly' || path === '/api/demo/advance') return weekly(req,res);
   if (path === '/api/velo-topups') return veloTopups(req,res);
   if (path.startsWith('/api/family/')) return family(req, res);
   if (path === '/api/purchases' || path.startsWith('/api/purchases/')) return purchases(req, res);

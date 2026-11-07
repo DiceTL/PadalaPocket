@@ -1,3 +1,4 @@
+import { renderWeekly } from './weekly.js';
 import { renderDashboard, renderUnavailable } from './live-layout.js';
 import { getPageTitle, getRoleView, MOCK_BADGE_TEXT, MOCK_DISCLOSURE } from './model.js';
 import { createCameraButton } from './camera.js';
@@ -118,7 +119,7 @@ function renderShell(root, state, controller) {
   content.append(title);
   content.append(el('p', 'muted page-description', !state.mock && state.activePage === 'Approvals' ? 'Review purchases that need your decision and track approved payments.' : !state.mock && state.activePage === 'Deposit' ? 'Top up your parent wallet through Velo on Stellar Testnet.' : !state.mock && state.activePage === 'Activity' ? 'Your submitted purchases and private item photos.' : !state.mock && state.activePage === 'Allowance rules' ? 'Manage the rules for future Needs purchases.' : !state.mock && state.user.role === 'parent' ? 'Distribute allowance into Needs and Wants on Stellar Testnet. Peso amounts are simulated.' : !state.mock && state.user.role === 'student' ? 'Submit a product photo and price, then track the real purchase status.' : view.message));
   const dashboardOnly = !state.mock && renderDashboard(content,state,controller);
-  if (!state.mock && (renderUnavailable(content,state,controller) || dashboardOnly || renderFamilyPage(content, state, controller))) {
+  if (!state.mock && (renderWeekly(content,state,controller) || renderUnavailable(content,state,controller) || dashboardOnly || renderFamilyPage(content, state, controller))) {
     // The family view owns its loaded/empty/error states.
   } else if (!state.mock && state.user.role === 'parent') {
     const panel = el('div', 'preview-panel');

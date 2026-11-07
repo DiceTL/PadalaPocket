@@ -1,3 +1,4 @@
+import { allowanceAvailable } from './weekly-plan.mjs';
 import { approvalBinding, REVIEW_REASONS, EXCEPTION_STAGES } from './purchase-approval.mjs';
 import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'node:crypto';
@@ -138,10 +139,10 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       if(member.role==='parent')return send(200,{purchases:result.data.map(purchaseProjection)});
       const funding = await db.from('needs_funding').select('amount_stroops,wants_stroops').eq('family_id', member.family_id).eq('status', 'confirmed');
       if (funding.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
-      const credits = funding.data.reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
-      const held = result.data.filter(row => row.reserved && row.bucket !== 'wants').reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
+      const sweeps = await db.from('weekly_events').select('needs_stroops,wants_stroops').eq('family_id',member.family_id);
+      if(sweeps.error)throw fail(503,'PROVIDER_UNAVAILABLE');
       const familyRules = await loadRules(db, member.family_id);
-      return send(200, { purchases: result.data.map(purchaseProjection), rules: purchaseRulesFromSettings(familyRules), availableNeedsStroops: (credits - held).toString(), wantsRules: purchaseRulesFromSettings(familyRules, 'wants'), availableWantsStroops: (funding.data.reduce((sum,r)=>sum+BigInt(r.wants_stroops??'0'),0n) - result.data.filter(row=>row.reserved && row.bucket==='wants').reduce((sum,row)=>sum+BigInt(row.amount_stroops),0n)).toString() });
+      return send(200, { purchases: result.data.map(purchaseProjection), rules: purchaseRulesFromSettings(familyRules), availableNeedsStroops: allowanceAvailable(funding.data,result.data,sweeps.data,'needs'), wantsRules: purchaseRulesFromSettings(familyRules, 'wants'), availableWantsStroops: allowanceAvailable(funding.data,result.data,sweeps.data,'wants') });
     }
     const key = req.headers['idempotency-key']; if (!uuid.test(key ?? '')) throw fail(400, 'INVALID_INPUT');
     let body = req.body;

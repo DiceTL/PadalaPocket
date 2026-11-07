@@ -26,7 +26,7 @@ function fixture({ role = 'student', ai = { productName: 'Notebook', category: '
     };
     const q = { select() { return this; }, eq(k,v) { filters.push([k,v]); return this; }, order: run, maybeSingle() { single = true; return run(); }, single() { single = true; return run(); }, update(patch) { mutation = patch; return this; }, insert(row) { insert = row; return this; }, then(resolve,reject) { return run().then(resolve,reject); } }; return q;
   }
-  const db = { from(name) { calls.db++; if (name === 'needs_funding') return { select() { return this; }, eq() { return this; }, then(resolve) { return Promise.resolve({ data: [{ amount_stroops: '10000000', wants_stroops: '8000000' }] }).then(resolve); } }; return table(); }, rpc: async (name, args={}) => {
+  const db = { from(name) { calls.db++; if(name==='weekly_events')return {select(){return this;},eq(){return Promise.resolve({data:[]});}}; if (name === 'needs_funding') return { select() { return this; }, eq() { return this; }, then(resolve) { return Promise.resolve({ data: [{ amount_stroops: '10000000', wants_stroops: '8000000' }] }).then(resolve); } }; return table(); }, rpc: async (name, args={}) => {
     if(name==='expire_purchase_reviews')return {data:null};
     const {p_id}=args;
     if(name==='admit_purchase_exception'){
