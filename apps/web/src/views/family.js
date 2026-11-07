@@ -17,7 +17,7 @@ function renderRules(content, state, controller) {
   if (state.rulesError) { const error = el('p', 'notice notice-error', state.rulesError); error.setAttribute('role', 'alert'); panel.append(error); }
   if (!state.familyRules) { panel.append(el('p', '', 'Rules have not loaded.'), refreshButton(controller)); content.append(panel); return; }
   const settings = state.rulesDraft || state.familyRules.settings;
-  const form = el('form', 'signin-form'); const inputs = {};
+  const form = el('form', 'signin-form family-rules-form'); const inputs = {};
   for (const [name, label, value] of [['weeklyAmountMinor','Weekly amount in simulated pesos',pesos(settings.weeklyAmountMinor).slice(1)],['needsPercent','Needs share (%)',settings.needsPercent],['capMinor','Purchase cap in simulated pesos',pesos(settings.capMinor).slice(1)]]) {
     const wrap = el('label', 'field-label', label), input = el('input', 'field-input');
     input.name = name; input.value = value; input.required = true; input.disabled = Boolean(state.rulesBusy);
@@ -25,6 +25,8 @@ function renderRules(content, state, controller) {
     if (name === 'needsPercent') { input.min = '0'; input.max = '100'; input.step = '1'; }
     wrap.append(input); form.append(wrap); inputs[name] = input;
   }
+  // UI review M6: keep the existing validation message beside the amount fields.
+  const validation = el('p', 'notice notice-error'); validation.hidden = true; validation.setAttribute('role','alert'); form.append(validation);
   for (const [key, title] of [['needsCategories','Needs allowed categories'],['wantsCategories','Wants allowed categories']]) {
     const group = el('fieldset', 'live-category-group'); group.append(el('legend', '', title));
     for (const category of state.familyRules.categories) {
@@ -33,7 +35,6 @@ function renderRules(content, state, controller) {
     }
     form.append(group);
   }
-  const validation = el('p', 'notice notice-error'); validation.hidden = true; validation.setAttribute('role','alert'); form.append(validation);
   const save = el('button', 'button button-primary', state.rulesBusy ? 'Saving…' : 'Save rules'); save.type = 'submit'; save.disabled = Boolean(state.rulesBusy); form.append(save);
   form.addEventListener('submit', event => {
     event.preventDefault(); const converted = {};

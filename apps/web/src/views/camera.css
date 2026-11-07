@@ -12,3 +12,8 @@
 .photo-selection { color: #59616d; font-size: 12px; line-height: 1.5; }
 .photo-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .photo-actions .camera-trigger:first-child, [data-name="Photo upload"] .camera-trigger { background: #15223d; color: #fff; border: 1px solid #15223d; }
+
+/* UI review M8: give selection and capture feedback a readable, distinct surface. */
+.photo-selection, .photo-camera .camera-status { padding: 12px; border-radius: 10px; background: #edf4f1; color: #19253c; font-size: 14px; line-height: 1.5; }
+.photo-camera .camera-status.is-error { background: #fff1ef; border: 1px solid #f2d2ce; color: #842c28; }
+.camera-capture.is-unavailable:disabled { cursor: not-allowed; }

@@ -205,6 +205,7 @@ Product IDs F-001–F-008 are unchanged; frontend task packets use FE-001 onward
 | Task / packet | Scope | State |
 |---|---|---|
 | [UI-001 Implement Figma layouts and delegated screens](../handoff/UI-001.md) | Fourteen responsive previews and role shells under DEC-062–DEC-069. Local checks pass; full repository check also passes outside the sandbox under L-001. Team review/merge remain | Review |
+| [UI-003 Screenshot-based visual refinement](../handoff/UI-003.md) | 238 PNGs reviewed;34 screen/viewport critiques;13 findings fixed,1 partial,2 explicitly skipped. Shared fixes approved; full check and26 page/viewport browser checks pass, with final rules-alert confirmation. Human review/deployment remain | Review |
 
 
 ## Connected-function delivery — DEC-070

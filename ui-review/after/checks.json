@@ -1,0 +1,33 @@
+{
+  "completed": true,
+  "checks": [
+    "mobile-parent-overview: rendered, no horizontal document overflow",
+    "mobile-parent-allowance-rules: rendered, no horizontal document overflow",
+    "mobile-parent-approvals: rendered, no horizontal document overflow",
+    "mobile-parent-activity: rendered, no horizontal document overflow",
+    "mobile-parent-savings: rendered, no horizontal document overflow",
+    "mobile-parent-deposit: rendered, no horizontal document overflow",
+    "mobile-parent-withdrawal: rendered, no horizontal document overflow",
+    "mobile-student-home: rendered, no horizontal document overflow",
+    "mobile-student-pay-a-seller: rendered, no horizontal document overflow",
+    "mobile-student-activity: rendered, no horizontal document overflow",
+    "mobile-student-savings: rendered, no horizontal document overflow",
+    "mobile-student-my-money: rendered, no horizontal document overflow",
+    "mobile-student-week-end-recap: rendered, no horizontal document overflow",
+    "desktop-parent-overview: rendered, no horizontal document overflow",
+    "desktop-parent-allowance-rules: rendered, no horizontal document overflow",
+    "desktop-parent-approvals: rendered, no horizontal document overflow",
+    "desktop-parent-activity: rendered, no horizontal document overflow",
+    "desktop-parent-savings: rendered, no horizontal document overflow",
+    "desktop-parent-deposit: rendered, no horizontal document overflow",
+    "desktop-parent-withdrawal: rendered, no horizontal document overflow",
+    "desktop-student-home: rendered, no horizontal document overflow",
+    "desktop-student-pay-a-seller: rendered, no horizontal document overflow",
+    "desktop-student-activity: rendered, no horizontal document overflow",
+    "desktop-student-savings: rendered, no horizontal document overflow",
+    "desktop-student-my-money: rendered, no horizontal document overflow",
+    "desktop-student-week-end-recap: rendered, no horizontal document overflow"
+  ],
+  "errors": [],
+  "scope": "Local production assets; demo account GET data proxied from deployed API. No application API writes allowed. Camera denial controlled in browser, no payment submitted."
+}

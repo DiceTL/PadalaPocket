@@ -1,5 +1,7 @@
 const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
 const money=n=>`₱${(Number(n)*9.68/10000000).toFixed(2)} simulated · ${(Number(n)/10000000).toFixed(7)} Testnet XLM`;
+// UI review M7: emphasize the existing balance without changing its value or qualifiers.
+const balance=n=>{const p=el('p',money(n));p.className='weekly-balance-amount';return p;};
 export function renderWeekly(content,state,controller){
  const page=state.activePage,parent=state.user.role==='parent';
  if(!['Overview','Savings','My Money','Week-end recap'].includes(page))return false;
@@ -8,8 +10,8 @@ export function renderWeekly(content,state,controller){
  const data=state.weekly;
  if(state.weeklyError){const error=el('p',state.weeklyError);error.setAttribute('role','alert');panel.append(error);}
  if(!data){panel.append(el('p','Loading weekly balances…'));content.append(panel);return page!=='Overview';}
- if(page==='Savings')panel.append(el('p',money(data.savingsStroops)),el('p','Confirmed Needs leftovers set aside in Savings.'));
- else if(page==='My Money')panel.append(el('p',money(data.myMoneyStroops)),el('p','Your private balance from Wants leftovers.'));
+ if(page==='Savings')panel.append(balance(data.savingsStroops),el('p','Confirmed Needs leftovers set aside in Savings.'));
+ else if(page==='My Money')panel.append(balance(data.myMoneyStroops),el('p','Your private balance from Wants leftovers.'));
  else{
   panel.append(el('p',`Simulated time: ${new Date(data.clock.simulatedAt).toLocaleString('en-PH',{timeZone:'Asia/Manila'})} PHT`));
   panel.append(el('p','At the weekly boundary, leftover Needs moves to Savings and leftover Wants moves to My Money. The next allowance then uses the parent funding wallet.'));

@@ -1,0 +1,9 @@
+{
+  "completed": true,
+  "checks": [
+    "mobile-parent-allowance-rules: rendered, no horizontal document overflow",
+    "desktop-parent-allowance-rules: rendered, no horizontal document overflow"
+  ],
+  "errors": [],
+  "scope": "Local production assets; demo account GET data proxied from deployed API. No application API writes allowed. Camera denial controlled in browser, no payment submitted."
+}

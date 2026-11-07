@@ -1,0 +1,4181 @@
+[
+  {
+    "file": "CAPTURE-INDEX.md",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/CAPTURE-INDEX.md",
+    "kind": ".md"
+  },
+  {
+    "file": "Desktop/parent/001-login-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/001-login-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "50d1d0fbc7adb9cdd63ddf086510a8bff2af124498d962d6e16646c2b3233392",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/002-login-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/002-login-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "d07ea42a334a208fed81ace9ee6851965161ac84a780061c02d1b72aa1feab39",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/003-login-install-help.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/003-login-install-help.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Manual install help expanded",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "660034c579e9e084f6dbe41c1e0bad6a7a4c22e8ee5d8b392460c5db3a79417b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/004-signup-default.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/004-signup-default.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "9daef08ce498fe3ff9c12a8156d935847a71fe274a133acc2f768c42e62d612f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/005-signup-parent-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/005-signup-parent-selected.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "1f422f1967aa545c0776757f8331c05e2f7c647c2421b6ec5d72e167231d6c7c",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/006-signup-student-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/006-signup-student-selected.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "f7fdc7c03b6778b1d67e74f411c120814fa2a71481a005d3f531ee1bafeb4734",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/007-signup-account-type-menu.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/007-signup-account-type-menu.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Native select menu open",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7183484cca9db4d9c8b0af50f4672b6b79e77b670cf42b03d40afc222eeb2543",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/008-overview-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/008-overview-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "b3b4720154c08b4dc2f950e8fac2ff2de97622077a237d65730808346b4a8128",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/009-overview-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/009-overview-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 1775,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "309d09483cbb8fb4dc7f3a31630b61ab4b0ba30c722fcc0e7186714a6bf89055",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/010-overview-allocation-history-4-expanded-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/010-overview-allocation-history-4-expanded-1.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2282,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "020d315b2d91d6b9122362adebdc87328d0f03d4061a9ac94e61ca9352f7b7a6",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/011-overview-select-1-sunday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/011-overview-select-1-sunday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "3e10e387a300a064d6d8a317273c1fe70d860e86983d2f7cce054f228cfc8f94",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/012-overview-select-1-monday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/012-overview-select-1-monday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "ffb5f46f75963464c0097f17d01e7c9b7ab9987d3c7a7cabf0a9fe3bcf8052af",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/013-overview-select-1-tuesday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/013-overview-select-1-tuesday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "7a99155c2e79c6a2a1b0dac47b9406e4667c0a8e69aa8da5acafa09bd6ca7696",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/014-overview-select-1-wednesday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/014-overview-select-1-wednesday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "f972d9673ec81aec645fc2863bb0acd70f436cdc259b1beb375b4e6272d089b5",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/015-overview-select-1-thursday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/015-overview-select-1-thursday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "757fd89f1a3f65c43c1db73a48048f319d39e7b8e6ea7395ea1ee5afc80baaf2",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/016-overview-select-1-friday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/016-overview-select-1-friday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "fed54d1837cf2fae4d2d28adfbd0ebe78b208c997723d5a8fe60d56f86b16b19",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/017-overview-select-1-saturday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/017-overview-select-1-saturday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e44c78da40e423902d152b7aa82d9c23bdad2f0d2c7b63f4dc41e1ebfec53850",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/018-overview-select-1-opened.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/018-overview-select-1-opened.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Native select menu open",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "a924ce30acd172d8c04fd3b620ef5564c9c342b1a21d21392ed6e34cd320006b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/019-allowance-rules-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/019-allowance-rules-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7d72e8014bdc47973b91b11d6532f51814b37c2bbe13ccf3908d341844784837",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/020-allowance-rules-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/020-allowance-rules-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2205,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "4b63ef03864aee1f64db1ff0e181129428a5fff692d6b097b004192a291d9fe2",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/021-approvals-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/021-approvals-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "ff4a904a0b2d4aee40eb0377d427a21651e4aeec59887409c9765518c7286f97",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/022-approvals-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/022-approvals-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2156,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "cb6a125a139c618d20511a7c2a70cdc12039f1dcb99948b6f581eb0a618301b9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/023-approvals-transaction-evidence-expanded-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/023-approvals-transaction-evidence-expanded-1.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2156,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "759e09c10bbb7ad255973d01e8f43a473b379e8acc3df022dc568bdd222d9371",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/024-approvals-transaction-evidence-expanded-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/024-approvals-transaction-evidence-expanded-2.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2324,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "d5dd40d0a2d6ff6a30d4f6a56baebbae10ce465ae20f01ea55427997153476c1",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/025-approvals-transaction-evidence-expanded-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/025-approvals-transaction-evidence-expanded-3.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2156,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "2d39513a286c114542a0cd40d8d39349bc55ee269e943657d712bc4d0aa674b4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/026-approvals-transaction-evidence-expanded-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/026-approvals-transaction-evidence-expanded-4.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2324,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7b03bb00d82e75d1d2c1389786ad562f00ea634f07784ca9459b06eb96b44d73",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/027-approvals-transaction-evidence-expanded-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/027-approvals-transaction-evidence-expanded-5.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2156,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "99f18a578ba49fdb124e63dbf7fd20b0418edd9d6f036b0a2b6a1119f4006a26",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/028-approvals-transaction-evidence-expanded-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/028-approvals-transaction-evidence-expanded-6.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2324,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "4608ae01b0874038897818d8930dbd75bb529acd11e827c98f0bb9af352385d8",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/029-approvals-photo-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/029-approvals-photo-1.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "5ad00dcafa8241fa79b6624db6b2521d2195411aa0a24bf37d1428cf6d3953b4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/030-approvals-photo-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/030-approvals-photo-2.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "07ad4e0df4d45407e1a0d20a01e6ea3920130ade1321a12758dec34710ec09aa",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/031-approvals-photo-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/031-approvals-photo-3.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "99616bb0bf348a6d94b767c660ea807efc3e147be76dddf1386cda2e6d41da78",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/032-approvals-photo-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/032-approvals-photo-4.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "99616bb0bf348a6d94b767c660ea807efc3e147be76dddf1386cda2e6d41da78",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/033-approvals-photo-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/033-approvals-photo-5.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "caf3941da92b2348ca10b6aab8dec9a60ea0a76d9f06cfbdc4d44cbbac4fa299",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/034-approvals-photo-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/034-approvals-photo-6.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "caf3941da92b2348ca10b6aab8dec9a60ea0a76d9f06cfbdc4d44cbbac4fa299",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/035-activity-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/035-activity-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "45dfb151fed4c8f894d4a157bf469c01f3a085356784688173bc4fd5695da3d2",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/036-activity-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/036-activity-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 3122,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8fae4144275c94d37ba633cfdaf5d92fd18294097ecfe6dfc178cb31feef60c3",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/037-activity-photo-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/037-activity-photo-1.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8c74c8ba14c02e85a3956b393314096019e7167f27d32236d4b2ed5d347daeee",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/038-activity-photo-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/038-activity-photo-2.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8c74c8ba14c02e85a3956b393314096019e7167f27d32236d4b2ed5d347daeee",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/039-activity-photo-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/039-activity-photo-3.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "80c939ddbdd6416bfb93217903390ab70f077a7c2ea47fd9687206433c569216",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/040-activity-photo-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/040-activity-photo-4.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "d875886b92289893af922ecc3e26f6c4425a706c521162db156ce37cf8c1fd22",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/041-activity-photo-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/041-activity-photo-5.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "d875886b92289893af922ecc3e26f6c4425a706c521162db156ce37cf8c1fd22",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/042-activity-photo-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/042-activity-photo-6.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "d875886b92289893af922ecc3e26f6c4425a706c521162db156ce37cf8c1fd22",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/043-activity-photo-7.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/043-activity-photo-7.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "959ef26a4f241e0b411446a0e01deb91afad9cb6638640039012da2d14b5f7c8",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/044-activity-photo-8.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/044-activity-photo-8.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "de3b86a82d0f8ba8236d3bdfd697d01aa1ba2241686e5d06044edb6a37a78063",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/045-activity-photo-9.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/045-activity-photo-9.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "f60da13ccd87f0149731fe6fa667f7915cc13cb5fffcb0441e951aa36f0ac90a",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/046-activity-photo-10.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/046-activity-photo-10.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "65bd2086d2735b0e875c1e5b4cc2801dab4bb3e0934262834cb56fb067dd5449",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/047-savings-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/047-savings-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Savings",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "21e4fe0c5d5c5b50a2ff10c90ab4931155ee20b12a10101d59b554b10c7e405e",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/048-savings-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/048-savings-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Savings",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "21e4fe0c5d5c5b50a2ff10c90ab4931155ee20b12a10101d59b554b10c7e405e",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/049-deposit-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/049-deposit-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Deposit",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8f349a83dd6a73a4bf2c2b7142912df08ea5cc9660a8ab0f86e57b67f8fdcbfb",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/050-deposit-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/050-deposit-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 909,
+    "reviewed": true,
+    "screen": "Parent Deposit",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "a9864f8bf5786313c7cd36f800f5786913fdccf71bb8f1ca0045a62d0a5f3fae",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/051-withdrawal-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/051-withdrawal-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Withdrawal",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "c9cc20a1828f85d72454e185c32270bd8d8e60261228676a03dee401065ecfad",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/052-withdrawal-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/052-withdrawal-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Withdrawal",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "c9cc20a1828f85d72454e185c32270bd8d8e60261228676a03dee401065ecfad",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/053-connection-offline-banner.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/053-connection-offline-banner.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared connection banner",
+    "viewport": "Desktop",
+    "state": "Offline notice over authenticated screen",
+    "sources": [
+      "apps/web/src/pwa.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "b0dff4b05be2de24b5fa69d6cac3238e3f79dccf8b30712a894d85cee2ba08b2",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-activity-network-error.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-activity-network-error.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 3238,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Offline banner, retained history, fetch error, photo retry",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "99f1c8ae8be2b7bf07d5c415b4271c6f661316eca1a3fb623c882cfdaea4c28e",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-activity-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-activity-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 3122,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "314a20ed80c99aa7a348209ca9b4476d61af4a047a9a1d683889474e9e508eb4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-allowance-rules-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-allowance-rules-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2205,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7c58721d66b794768086c2474e752b0f6c738f2399e4f95ce7decb450230d0de",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-approvals-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-approvals-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2156,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "f31baf1bb78d3c62a4e72d1463a39531c854b9b186f019d76cc1301abc028184",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-deposit-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-deposit-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 909,
+    "reviewed": true,
+    "screen": "Parent Deposit",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "a9864f8bf5786313c7cd36f800f5786913fdccf71bb8f1ca0045a62d0a5f3fae",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-offline-navigation-fallback.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-offline-navigation-fallback.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared offline fallback",
+    "viewport": "Desktop",
+    "state": "Offline fallback",
+    "sources": [
+      "apps/web/public/offline.html"
+    ],
+    "sha256": "97c93baaf23c5bb13c44f37d2e99a4108af3a8ed5a2eac28ffa5bc4856243d00",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-overview-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-overview-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2029,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Partially loaded dashboard (filename says settled)",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "99cde2974b7aac52c3b19e2f44732a4c4f5130260add4867899d7ea2cc23fdf9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-rules-group-1-all-checked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-rules-group-1-all-checked-unsaved.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2205,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Unsaved category group: all checked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "4a3b50fa9d973edc1b911f34e789c265c182e5e6a0bac3f727e24e49b7a6e3fa",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-rules-group-1-all-unchecked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-rules-group-1-all-unchecked-unsaved.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2205,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Unsaved category group: all unchecked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "57ab642de3eea69250755028577e4ff6f7b2232ea62c56f099ca7309ad966210",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-rules-group-2-all-checked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-rules-group-2-all-checked-unsaved.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2205,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Unsaved category group: all checked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7e111199d40da1132b4d19a8262fe7b40504d86c98ef838877a0f6ed276ccd06",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-rules-group-2-all-unchecked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-rules-group-2-all-unchecked-unsaved.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2205,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Unsaved category group: all unchecked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "b41d574393bbba60f6882958e71fd14332e5b8d736d1158b6f646dbd5f454a50",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-rules-local-validation-error.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-rules-local-validation-error.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 2292,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Desktop",
+    "state": "Local form validation error",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "539715f2a7ac08a307337faec67bc6d2e4641e3990bedcf279f2c873375a4480",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-savings-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-savings-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Savings",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "21e4fe0c5d5c5b50a2ff10c90ab4931155ee20b12a10101d59b554b10c7e405e",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-signed-out.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-signed-out.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Signed out",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "50d1d0fbc7adb9cdd63ddf086510a8bff2af124498d962d6e16646c2b3233392",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-weekly-day-friday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-weekly-day-friday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e41a39d2aa567fa0bdede5ff324772318ba77e1133a68273cf660e1ad0da74d9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-weekly-day-monday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-weekly-day-monday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e41a39d2aa567fa0bdede5ff324772318ba77e1133a68273cf660e1ad0da74d9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-weekly-day-saturday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-weekly-day-saturday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e41a39d2aa567fa0bdede5ff324772318ba77e1133a68273cf660e1ad0da74d9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-weekly-day-sunday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-weekly-day-sunday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e41a39d2aa567fa0bdede5ff324772318ba77e1133a68273cf660e1ad0da74d9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-weekly-day-thursday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-weekly-day-thursday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e41a39d2aa567fa0bdede5ff324772318ba77e1133a68273cf660e1ad0da74d9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-weekly-day-tuesday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-weekly-day-tuesday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e41a39d2aa567fa0bdede5ff324772318ba77e1133a68273cf660e1ad0da74d9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-weekly-day-wednesday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-weekly-day-wednesday.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "e41a39d2aa567fa0bdede5ff324772318ba77e1133a68273cf660e1ad0da74d9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent/extra-withdrawal-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent/extra-withdrawal-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Withdrawal",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "c9cc20a1828f85d72454e185c32270bd8d8e60261228676a03dee401065ecfad",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/parent-overview-1440x900.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/parent-overview-1440x900.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "b3b4720154c08b4dc2f950e8fac2ff2de97622077a237d65730808346b4a8128",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/001-login-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/001-login-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "50d1d0fbc7adb9cdd63ddf086510a8bff2af124498d962d6e16646c2b3233392",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/002-login-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/002-login-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "d07ea42a334a208fed81ace9ee6851965161ac84a780061c02d1b72aa1feab39",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/003-login-install-help.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/003-login-install-help.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Manual install help expanded",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "660034c579e9e084f6dbe41c1e0bad6a7a4c22e8ee5d8b392460c5db3a79417b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/004-signup-default.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/004-signup-default.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "9daef08ce498fe3ff9c12a8156d935847a71fe274a133acc2f768c42e62d612f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/005-signup-parent-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/005-signup-parent-selected.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "1f422f1967aa545c0776757f8331c05e2f7c647c2421b6ec5d72e167231d6c7c",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/006-signup-student-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/006-signup-student-selected.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 977,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "f7fdc7c03b6778b1d67e74f411c120814fa2a71481a005d3f531ee1bafeb4734",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/007-signup-account-type-menu.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/007-signup-account-type-menu.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Desktop",
+    "state": "Native select menu open",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7183484cca9db4d9c8b0af50f4672b6b79e77b670cf42b03d40afc222eeb2543",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/008-home-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/008-home-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Home",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "a1008d2cbf9482e7f0ec8f7cd84812f09d8af717105470f3dcc07b77f4603b7e",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/009-home-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/009-home-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 1277,
+    "reviewed": true,
+    "screen": "Student Home",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "ccee54a7955ccefaec084ce123eb7320a6e533f0cdabead67bf916161a7803fd",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/010-pay-a-seller-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/010-pay-a-seller-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "ea2f69d3b31eba98f7c251a2cf5497b7781f06c6cd54a1266aadd6467b0b6b9f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/011-pay-a-seller-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/011-pay-a-seller-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 4638,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8c6a321517b0a226898e54dd939fbb7b2cb9058bf917e6067f4fd7e978655d7c",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/012-pay-a-seller-select-1-needs.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/012-pay-a-seller-select-1-needs.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "ea2f69d3b31eba98f7c251a2cf5497b7781f06c6cd54a1266aadd6467b0b6b9f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/013-pay-a-seller-select-1-wants.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/013-pay-a-seller-select-1-wants.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "a046663ab63758c6cd50a0cf09e84aa9f85a7b504003301cad0024142a0753c8",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/014-pay-a-seller-select-1-opened.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/014-pay-a-seller-select-1-opened.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Native select menu open",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e225d7b90ca906771e927b717663a819898859d8900f147a98a2d5176a812410",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/015-pay-photo-chosen-draft.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/015-pay-photo-chosen-draft.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 4638,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Unsubmitted file selection",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "006fea5edbcdfe60c95993cf4f753ab29b70deebf6cf63d8226b1f39f2ffcc7d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/016-pay-camera-dialog-simulated-device.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/016-pay-camera-dialog-simulated-device.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Camera modal: ready, simulated stream",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "442968667d5bcc91e33bcf3016d010104da91486c64b834cf669f712de38ff06",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/017-activity-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/017-activity-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "569e26a097d5f56108e6723df5afefd01e5df81e7bcfe77c7d2a271ea7c646b3",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/018-activity-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/018-activity-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 3110,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "35708744ebbef98283cb95d8577444f245ea1a3e92c30ce78048d415c8b56000",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/019-activity-photo-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/019-activity-photo-1.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "d8bc0e32cc1f50ce9604e8f316d9209f83d78783e13ecc8e84c6dd13fca9886c",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/020-activity-photo-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/020-activity-photo-2.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "d3d11ea30a7c67c818f4eba6955114ba119f85c1d824af2fd6a8a8c88ce0461a",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/021-activity-photo-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/021-activity-photo-3.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "faaa339fb61859ed99e71068fc7ff150afaa04160139f6b2dd9f4a4803979fd8",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/022-activity-photo-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/022-activity-photo-4.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e293f65a6274a3761f3f9b668ae020f3a431c6747b141564720dff7b0d96e2d4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/023-activity-photo-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/023-activity-photo-5.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e293f65a6274a3761f3f9b668ae020f3a431c6747b141564720dff7b0d96e2d4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/024-activity-photo-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/024-activity-photo-6.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "2bcf4ad9435ddc46af8543e4ee3f8775f0b323ab77fa99e19485627af246692d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/025-activity-photo-7.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/025-activity-photo-7.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "223f7b5ab4a0bb7d660a4d3afecf6b6e3e21b8af7b52e63984537245ae3023f6",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/026-activity-photo-8.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/026-activity-photo-8.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "78fa489c218beb3c8a97ed5a9845f25d320819b372e9da7ce424c53928b37fc3",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/027-activity-photo-9.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/027-activity-photo-9.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "d1b04add374311028c1c7b7733cc3be206c9615f83e016edbd6d3050a99f43d8",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/028-activity-photo-10.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/028-activity-photo-10.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "0d5ffc7695bec2cc24c901647fc9c27ec48ff35009bc88db32bf3772013a478a",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/029-savings-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/029-savings-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Savings",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "bdb88443a7257e3acd86d22e942fba274d272a39ab621b126a5e7cfc478e7a6f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/030-savings-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/030-savings-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Savings",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "bdb88443a7257e3acd86d22e942fba274d272a39ab621b126a5e7cfc478e7a6f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/031-my-money-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/031-my-money-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student My Money",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "fd0e7750e58555959b4cca79bf07efec8d16ceda4664bfd466e5efbd7014849d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/032-my-money-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/032-my-money-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student My Money",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "fd0e7750e58555959b4cca79bf07efec8d16ceda4664bfd466e5efbd7014849d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/033-week-end-recap-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/033-week-end-recap-viewport.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Week-end recap",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "f9771251027cca6d040e63429c0729e1143334d9d68af1a26d647786e1f9c987",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/034-week-end-recap-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/034-week-end-recap-full-page.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Week-end recap",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "f9771251027cca6d040e63429c0729e1143334d9d68af1a26d647786e1f9c987",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/035-connection-offline-banner.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/035-connection-offline-banner.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared connection banner",
+    "viewport": "Desktop",
+    "state": "Offline notice over authenticated screen",
+    "sources": [
+      "apps/web/src/pwa.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "fe9777cd17e1061b286714635a950024d823ed01066315f23c0bf1efb55b0680",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-activity-network-error.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-activity-network-error.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 3226,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Offline banner, retained history, fetch error, photo retry",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "9a7dd4c338a6ac7bdfc8143c9665efb5d8113d71f4d4abe4c38f8f4bbbbc7671",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-activity-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-activity-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 3110,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "6a3ea3a3edb87fcfb9c2e88f232aca8329489ca08943b55c867cfbb74a0f58b9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-home-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-home-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 1277,
+    "reviewed": true,
+    "screen": "Student Home",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "ccee54a7955ccefaec084ce123eb7320a6e533f0cdabead67bf916161a7803fd",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-my-money-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-my-money-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student My Money",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "898e4ee6509da0d9523eff878aee2fd81a04c81c0ce30494673a6e16c15cfd1d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-offline-navigation-fallback.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-offline-navigation-fallback.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared offline fallback",
+    "viewport": "Desktop",
+    "state": "Offline fallback",
+    "sources": [
+      "apps/web/public/offline.html"
+    ],
+    "sha256": "97c93baaf23c5bb13c44f37d2e99a4108af3a8ed5a2eac28ffa5bc4856243d00",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-pay-a-seller-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-pay-a-seller-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 4638,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8c6a321517b0a226898e54dd939fbb7b2cb9058bf917e6067f4fd7e978655d7c",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-pay-camera-captured-unsent-simulated.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-pay-camera-captured-unsent-simulated.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 4638,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Unsubmitted camera selection, simulated stream",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "0eab986ab854edd502301c5acd18c8eb829c99557a06a163522e3ce08d0bb5bf",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-pay-camera-unavailable.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-pay-camera-unavailable.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Camera modal: unavailable, capture disabled",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "66c7e7242ddca74da3c9df812ecf7182b28b70f63017ec854f2f7caf4c8bb623",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-pay-missing-photo-validation.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-pay-missing-photo-validation.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 4638,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Desktop",
+    "state": "Local form validation error",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7ca4d4cc20fbe4b4dd7eb4ea847821813fbc191c12df7972b8bcf61300bf9860",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-savings-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-savings-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Savings",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "bdb88443a7257e3acd86d22e942fba274d272a39ab621b126a5e7cfc478e7a6f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-signed-out.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-signed-out.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Desktop",
+    "state": "Signed out",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "50d1d0fbc7adb9cdd63ddf086510a8bff2af124498d962d6e16646c2b3233392",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Desktop/student/extra-week-end-recap-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Desktop/student/extra-week-end-recap-settled.png",
+    "kind": ".png",
+    "width": 1440,
+    "height": 900,
+    "reviewed": true,
+    "screen": "Student Week-end recap",
+    "viewport": "Desktop",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "f9771251027cca6d040e63429c0729e1143334d9d68af1a26d647786e1f9c987",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "EXTRA-STATES.md",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/EXTRA-STATES.md",
+    "kind": ".md"
+  },
+  {
+    "file": "Mobile/parent/001-login-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/001-login-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "2ff575f35ab226ac7dc8f1f352ef0ea6c71e4d0819426b9e25d22f209e4ce3ed",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/002-login-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/002-login-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "d941049c2381ee242bc45e30139ae01f895663665afda2ffbaa1c0cac4476bcd",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/003-login-install-help.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/003-login-install-help.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1013,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Manual install help expanded",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "f640fcb16f9957ca4a2034d1fa1eeab81c47a85e56f9d5d1ba002e0cff802523",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/004-signup-default.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/004-signup-default.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "de5499c10c28497375a45756262806ee614e7238e05586dead60bda4f53f50ad",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/005-signup-parent-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/005-signup-parent-selected.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "ce6dea45035b6a1619224e4a7fa30955ac132fa4fd7241b985b7dc47ba8c8d8f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/006-signup-student-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/006-signup-student-selected.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "270152ad82ba50b6f83f3508c5963ed1aee8a6a6b692d523ada0941b048ee4c0",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/007-signup-account-type-menu.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/007-signup-account-type-menu.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Native select menu open",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "0c8ea68237d97a7c113372633a4e403e3e01b479fed15e6838a03f6501ba9185",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/008-overview-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/008-overview-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "3503d088b39febf06d48ed1faf7c99143fc953ca4f57b1c710de15ac10d21714",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/009-overview-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/009-overview-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1918,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "315ec372e7e6a56640bf1eb53d8dda77d402e6d915ae2678b27e1cff8a360aa9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/010-overview-allocation-history-4-expanded-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/010-overview-allocation-history-4-expanded-1.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 2590,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "c696fbac30ae2ad3ab834dd074f513c1d422c08eae67a1ae38b36615c9f80f76",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/011-allowance-rules-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/011-allowance-rules-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "813fbbae7be127316c949920f0bedd62afa2ef6240cb6348ef440fdbaffae8d8",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/012-allowance-rules-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/012-allowance-rules-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 2920,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8f8f2cbeeabd48df74a2631c2ec37764dc8c9061881bbeb0784aea5eb3889d71",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/013-approvals-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/013-approvals-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "92ba0266574fdc47f13b3ee46410a4c0b6254b104b249678bdcaa10e3ace7c20",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/014-approvals-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/014-approvals-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3346,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "0acfbdd3218db9e240730f76f7c3600f311ee32215bc398e93e1d37e2df7f44c",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/015-approvals-transaction-evidence-expanded-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/015-approvals-transaction-evidence-expanded-1.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3346,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "2a056a144babdabb36b9643232e67f53ab8d6d26fb9369205f179f80af046d13",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/016-approvals-transaction-evidence-expanded-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/016-approvals-transaction-evidence-expanded-2.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3850,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "0277f064b7024dbf2ae5f83e96ab7dfcc099089723e0c63e3be2509ad56de88d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/017-approvals-transaction-evidence-expanded-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/017-approvals-transaction-evidence-expanded-3.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3346,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7b99b3bdb88cb2447d5d09a4d672566a5842c488ed19287973c62a5863dd2b9e",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/018-approvals-transaction-evidence-expanded-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/018-approvals-transaction-evidence-expanded-4.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3850,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "3df0fe19c15822456e960cb373803d6d6c6eb04d90d98b50affada61f2950eb5",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/019-approvals-transaction-evidence-expanded-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/019-approvals-transaction-evidence-expanded-5.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3346,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "3c11bac4ce00da1eec4baa88dc8ddabd29acde051ea9d4cb31cc258a263c5d32",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/020-approvals-transaction-evidence-expanded-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/020-approvals-transaction-evidence-expanded-6.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3850,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Disclosure open; rejected entries can contain no evidence",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "6ecd61661920d4facbae7ba93f2de90156e33578f66faaec53c404c3f42acdb9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/021-approvals-photo-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/021-approvals-photo-1.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "710f0b8d2de5f124f81a16fafc808b673671574ba1d8f705c3cbd579ddcf470b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/022-approvals-photo-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/022-approvals-photo-2.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "2dd5bdc488249928d09d1ced2e1d4f1550d8c396c8628776e20eed61cae1c9b3",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/023-approvals-photo-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/023-approvals-photo-3.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "5853d73a02da021f4b35f2d6a302717a3c26ea5c823a5b6acfc766863958e7b5",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/024-approvals-photo-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/024-approvals-photo-4.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "6b5d43909a63218a05bdd41e7fad48792ccfb4b13a3a05095633d4df121c9253",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/025-approvals-photo-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/025-approvals-photo-5.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "83c53129bc8b7ba0bd43781769217ea32773919d2607ae7b5da26fdcfe0ebff2",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/026-approvals-photo-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/026-approvals-photo-6.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e9fee9fbafbed20411d5151ac5630d8d9a01e7153bfd76d06fe8930b2700d4f4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/027-activity-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/027-activity-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "068d5e24577eb1fb1fb366dadf57b090ba725e113eca94764bd3a46070d23c6e",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/028-activity-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/028-activity-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3650,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8702b483198a75815a1d24b2a896e4c78f4030003627fe5b84157792fe799023",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/029-activity-photo-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/029-activity-photo-1.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "53d24e9c987d845e2062340e53315eb4437df9a93818b6329033136f526a6aca",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/030-activity-photo-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/030-activity-photo-2.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "93258abaef31ac56a2bd1c018e66ddb25dcd220f0f4def08a80de6b3489e76b8",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/031-activity-photo-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/031-activity-photo-3.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "2f029e99bfb2e286a17285a5b9e4dafff1cfb373c5723e96c031d68abbce16aa",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/032-activity-photo-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/032-activity-photo-4.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "2501ef4629764e4e6cbc5c6a81a8923d0836ca21f5e9bb59ca22295645d6b733",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/033-activity-photo-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/033-activity-photo-5.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "6ba418e21b7fb57b39b627ccaa60fd3c7d3da66502abd48c66eaa8b7c9abbb8b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/034-activity-photo-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/034-activity-photo-6.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "6ba418e21b7fb57b39b627ccaa60fd3c7d3da66502abd48c66eaa8b7c9abbb8b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/035-activity-photo-7.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/035-activity-photo-7.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "a0f82daa062e2aca570ab7561e53d3bb9b39ddeab65e1af530787d799a331cd9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/036-activity-photo-8.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/036-activity-photo-8.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "ebfdc546456071bea9635bf3b9f93c8c731467a5b7784ae68be966d7dfb17fab",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/037-activity-photo-9.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/037-activity-photo-9.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "cf86208e774380b9b47f6a17e1b4c317fe5669d251663cf64b993d2846bd015b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/038-activity-photo-10.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/038-activity-photo-10.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "5a322eea63deb18b7b72592e7f9a53c1540efe9b64f247eeb0e16c1051dcac09",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/039-savings-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/039-savings-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Savings",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "818063e52fddd963c2b0ebe675b9bb0f5761a01e4e1ee70849b7e3087683cc76",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/040-savings-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/040-savings-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 846,
+    "reviewed": true,
+    "screen": "Parent Savings",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "bc5032a6b566cd27cfbf38ca13d9ce4094b46e45f057207411aa929b8b30f656",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/041-deposit-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/041-deposit-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Deposit",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "050b1473c0ca35057d289fa34d337aab6006524b8ae858075bea8c0c2675b83d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/042-deposit-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/042-deposit-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1455,
+    "reviewed": true,
+    "screen": "Parent Deposit",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "c865c39ba546a2451787eeeb777d2b231085d06f189d4c0c0b98f23a6b4f1a71",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/043-withdrawal-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/043-withdrawal-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Withdrawal",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "cef959e2348c1a06cde4f3aff05d874cd8bee2ed619c5ca8cd7c76d0626daffa",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/044-withdrawal-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/044-withdrawal-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 941,
+    "reviewed": true,
+    "screen": "Parent Withdrawal",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "2bc04d9fb1721bb703436afe8a914ec1251ec350dfcc7f8c6e73cb861a09eb42",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/045-connection-offline-banner.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/045-connection-offline-banner.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared connection banner",
+    "viewport": "Mobile",
+    "state": "Offline notice over authenticated screen",
+    "sources": [
+      "apps/web/src/pwa.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "b784598cc1ca44fd506fd05c9d571f4e6e040093d6c00d7e34a7acdbaf8756ea",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-activity-network-error.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-activity-network-error.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3787,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Offline banner, retained history, fetch error, photo retry",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "c17f915d5a31e78f8d8496ad413608325eed5e1fe950960274d76863dc0da293",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-activity-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-activity-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3650,
+    "reviewed": true,
+    "screen": "Parent Activity",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8702b483198a75815a1d24b2a896e4c78f4030003627fe5b84157792fe799023",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-allowance-rules-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-allowance-rules-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 2920,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "8f8f2cbeeabd48df74a2631c2ec37764dc8c9061881bbeb0784aea5eb3889d71",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-approvals-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-approvals-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 880,
+    "reviewed": true,
+    "screen": "Parent Approvals",
+    "viewport": "Mobile",
+    "state": "Activity not loaded (filename says settled)",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e2bbd0a144e6888573b043810cf6343b9b234898e70948775a12036f05d917af",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-deposit-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-deposit-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1455,
+    "reviewed": true,
+    "screen": "Parent Deposit",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "c865c39ba546a2451787eeeb777d2b231085d06f189d4c0c0b98f23a6b4f1a71",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-offline-navigation-fallback.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-offline-navigation-fallback.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared offline fallback",
+    "viewport": "Mobile",
+    "state": "Offline fallback",
+    "sources": [
+      "apps/web/public/offline.html"
+    ],
+    "sha256": "3a53995cee98fccb0258e626b06015ca8b85b2a858bdd82ae895008d8625fff1",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-overview-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-overview-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1624,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Partially loaded dashboard (filename says settled)",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "13a5a8d347edb58c22bd0ca8d0da253740ed156ce5c661815762628760f9a124",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-rules-group-1-all-checked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-rules-group-1-all-checked-unsaved.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 2920,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Unsaved category group: all checked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "08aa09ca3dd0a1518201f8efb1c6196f2dcf68cb4748d69facedce2f3ffd3f17",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-rules-group-1-all-unchecked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-rules-group-1-all-unchecked-unsaved.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 2920,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Unsaved category group: all unchecked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "30f4017dcfe1e2332037445ef2f0bb4166042a5d02de66ffa7f2b9bca5b577cc",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-rules-group-2-all-checked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-rules-group-2-all-checked-unsaved.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 2920,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Unsaved category group: all checked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "5fdc7f6d5b351f372810b90f913cf6cd350aba7c51e56f4e0ad3180c7c5d0ed9",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-rules-group-2-all-unchecked-unsaved.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-rules-group-2-all-unchecked-unsaved.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 2920,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Unsaved category group: all unchecked",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "687da6979219a66edd8d2a4a44d5c6417b42ce14b0b5f6725fd8d6f6ee824fae",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-rules-local-validation-error.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-rules-local-validation-error.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3027,
+    "reviewed": true,
+    "screen": "Parent Allowance rules",
+    "viewport": "Mobile",
+    "state": "Local form validation error",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "931acfadca50f4476e988f2873bdc0ab8ada41f11d1a91cf82a6289a83ff9d0d",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-savings-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-savings-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 846,
+    "reviewed": true,
+    "screen": "Parent Savings",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "bc5032a6b566cd27cfbf38ca13d9ce4094b46e45f057207411aa929b8b30f656",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-signed-out.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-signed-out.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Signed out",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "2ff575f35ab226ac7dc8f1f352ef0ea6c71e4d0819426b9e25d22f209e4ce3ed",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-weekly-day-friday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-weekly-day-friday.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "52640893b5e64ec712cc9fafa50a841dec29888550cc4923ac4dfdf42ca330a4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-weekly-day-monday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-weekly-day-monday.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "52640893b5e64ec712cc9fafa50a841dec29888550cc4923ac4dfdf42ca330a4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-weekly-day-saturday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-weekly-day-saturday.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "52640893b5e64ec712cc9fafa50a841dec29888550cc4923ac4dfdf42ca330a4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-weekly-day-sunday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-weekly-day-sunday.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "52640893b5e64ec712cc9fafa50a841dec29888550cc4923ac4dfdf42ca330a4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-weekly-day-thursday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-weekly-day-thursday.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "52640893b5e64ec712cc9fafa50a841dec29888550cc4923ac4dfdf42ca330a4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-weekly-day-tuesday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-weekly-day-tuesday.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "52640893b5e64ec712cc9fafa50a841dec29888550cc4923ac4dfdf42ca330a4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-weekly-day-wednesday.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-weekly-day-wednesday.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Parent Overview",
+    "viewport": "Mobile",
+    "state": "Dashboard viewport; named day control is below visible crop",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "52640893b5e64ec712cc9fafa50a841dec29888550cc4923ac4dfdf42ca330a4",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/parent/extra-withdrawal-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/parent/extra-withdrawal-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 941,
+    "reviewed": true,
+    "screen": "Parent Withdrawal",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "2bc04d9fb1721bb703436afe8a914ec1251ec350dfcc7f8c6e73cb861a09eb42",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/001-login-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/001-login-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "2ff575f35ab226ac7dc8f1f352ef0ea6c71e4d0819426b9e25d22f209e4ce3ed",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/002-login-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/002-login-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "d941049c2381ee242bc45e30139ae01f895663665afda2ffbaa1c0cac4476bcd",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/003-login-install-help.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/003-login-install-help.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1013,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Manual install help expanded",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "f640fcb16f9957ca4a2034d1fa1eeab81c47a85e56f9d5d1ba002e0cff802523",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/004-signup-default.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/004-signup-default.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "de5499c10c28497375a45756262806ee614e7238e05586dead60bda4f53f50ad",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/005-signup-parent-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/005-signup-parent-selected.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "ce6dea45035b6a1619224e4a7fa30955ac132fa4fd7241b985b7dc47ba8c8d8f",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/006-signup-student-selected.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/006-signup-student-selected.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 921,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "270152ad82ba50b6f83f3508c5963ed1aee8a6a6b692d523ada0941b048ee4c0",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/007-signup-account-type-menu.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/007-signup-account-type-menu.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared signup",
+    "viewport": "Mobile",
+    "state": "Native select menu open",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "0c8ea68237d97a7c113372633a4e403e3e01b479fed15e6838a03f6501ba9185",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/008-home-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/008-home-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Home",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "9c38bd2ede1f35085222f4244bac9d9080c4b08abc653cca3f423e31dc9fc951",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/009-home-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/009-home-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1446,
+    "reviewed": true,
+    "screen": "Student Home",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "8fb771ff710a5f80f5bd8e7a24506777abae3f6a15f49fdaf0c5739a56d455c3",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/010-pay-a-seller-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/010-pay-a-seller-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "616ad6eb07548033611641ee82f9f6f5cb9784cc9afb8f6dbb188df20b041c10",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/011-pay-a-seller-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/011-pay-a-seller-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 6160,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "26ab785f9a76f08318541165c6aa815075fb41e850000b70a8c1fb8d5f981d68",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/012-pay-a-seller-select-1-needs.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/012-pay-a-seller-select-1-needs.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "616ad6eb07548033611641ee82f9f6f5cb9784cc9afb8f6dbb188df20b041c10",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/013-pay-a-seller-select-1-wants.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/013-pay-a-seller-select-1-wants.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Select option selected",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "c25d6de11cfc97612368f95d6d70fa3482efc7cd6a54876afbb91016f10aff12",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/014-pay-a-seller-select-1-opened.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/014-pay-a-seller-select-1-opened.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Native select menu open",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "01372bda850bc09a9e77f55dd449893a46e43891a027ddd6bded09ceba8d2417",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/015-pay-photo-chosen-draft.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/015-pay-photo-chosen-draft.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 6142,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Unsubmitted file selection",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "64dd3ac7ee94730da5cfcdcd9ddc48423a985414f08ab5c9ed0022d0a5ae3d1a",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/016-pay-camera-dialog-simulated-device.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/016-pay-camera-dialog-simulated-device.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Camera modal: ready, simulated stream",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "f5513f6fde185aa1f7fdc440802d727deea8b6cc9aba8408caad67d53d60edb3",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/017-activity-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/017-activity-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "0670188acded0d2d83d131c2160452f77ba22325509cb176866cf30125763556",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/018-activity-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/018-activity-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3414,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "ffbf4bc57a61532f9e0ba733830b112eb32a1fc2a52f8509788a3cf5b26d3759",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/019-activity-photo-1.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/019-activity-photo-1.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "da05376abaec64d34413a0c2e4c34a176511b5a99e5d2fdb8bb5fa46a334b531",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/020-activity-photo-2.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/020-activity-photo-2.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "da05376abaec64d34413a0c2e4c34a176511b5a99e5d2fdb8bb5fa46a334b531",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/021-activity-photo-3.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/021-activity-photo-3.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "7d31399835dff7b83779de1236dd50d03a90675068b4d83d05426613a9c4e767",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/022-activity-photo-4.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/022-activity-photo-4.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e9e69a807d5ffdc0be606419f647a5f72eb980b97561f3711c2e101917e80889",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/023-activity-photo-5.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/023-activity-photo-5.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e9e69a807d5ffdc0be606419f647a5f72eb980b97561f3711c2e101917e80889",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/024-activity-photo-6.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/024-activity-photo-6.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "4ccbca2210fce2d12229cc360414103f632913b850e959853af4f7a6122a48b0",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/025-activity-photo-7.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/025-activity-photo-7.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "e35b35bb2e837b5ff6549be8a3e62fdd059d2920f4a2ae0b0f8d19ae27a88d09",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/026-activity-photo-8.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/026-activity-photo-8.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "17150ddef8d1023ad19f89eaca6a0278c2325a5175dcf1f934229c665bade7e0",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/027-activity-photo-9.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/027-activity-photo-9.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "6fabd2f8d2f7b8ef830aa458f17977d631cb0dfd6455fe6e41215cf28ec4e125",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/028-activity-photo-10.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/028-activity-photo-10.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Submitted photo modal",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "a5be79add9944ff87a14bd9d1268a1ee2c8a685db6e578ad3a0ab20c84e54bda",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/029-savings-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/029-savings-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Savings",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "88b3a7c2e6387c4e658c7f311edc35ecbf67da368c182309ce1a988dee72ab08",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/030-savings-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/030-savings-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Savings",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "88b3a7c2e6387c4e658c7f311edc35ecbf67da368c182309ce1a988dee72ab08",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/031-my-money-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/031-my-money-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student My Money",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "a347874802949cd46e23c3e3dbfc5d6a3be054c8ebe9b7a006af941f2c0e95ee",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/032-my-money-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/032-my-money-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student My Money",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "a347874802949cd46e23c3e3dbfc5d6a3be054c8ebe9b7a006af941f2c0e95ee",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/033-week-end-recap-viewport.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/033-week-end-recap-viewport.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Week-end recap",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "31243ea7b26245fba11070c4cfceef5fae2ff62434b0ed919082eba5de408f88",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/034-week-end-recap-full-page.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/034-week-end-recap-full-page.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 855,
+    "reviewed": true,
+    "screen": "Student Week-end recap",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "81fa21f3aa43cd351eebbeaf27df55aa3612fe9136000b52243e72f38a6c8100",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/035-connection-offline-banner.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/035-connection-offline-banner.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared connection banner",
+    "viewport": "Mobile",
+    "state": "Offline notice over authenticated screen",
+    "sources": [
+      "apps/web/src/pwa.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "b537aa9512338e877d60d7f73878962eafc6b9828ae5d68c329db432b70a2ed5",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-activity-network-error.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-activity-network-error.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3551,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Offline banner, retained history, fetch error, photo retry",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "a96aab2a8a4638fa8e66e2c6bfab728b6cdf220054ff6a01894a34b6c1657f6b",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-activity-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-activity-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 3414,
+    "reviewed": true,
+    "screen": "Student Activity",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/family.js",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "732c6893721d06f98885cc584e211943f429130bc665dc045a16d5f81bb99d61",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-home-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-home-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 1195,
+    "reviewed": true,
+    "screen": "Student Home",
+    "viewport": "Mobile",
+    "state": "Partially loaded dashboard (filename says settled)",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "f075e9c358feae515897a44ff8dfa388e310896241ec4c88e01dce48bfdbf290",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-my-money-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-my-money-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student My Money",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "a2ee77097e3e021e2e3bac0b062a4b09e8106baae6416410d7960318cade0cf3",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-offline-navigation-fallback.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-offline-navigation-fallback.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared offline fallback",
+    "viewport": "Mobile",
+    "state": "Offline fallback",
+    "sources": [
+      "apps/web/public/offline.html"
+    ],
+    "sha256": "3a53995cee98fccb0258e626b06015ca8b85b2a858bdd82ae895008d8625fff1",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-pay-a-seller-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-pay-a-seller-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 6160,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "26ab785f9a76f08318541165c6aa815075fb41e850000b70a8c1fb8d5f981d68",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-pay-camera-captured-unsent-simulated.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-pay-camera-captured-unsent-simulated.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 6160,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Unsubmitted camera selection, simulated stream",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "b1d92e397b58994f4833d8b9f72cb02bd3b6ae98ce04361c8cf90862b5f82e81",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-pay-camera-unavailable.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-pay-camera-unavailable.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Camera modal: unavailable, capture disabled",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "058aec103798e3df805bdc33abcdee620d6e47d7044c2d28e7d080599711de70",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-pay-missing-photo-validation.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-pay-missing-photo-validation.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 6142,
+    "reviewed": true,
+    "screen": "Student Pay a seller",
+    "viewport": "Mobile",
+    "state": "Local form validation error",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/views/camera.js",
+      "apps/web/src/views/camera.css",
+      "apps/web/src/styles.css"
+    ],
+    "sha256": "603bebc24d0462ae93306fe918436edd5296b2a04e8756a6f337a06a29667286",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-savings-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-savings-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Savings",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "88b3a7c2e6387c4e658c7f311edc35ecbf67da368c182309ce1a988dee72ab08",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-signed-out.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-signed-out.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Shared sign-in",
+    "viewport": "Mobile",
+    "state": "Signed out",
+    "sources": [
+      "apps/web/src/views/render.js",
+      "apps/web/src/styles.css",
+      "apps/web/src/pwa.js"
+    ],
+    "sha256": "07f4d834253985833f1e7a1b02eb08181e1b99aafb7bee230aa16101847f1836",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student/extra-week-end-recap-settled.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student/extra-week-end-recap-settled.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 855,
+    "reviewed": true,
+    "screen": "Student Week-end recap",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; full scroll capture",
+    "sources": [
+      "apps/web/src/views/weekly.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "81fa21f3aa43cd351eebbeaf27df55aa3612fe9136000b52243e72f38a6c8100",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "Mobile/student-home-390x844.png",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/Mobile/student-home-390x844.png",
+    "kind": ".png",
+    "width": 390,
+    "height": 844,
+    "reviewed": true,
+    "screen": "Student Home",
+    "viewport": "Mobile",
+    "state": "Default / loaded or partially loaded; viewport",
+    "sources": [
+      "apps/web/src/views/live-layout.js",
+      "apps/web/src/views/live-layout.css"
+    ],
+    "sha256": "9c38bd2ede1f35085222f4244bac9d9080c4b08abc653cca3f423e31dc9fc951",
+    "review_method": "Individually opened with view_image during Phase 1"
+  },
+  {
+    "file": "index.html",
+    "path": "/home/tyrone-teemer/Downloads/PadalaPocket/index.html",
+    "kind": ".html"
+  }
+]

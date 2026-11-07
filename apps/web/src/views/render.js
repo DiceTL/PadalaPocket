@@ -144,8 +144,8 @@ function renderShell(root, state, controller) {
       for (const operation of state.funding.operations) {
         history.append(el('p', '', `Funding status: ${operation.status}`));
         history.append(el('p', '', `Needs: ${Number(operation.amountStroops)/10000000} XLM · Wants: ${Number(operation.wantsStroops??0)/10000000} XLM`));
-        if (operation.wantsTransactionHash) history.append(el('p', '', `Wants transaction: ${operation.wantsTransactionHash}`));
-        if (operation.transactionHash) history.append(el('p', '', `Transaction: ${operation.transactionHash}`));
+        if (operation.wantsTransactionHash) history.append(el('p', 'transaction-reference', `Wants transaction: ${operation.wantsTransactionHash}`));
+        if (operation.transactionHash) history.append(el('p', 'transaction-reference', `Transaction: ${operation.transactionHash}`));
       }
     }
     if (state.fundingError) panel.append(el('p', '', state.fundingError));
@@ -187,7 +187,7 @@ function renderShell(root, state, controller) {
     if (state.purchaseError) { const error = el('p', '', state.purchaseError); error.setAttribute('role', 'alert'); panel.append(error); }
     const refresh = el('button', 'button button-secondary', 'Refresh purchase status'); refresh.type = 'button'; refresh.addEventListener('click', () => controller.refreshPurchases()); panel.append(refresh);
     for (const purchase of state.purchaseHistory?.purchases || []) {
-      const card = el('article', 'preview-panel'); card.append(el('h3', '', `${purchase.bucket === 'wants' ? 'Wants' : 'Needs'} purchase: ${purchase.status}`));
+      const card = el('article', 'preview-panel purchase-history-card'); card.append(el('h3', '', `${purchase.bucket === 'wants' ? 'Wants' : 'Needs'} purchase: ${purchase.status}`));
       card.append(el('p', '', `Simulated ₱${Number(purchase.priceMinor) / 100} · ${Number(purchase.amountStroops) / 10000000} Testnet XLM`));
       if (purchase.ai) card.append(el('p', '', `AI identification: ${purchase.ai.productName || 'Unclear'} · ${purchase.ai.category.replaceAll('_', ' ')}`));
       if(purchase.approvalDeadline)card.append(el('p','',`Parent decision deadline: ${new Date(purchase.approvalDeadline).toLocaleString()}`));

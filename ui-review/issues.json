@@ -1,0 +1,146 @@
+{
+  "H1": {
+    "severity": "High",
+    "element": "Mobile parent shell",
+    "problem": "The brand, seven destinations, sign-out and duplicate role strip take an estimated 373px before page content, reducing the first-screen task area.",
+    "fix": "Keep the brand/role and sign-out in one compact row; use a 44px-high horizontally scrollable navigation row; hide only the duplicate role-only topbar on phones. Preserve all destinations.",
+    "status": "DONE",
+    "files": "apps/web/src/styles.css",
+    "implementation": "Approved shared fix. Compact mobile parent header retains brand, role, sign-out and every scrollable destination; viewport check confirms header under180px."
+  },
+  "H2": {
+    "severity": "High",
+    "element": "Mobile student navigation",
+    "problem": "My Money is clipped and Week-end recap is offscreen in the horizontal strip; these destinations are difficult to discover.",
+    "fix": "At \u2264760px use a three-column, two-row grid for all six destinations, wrap labels, keep each target \u226544px high, and reserve 120px bottom clearance. Preserve desktop sidebar.",
+    "status": "DONE",
+    "files": "apps/web/src/views/live-layout.css",
+    "implementation": "Approved shared fix. All six destinations fit a3\u00d72 phone grid, each target at least44px high; bottom clearance adjusted."
+  },
+  "M1": {
+    "severity": "Medium",
+    "element": "Essential input outlines",
+    "problem": "Faint empty-field outlines are hard to locate. Source color #bcc2b7 measures 1.82:1 against white; this is a likely WCAG AA non-text contrast issue where the border is the identifying cue. Secondary buttons have readable labels and are not automatically failures.",
+    "fix": "Use #778477 for essential field outlines (target \u22653:1 against white and page background); preserve lighter decorative card dividers and existing focus outlines.",
+    "status": "DONE",
+    "files": "apps/web/src/styles.css",
+    "implementation": "Approved shared fix. New #778477 input outline measures3.92:1 against white and3.65:1 against page background; decorative borders unchanged."
+  },
+  "M2": {
+    "severity": "Medium",
+    "element": "Small form labels",
+    "problem": "Form labels look small relative to 16px input values. Source confirms 12px labels. Contrast is sufficient; small size remains a readability concern.",
+    "fix": "Increase field labels from 12px to 14px, line-height 1.5; keep inputs at16px and min-height44px.",
+    "status": "DONE",
+    "files": "apps/web/src/styles.css",
+    "implementation": "Approved shared fix. Labels now14px/1.5; browser computed style checked."
+  },
+  "M3": {
+    "severity": "Medium",
+    "element": "Dashboard action alignment",
+    "problem": "The outlined action sits lower than the filled action in both balance dashboards; the pair reads as unrelated controls.",
+    "fix": "Set margin-top:0 on buttons inside .live-actions and align-items:stretch. Apply only to Overview/Home actions.",
+    "status": "DONE",
+    "files": "apps/web/src/views/live-layout.css",
+    "implementation": "Dashboard action buttons have zero top margin and matching stretch alignment."
+  },
+  "M4": {
+    "severity": "Medium",
+    "element": "Activity/approval rows",
+    "problem": "The 88px photo plus gap leaves an estimated 200px-wide mobile detail column. Rules, dates and hashes wrap repeatedly; metadata also looks small.",
+    "fix": "At \u2264480px put a 72px photo above full-width details; set detail paragraphs to14px/1.5 with8px vertical margins, retain headings16px and disclosure targets min-height44px. Keep desktop side-by-side rows.",
+    "status": "DONE",
+    "files": "apps/web/src/styles.css",
+    "implementation": "Phone rows use72px photos above full-width details; metadata14px/1.5 and evidence disclosure targets44px."
+  },
+  "M5": {
+    "severity": "Medium",
+    "element": "Allowed-category form",
+    "problem": "Desktop shows two successive, very long category lists despite available width; phone category labels/examples are dense.",
+    "fix": "Add a rules-form class; at \u22651000px place Needs/Wants fieldsets side by side. Keep numeric fields and validation full width and phone fieldsets stacked. Names14px, examples13px/1.5, row padding8px0, clickable label min-height44px.",
+    "status": "DONE",
+    "files": "apps/web/src/views/family.js; apps/web/src/styles.css",
+    "implementation": "Rules-only form class enables two desktop category columns; mobile stays stacked; names/examples enlarged with padded label targets."
+  },
+  "M6": {
+    "severity": "Medium",
+    "element": "Rules validation location",
+    "problem": "The validation message is below30 category choices, far from the invalid amount at the top.",
+    "fix": "Move the existing validation node immediately after the three numeric fields and before the category fieldsets. Preserve text, conditions and submit handler.",
+    "status": "DONE",
+    "files": "apps/web/src/views/family.js; apps/web/src/styles.css",
+    "implementation": "Same alert moved before categories and made sticky12px from viewport top. Follow-up source review identified an offscreen-submit risk; final captures/assertions verify the alert stays visible after Save at the bottom on phone and desktop. Validation conditions/wording unchanged."
+  },
+  "M7": {
+    "severity": "Medium",
+    "element": "Weekly balance hierarchy",
+    "problem": "The Savings/My Money amount uses ordinary body styling and competes with explanatory text; the primary fact is difficult to scan.",
+    "fix": "Give the existing amount paragraph a dedicated class with24px, weight650, line-height1.4, tabular numerals and12px vertical spacing. Keep simulated PHP and Testnet XLM qualifiers visible.",
+    "status": "DONE",
+    "files": "apps/web/src/views/weekly.js; apps/web/src/views/live-layout.css",
+    "implementation": "Existing money formatter and qualifiers retained; dedicated paragraph uses24px/650 weight and tabular numerals."
+  },
+  "M8": {
+    "severity": "Medium",
+    "element": "Camera and selected-photo feedback",
+    "problem": "Camera failure is visually similar to ready guidance and a disabled capture button looks like it is still waiting. Selected/missing-photo messages are small, plain helper text.",
+    "fix": "Set camera status and photo-selection text to14px/1.5 with12px padded surfaces; add an error class in the existing camera failure path and use the existing error palette; use not-allowed cursor for unavailable capture. Do not change acquisition or submission behavior.",
+    "status": "DONE",
+    "files": "apps/web/src/views/camera.js; apps/web/src/views/camera.css",
+    "implementation": "Existing failure path adds presentation classes only; status/selection use14px padded surfaces and failure uses existing error palette. Disabled unavailable capture uses not-allowed cursor."
+  },
+  "M9": {
+    "severity": "Medium",
+    "element": "Transaction references and payment history",
+    "problem": "Unstyled hashes dominate Pay a seller history; narrow evidence text is difficult to distinguish from human-readable outcomes.",
+    "fix": "Apply12\u201313px monospace, line-height1.6, padding12px and a neutral inset background to existing transaction-reference/evidence paragraphs. Keep overflow-wrap:anywhere and all text. Add a payment-history class with20px spacing.",
+    "status": "DONE",
+    "files": "apps/web/src/views/render.js; apps/web/src/styles.css; apps/web/src/views/live-layout.css",
+    "implementation": "Existing hashes gain wrapping monospace inset surfaces; history gets20px separation. Every hash, outcome and action remains present."
+  },
+  "M10": {
+    "severity": "Medium",
+    "element": "Inherited page subtitles",
+    "problem": "Savings/My Money/recap instruct the user to submit a product photo; parent Savings/Withdrawal describe distribution. These subtitles describe another task.",
+    "fix": "Replace with page-specific descriptions only after explicit copy-meaning authorization. Current task prohibits changing copy meaning; preserve these strings in this pass.",
+    "status": "SKIPPED",
+    "files": "None",
+    "implementation": "Fixing the misleading inherited subtitles changes copy meaning, which the user explicitly excluded. Requires a separate copy decision."
+  },
+  "M11": {
+    "severity": "Medium",
+    "element": "Panel prose rhythm",
+    "problem": "Explanatory paragraphs in payment, rules and weekly panels have tightly packed lines compared with page descriptions, especially when wrapping on phones.",
+    "fix": "Set preview-panel direct prose to line-height1.55 and max-width75ch; retain existing paragraph order and12px inter-element gap. Do not expand already-legible dashboard descriptions.",
+    "status": "DONE",
+    "files": "apps/web/src/views/live-layout.css",
+    "implementation": "Approved shared fix. Panel prose has1.55 line-height and direct explanatory paragraphs a75ch maximum measure."
+  },
+  "L1": {
+    "severity": "Low",
+    "element": "Sign-in/signup vertical spacing",
+    "problem": "The full-page login image extends below the viewport with blank space; source forces an844px card plus the installation bar. Signup also has oversized gaps around the role explanation.",
+    "fix": "Remove the mobile card min-height844px; use content-based card height and zero margins on the role explanation inside the form. Preserve existing16px form gap and44px targets.",
+    "status": "PARTIAL",
+    "files": "apps/web/src/styles.css",
+    "implementation": "Removed844px card minimum and redundant role-description margins. Default installation bar is accounted for, but expanded manual-help height is variable and can still extend the document beyond one viewport; no shared PWA behavior was changed."
+  },
+  "L2": {
+    "severity": "Low",
+    "element": "Velo history grouping",
+    "problem": "Paid and configuration-required entries have little separation, making it harder to tell which message belongs to which amount.",
+    "fix": "Give .live-activity-item entries16px padding, a1px existing divider-color border,12px radius and16px separation. Preserve both status messages.",
+    "status": "DONE",
+    "files": "apps/web/src/styles.css",
+    "implementation": "Existing Velo history articles have16px padding,12px radius and separate outlined surfaces; existing gap plus4px adjacent margin gives16px separation."
+  },
+  "L3": {
+    "severity": "Low",
+    "element": "Offline fallback palette",
+    "problem": "The standalone offline page uses a brighter teal and bluer background than the connected app.",
+    "fix": "Use the established app teal/background in offline CSS in a later cache-aware delivery change. Leave this low-impact difference in place here to avoid changing service-worker delivery behavior.",
+    "status": "SKIPPED",
+    "files": "None",
+    "implementation": "Offline document palette retained because updating the cached document also needs a service-worker cache-version/delivery change, excluded from this visual-only pass."
+  }
+}

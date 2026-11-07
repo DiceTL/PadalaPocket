@@ -28,3 +28,18 @@ body,button,input,select,textarea { font-family:Inter,sans-serif; }
 .live-funding-history { margin:20px 0; }.live-funding-history summary { cursor:pointer; padding:12px 0; color:#21655f; font-weight:600; }.live-funding-history p { font-size:13px; }
 @media(min-width:1000px){.role-student .nav-item { width:100%; }.role-student .navigation { justify-content:stretch; }}
 @media(max-width:999px){.role-student .navigation { overflow-x:auto; justify-content:flex-start; scrollbar-width:thin; }.role-student .nav-item { flex:0 0 auto; padding:10px 14px; min-height:48px; }.role-student .sidebar { background:#f6f7f4; }}
+
+/* UI review M3/M7/M9/M11: preserve data, improve its visual hierarchy. */
+.live-actions { align-items: stretch; }
+.live-actions .button { margin-top: 0; }
+.app-shell .preview-panel p { line-height: 1.55; }
+.app-shell .preview-panel > p { max-width: 75ch; }
+.app-shell .preview-panel > .weekly-balance-amount { margin: 12px 0; font-size: 24px; font-weight: 650; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.app-shell .purchase-history-card { margin-top: 20px; }
+/* UI review H2: show every existing phone destination without horizontal clipping. */
+@media (max-width: 760px) {
+ .app-shell.role-student { padding-bottom: calc(128px + env(safe-area-inset-bottom)); }
+ .role-student .navigation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; overflow: visible; }
+ .role-student .nav-item { width: 100%; min-height: 44px; padding: 8px 4px; white-space: normal; line-height: 1.3; }
+ .role-student .page-content { padding-bottom: 32px; }
+}

@@ -99,8 +99,9 @@ button:disabled { cursor: wait; opacity: .72; }
 .signin-card .eyebrow { display: none; }
 .intro { font-size: 16px; line-height: 1.35; margin: 0 0 16px; }
 .signin-form { gap: 16px; }
-.field-label { gap: 8px; color: #59616d; font-size: 12px; font-weight: 400; }
-.field-input { min-height: 44px; border-color: #bcc2b7; border-radius: 10px; font-size: 16px; padding: 10px 12px; }
+/* UI review M1/M2: readable shared labels and identifiable field boundaries. */
+.field-label { gap: 8px; color: #59616d; font-size: 14px; line-height: 1.5; font-weight: 400; }
+.field-input { min-height: 44px; border-color: #778477; border-radius: 10px; font-size: 16px; padding: 10px 12px; }
 .field-input::placeholder { color: #59616d; }
 .button { min-height: 44px; padding: 10px 18px; border-radius: 10px; font-weight: 500; }
 .button-primary { margin-top: 0; background: #15223d; }
@@ -126,10 +127,10 @@ button:disabled { cursor: wait; opacity: .72; }
 input { caret-color: #21655f; }
 .live-category-group { border: 1px solid var(--line); border-radius: 10px; padding: 12px; min-width: 0; }
 .live-category-group legend { font-size: 13px; padding: 0 6px; }
-.live-category-choice { min-height: 44px; display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.live-category-choice { min-height: 44px; display: flex; gap: 10px; align-items: center; padding: 8px 0; font-size: 14px; line-height: 1.5; }
 .live-category-choice input { width: 18px; height: 18px; accent-color: #21655f; }
 .live-activity-row { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); min-width: 0; }
-.live-activity-details { min-width: 0; }.live-activity-details h3 { margin: 0; font-size: 16px; }.live-activity-details p { margin: 7px 0; font-size: 13px; }
+.live-activity-details { min-width: 0; }.live-activity-details h3 { margin: 0; font-size: 16px; }.live-activity-details p { margin: 8px 0; font-size: 14px; line-height: 1.5; }
 .live-photo-button { flex-shrink: 0; width: 88px; height: 88px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; padding: 0; color: #59616d; background: #fff; font: inherit; font-size: 11px; }
 .live-photo-button img { width: 100%; height: 100%; object-fit: cover; }
 .live-photo-dialog { width: min(100% - 32px, 900px); padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); max-height: calc(100dvh - 32px); overflow: auto; }
@@ -140,14 +141,18 @@ input { caret-color: #21655f; }
 .preview-panel p { overflow-wrap: anywhere; }
 @media (max-width: 760px) {
  .app-shell.role-parent { display: block; }
- .role-parent .sidebar { position: static; width: 100%; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 16px; }
- .role-parent .sidebar > .role-chip { padding: 0 0 12px; }
- .role-parent .navigation { grid-template-columns: repeat(3, minmax(0, 1fr)); }
- .role-parent .nav-item { padding: 8px; }
- .role-parent .sidebar-bottom { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 0 0; }
+ /* UI review H1: retain every destination in a compact, scrollable header. */
+ .role-parent .sidebar { position: static; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; width: 100%; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 16px; }
+ .role-parent .sidebar > .brand-lockup { grid-column: 1; grid-row: 1; padding: 0; }
+ .role-parent .sidebar > .role-chip { grid-column: 1; grid-row: 2; padding: 0; }
+ .role-parent .navigation { grid-column: 1 / -1; grid-row: 3; display: flex; overflow-x: auto; scrollbar-width: thin; padding-bottom: 8px; margin-top: 6px; }
+ .role-parent .nav-item { flex: 0 0 auto; padding: 8px 12px; white-space: nowrap; }
+ .role-parent .sidebar-bottom { grid-column: 2; grid-row: 1 / 3; display: flex; align-items: center; gap: 12px; padding: 0; margin: 0; }
  .role-parent .layout-entry { margin: 0; }
  .role-parent .page-content { padding: 24px 16px; }
- .role-parent .topbar { padding: 12px 16px; }
+ .role-parent .topbar { min-height: 0; padding: 0; border: 0; }
+ .role-parent .topbar > .role-chip { display: none; }
+ .role-parent .topbar .mock-badge { margin: 8px 16px; }
 }
 @media (min-width: 761px) {
  .signin-page { display: grid; place-items: center; padding: 48px 24px; }
@@ -162,7 +167,29 @@ input { caret-color: #21655f; }
  .role-student .preview-panel > .signin-form { max-width: 620px; }
 }
 
-.live-category-copy { display:grid; gap:5px; }.live-category-copy small { font-size:12px; line-height:1.5; color:#59616d; font-weight:400; }
+.live-category-copy { display:grid; gap:5px; }.live-category-copy small { font-size:13px; line-height:1.5; color:#59616d; font-weight:400; }
+
+/* UI review M4/M5/M9: screen-scoped information layout. */
+.live-activity-details summary { min-height: 44px; padding: 12px 0; cursor: pointer; }
+.transaction-reference, .transaction-evidence { min-width: 0; max-width: 100%; overflow-wrap: anywhere; padding: 12px; border-radius: 8px; background: #f6f7f4; font: 13px/1.6 ui-monospace, monospace; }
+.live-activity-details .transaction-reference { font: 13px/1.6 ui-monospace, monospace; }
+.live-activity-item { padding: 16px; border: 1px solid var(--line); border-radius: 12px; }
+.live-activity-item + .live-activity-item { margin-top: 4px; }
+/* UI review M6: keep the same alert visible when Save is tapped at the form bottom. */
+.family-rules-form > .notice:not([hidden]) { position: sticky; top: 12px; z-index: 1; }
+@media (max-width: 480px) {
+ .live-activity-row { flex-direction: column; gap: 12px; }
+ .live-photo-button { width: 72px; height: 72px; }
+ .live-activity-details { width: 100%; }
+}
+@media (min-width: 1000px) {
+ .family-rules-form { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+ .family-rules-form > .field-label, .family-rules-form > .notice, .family-rules-form > .button { grid-column: 1 / -1; }
+}
+/* UI review L1: remove the fixed phone height and doubled paragraph margins. */
+.signin-card { min-height: 0; }
+.signin-card .signin-form > .muted { margin: 0; }
+.pwa-tools:not([hidden]) + #app .signin-page { min-height: calc(100svh - 76px); }
 
 .pwa-tools { padding: 8px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left)); background: var(--surface); border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 16px; }
 .pwa-tools p { margin: 0; max-width: 72ch; font-size: 14px; line-height: 1.5; }

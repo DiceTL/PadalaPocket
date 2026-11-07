@@ -18,7 +18,7 @@ export function createCameraButton({ onPhoto, onError }) {
     let stream;
     const stop = () => { stream?.getTracks().forEach(track => track.stop()); video.srcObject = null; };
     const close = () => dialog.close();
-    const fail = message => { stop(); status.textContent = message; capture.disabled = true; onError?.(message); };
+    const fail = message => { stop(); status.classList.add('is-error'); capture.classList.add('is-unavailable'); status.textContent = message; capture.disabled = true; onError?.(message); };
     dialog.querySelector('.camera-close').addEventListener('click', close);
     dialog.addEventListener('close', () => { stop(); window.removeEventListener('pagehide', stop); dialog.remove(); if (button.isConnected) button.focus(); }, { once: true });
     window.addEventListener('pagehide', stop);
