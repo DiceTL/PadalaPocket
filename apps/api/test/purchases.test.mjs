@@ -18,7 +18,7 @@ function fixture({ role = 'student', ai = { productName: 'Notebook', category: '
       let selected = rows.filter(row => filters.every(([field, value]) => row[field] === value));
       if (insert) {
         if (rows.some(row => row.request_key === insert.request_key || !['blocked','claimed','failed'].includes(row.status))) return { error: { code: '23505' } };
-        const row = { id, status: 'assessing', steps: {}, evidence: {}, claim_started: false, reserved: false, nonce: ++nonce, ...insert }; rows.push(row); selected = [row];
+        const row = { exception_started:false,exception_stage:0,created_at:new Date().toISOString(), id, status: 'assessing', steps: {}, evidence: {}, claim_started: false, reserved: false, nonce: ++nonce, ...insert }; rows.push(row); selected = [row];
       }
       if (mutation) for (const row of selected) Object.assign(row, structuredClone(mutation));
       // PostgREST serializes every result, including insert/update responses.
@@ -26,12 +26,28 @@ function fixture({ role = 'student', ai = { productName: 'Notebook', category: '
     };
     const q = { select() { return this; }, eq(k,v) { filters.push([k,v]); return this; }, order: run, maybeSingle() { single = true; return run(); }, single() { single = true; return run(); }, update(patch) { mutation = patch; return this; }, insert(row) { insert = row; return this; }, then(resolve,reject) { return run().then(resolve,reject); } }; return q;
   }
-  const db = { from(name) { calls.db++; if (name === 'needs_funding') return { select() { return this; }, eq() { return this; }, then(resolve) { return Promise.resolve({ data: [{ amount_stroops: '10000000' }] }).then(resolve); } }; return table(); }, rpc: async (_, { p_id }) => {
+  const db = { from(name) { calls.db++; if (name === 'needs_funding') return { select() { return this; }, eq() { return this; }, then(resolve) { return Promise.resolve({ data: [{ amount_stroops: '10000000' }] }).then(resolve); } }; return table(); }, rpc: async (name, args={}) => {
+    if(name==='expire_purchase_reviews')return {data:null};
+    const {p_id}=args;
+    if(name==='admit_purchase_exception'){
+      const row=rows.find(r=>r.id===p_id);
+      const admitted=['approved','exception_pending'].includes(row.status) && !row.exception_started && row.exception_stage<7;
+      if(admitted)row.exception_started=true;
+      return {data:{row:structuredClone(row),admitted}};
+    }
+    if(name==='decide_purchase_review'){
+      const row=rows.find(r=>r.id===p_id);
+      if(row.parent_decision)return row.parent_decision.decision===args.p_decision?{data:{row:structuredClone(row),admitted:false}}:{data:{error:'DECISION_ALREADY_CLOSED'}};
+      Object.assign(row,{status:args.p_decision==='approve'?'approved':'rejected',reserved:args.p_decision==='approve',parent_decision:{decision:args.p_decision,parentId:args.p_parent,binding:args.p_binding,decidedAt:new Date().toISOString()}});
+      return {data:{row:structuredClone(row),admitted:args.p_decision==='approve'}};
+    }
+    if(name==='begin_purchase_review'){const row=rows.find(r=>r.id===p_id);Object.assign(row,{status:'awaiting_parent',approval_binding:args.p_binding,approval_deadline:new Date(Date.now()+600000).toISOString(),reason:args.p_reason});return {data:structuredClone(row)};}
+
     const row = rows.find(r => r.id === p_id);
     Object.assign(row, funds ? { status: 'reserved', reserved: true } : { status: 'blocked', reason: 'INSUFFICIENT_FUNDS' }); return { data: funds };
   } };
   let pending = 0n;
-  const ledger = { merchantPublicKey: 'fixed-merchant', status: async () => ({ status }), escrow: async () => 10000000n, pending: async () => pending, check: async () => ({ ok: true }), prepare: async stage => { calls.prepare.push(stage); return { signed: `${stage}-envelope`, hash: `${stage}-hash` }; }, submit: async signed => { assert.ok(rows[0].steps[calls.prepare.at(-1)]); calls.submit.push(signed); if (signed === 'authorize-envelope') pending = 2500000n; if (signed === 'claim-envelope') pending = 0n; } };
+  const ledger = { consent:()=>({signature:'test'}),exceptionReady:async()=>true,exceptionComplete:async()=>true,merchantPublicKey: 'fixed-merchant', status: async () => ({ status }), escrow: async () => 10000000n, pending: async () => pending, check: async () => ({ ok: true }), prepare: async stage => { calls.prepare.push(stage); return { signed: `${stage}-envelope`, hash: `${stage}-hash` }; }, submit: async signed => { assert.ok(rows[0].steps[calls.prepare.at(-1)]); calls.submit.push(signed); if(signed==='exception_authorize-envelope')pending=BigInt(rows[0].amount_stroops); if(signed==='exception_claim-envelope')pending=0n; if (signed === 'authorize-envelope') pending = 2500000n; if (signed === 'claim-envelope') pending = 0n; } };
   const deps = { loadRules: async () => ({ revision: 0, settings: structuredClone(DEFAULT_SETTINGS) }), authenticate: async () => ({ member: { role, user_id: student, family_id: 'family' } }), database: () => db, validate: async () => {}, identify: async () => { calls.ai++; return { ai, usage: { total_tokens: 1 } }; }, ledger: () => ledger };
   const request = async (method = 'POST', body = payload, url = '/api/purchases', requestKey = key) => { const res = { setHeader() {}, end(raw) { this.body = Buffer.isBuffer(raw) ? raw : JSON.parse(raw); } }; await purchases({ method, url, body, headers: { 'idempotency-key': requestKey } }, res, deps); return res; };
   return { calls, rows, deps, request, ledger, setStatus(value) { status = value; } };
@@ -49,7 +65,7 @@ for (const [name, ai, reason] of [
   ['uncertain', { productName: null, category: 'unknown', uncertain: true }, 'AI_UNCERTAIN'],
   ['category', { productName: 'Toy', category: 'toys_collectibles', uncertain: false }, 'CATEGORY_DISALLOWED'],
   ['prohibited', { productName: 'Alcohol', category: 'drinks', uncertain: false, prohibited: true }, 'CATEGORY_DISALLOWED'],
-]) test(`${name} blocks without preparing or submitting`, async () => { const f = fixture({ ai }); const res = await f.request(); assert.equal(res.body.reason, reason); assert.equal(res.body.status, 'blocked'); assert.equal(f.calls.prepare.length, 0); });
+]) test(`${name} blocks without preparing or submitting`, async () => { const f = fixture({ ai }); const res = await f.request(); assert.equal(res.body.reason, reason); assert.equal(res.body.status, reason==='AI_UNCERTAIN'?'blocked':'awaiting_parent'); assert.equal(f.calls.prepare.length, 0); });
 test('cap and insufficient funds blocks never dispatch', async () => {
   for (const [options, price, reason] of [[{}, '485', 'CAP_EXCEEDED'], [{ funds: false }, '242', 'INSUFFICIENT_FUNDS']]) {
     const f = fixture(options); const res = await f.request('POST', { ...payload, priceMinor: price }); assert.equal(res.body.reason, reason); assert.equal(f.calls.submit.length, 0);
@@ -211,4 +227,50 @@ test('admitted claim with no saved envelope stays locked when its outcome is unc
   assert.equal(statusReads, 0);
   assert.equal(f.calls.prepare.length, 0);
   assert.equal(f.calls.submit.length, 0);
+});
+
+test('review reserves but dispatches nothing; only one concurrent approval executes exception steps',async()=>{
+ const f=fixture();const created=await f.request('POST',{...payload,priceMinor:'500'});
+ assert.equal(created.body.status,'awaiting_parent');assert.equal(f.rows[0].reserved,true);assert.equal(f.calls.submit.length,0);
+ f.deps.authenticate=async()=>({member:{role:'parent',user_id:'parent',family_id:'family'}});
+ const payloadDecision={decision:'approve',binding:created.body.approvalBinding};
+ const responses=await Promise.all([f.request('POST',payloadDecision,`/api/purchases/${id}/decision`),f.request('POST',payloadDecision,`/api/purchases/${id}/decision`)]);
+ assert.ok(responses.every(r=>[200,202].includes(r.statusCode)));
+ for(let stage=1;stage<7;stage++)await f.request('POST',{},`/api/purchases/${id}/execute`);
+ assert.equal(f.rows[0].status,'claimed');assert.deepEqual(f.calls.prepare,['exception_device','exception_policy','needs_defund','exception_fund','exception_authorize','exception_claim','exception_revoke']);
+ assert.equal(f.calls.submit.length,7);assert.equal(JSON.stringify(responses).includes('signature'),false);
+});
+test('rejection never dispatches and a later approval cannot replace the decision',async()=>{
+ const f=fixture();const created=await f.request('POST',{...payload,priceMinor:'500'});
+ f.deps.authenticate=async()=>({member:{role:'parent',user_id:'parent',family_id:'family'}});
+ const decision={decision:'reject',binding:created.body.approvalBinding};
+ assert.equal((await f.request('POST',decision,`/api/purchases/${id}/decision`)).body.status,'rejected');
+ assert.equal(f.rows[0].reserved,false);assert.equal(f.calls.submit.length,0);
+ assert.equal((await f.request('POST',{...decision,decision:'approve'},`/api/purchases/${id}/decision`)).statusCode,409);
+});
+test('interrupted exception keeps reservation and replays never prepare replacement steps',async()=>{
+ const f=fixture();const created=await f.request('POST',{...payload,priceMinor:'500'});
+ f.deps.authenticate=async()=>({member:{role:'parent',user_id:'parent',family_id:'family'}});
+ f.ledger.submit=async()=>{throw Error('timeout')};
+ const decision={decision:'approve',binding:created.body.approvalBinding};
+ await f.request('POST',decision,`/api/purchases/${id}/decision`);
+ assert.equal(f.rows[0].status,'unknown');assert.equal(f.rows[0].reserved,true);
+ await f.request('POST',decision,`/api/purchases/${id}/decision`);
+ assert.deepEqual(f.calls.prepare,['exception_device']);
+});
+
+test('over-cap purchases with insufficient balance are blocked rather than sent for review',async()=>{
+ const f=fixture({funds:false});const res=await f.request('POST',{...payload,priceMinor:'500'});
+ assert.equal(res.body.status,'blocked');assert.equal(res.body.reason,'INSUFFICIENT_FUNDS');assert.equal(res.body.approvalBinding,null);assert.equal(f.calls.prepare.length,0);
+});
+
+test('an admitted stage cannot be executed by a second writer before its checkpoint',async()=>{
+ const f=fixture();const created=await f.request('POST',{...payload,priceMinor:'500'});
+ f.deps.authenticate=async()=>({member:{role:'parent',user_id:'parent',family_id:'family'}});
+ let finish;const original=f.ledger.submit;f.ledger.submit=async signed=>{await new Promise(resolve=>{finish=resolve});await original(signed)};
+ const first=f.request('POST',{decision:'approve',binding:created.body.approvalBinding},`/api/purchases/${id}/decision`);
+ while(!finish)await new Promise(resolve=>setImmediate(resolve));
+ const duplicate=await f.request('POST',{},`/api/purchases/${id}/execute`);
+ assert.equal(duplicate.body.executionStarted,true);assert.deepEqual(f.calls.prepare,['exception_device']);
+ finish();await first;assert.equal(f.rows[0].exception_stage,1);assert.equal(f.rows[0].exception_started,false);
 });

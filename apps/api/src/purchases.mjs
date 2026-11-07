@@ -1,3 +1,4 @@
+import { approvalBinding, REVIEW_REASONS, EXCEPTION_STAGES } from './purchase-approval.mjs';
 import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'node:crypto';
 import { authenticateMember } from './identity.mjs';
@@ -8,19 +9,21 @@ import { readFamilyRules, purchaseRulesFromSettings } from './family.mjs';
 const fail = (status, code) => Object.assign(Error(code), { status, code });
 const uuid = /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-export const purchaseProjection = row => ({ id: row.id, requestKey: row.request_key, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), rules: row.rules, ai: row.ai, createdAt: row.created_at, transactions: Object.fromEntries(Object.entries(row.steps).map(([name, step]) => [name, { hash: step.hash }])), evidence: row.evidence });
+export const purchaseProjection = row => ({ id: row.id, requestKey: row.request_key, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), rules: row.rules, ai: row.ai, createdAt: row.created_at, approvalBinding: row.approval_binding ?? null, approvalDeadline: row.approval_deadline ?? null, parentDecision: row.parent_decision ?? null, executionStarted: Boolean(row.exception_started), completedStages: row.exception_stage ?? 0, transactions: Object.fromEntries(Object.entries(row.steps).map(([name, step]) => [name, { hash: step.hash }])), evidence: row.evidence });
 export async function purchases(req, res, { authenticate = authenticateMember, database = createClient, validate = validatePhoto, identify = identifyPhoto, ledger = purchaseLedger, loadRules = readFamilyRules } = {}) {
   res.setHeader('Cache-Control', 'no-store'); res.setHeader('Content-Type', 'application/json');
   const send = (status, body) => { res.statusCode = status; res.end(JSON.stringify(body)); };
   try {
     const path = new URL(req.url, 'http://localhost').pathname;
-    const match = /^\/api\/purchases(?:\/([0-9a-f-]+)\/(photo|claim))?$/.exec(path);
+    const match = /^\/api\/purchases(?:\/([0-9a-f-]+)\/(photo|claim|decision|execute))?$/.exec(path);
     if (!match || match[1] && !uuid.test(match[1])) throw fail(404, 'NOT_FOUND');
-    if (!['GET','POST'].includes(req.method) || match[2] === 'photo' && req.method !== 'GET' || match[2] === 'claim' && req.method !== 'POST') throw fail(405, 'METHOD_NOT_ALLOWED');
+    if (!['GET','POST'].includes(req.method) || match[2] === 'photo' && req.method !== 'GET' || ['claim','decision','execute'].includes(match[2]) && req.method !== 'POST') throw fail(405, 'METHOD_NOT_ALLOWED');
     const { member } = await authenticate(req);
-    if (member.role !== 'student' && !(member.role === 'parent' && match[2] === 'photo')) throw fail(403, 'FORBIDDEN');
+    if (!['student','parent'].includes(member.role) || ['decision','execute'].includes(match[2]) && member.role !== 'parent' || member.role === 'parent' && !['photo','decision','execute'].includes(match[2]) && req.method !== 'GET') throw fail(403, 'FORBIDDEN');
     const db = database(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
     const table = () => db.from('needs_purchases');
+    const expired = await db.rpc('expire_purchase_reviews');
+    if (expired.error) throw fail(503,'PROVIDER_UNAVAILABLE');
     const save = async (row, patch, { beforeClaim = false } = {}) => {
       let update = table().update(patch).eq('id', row.id).eq('status', row.status);
       // Admission is a durable boundary, including for reads started before it.
@@ -41,7 +44,15 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
     const device = hash('PadalaPocket Needs ' + member.family_id);
     async function reconcile(row) {
       if (row.status === 'unknown' && row.reason === 'AI_UNAVAILABLE' && !row.reserved && !row.ai && Object.keys(row.steps).length === 0) { await save(row, { status: 'blocked' }); return; }
-      if (['blocked','claimed','failed'].includes(row.status)) return;
+      if (['blocked','claimed','failed','awaiting_parent','approved','rejected','expired'].includes(row.status)) return;
+      if (row.parent_decision?.decision === 'approve') {
+        // Reads may only close a fully dispatched, confirmed exception; never start missing stages.
+        if (!EXCEPTION_STAGES.every(stage=>row.steps[stage])) return;
+        for(const stage of EXCEPTION_STAGES) if((await network().status(row.steps[stage].hash)).status!=='SUCCESS') return;
+        if(await network().pending()!==0n || !await network().exceptionComplete(row)) return;
+        await save(row,{status:'claimed',reason:null,evidence:{...row.evidence,claimLedgerStatus:'SUCCESS',merchantPendingStroops:'0',exceptionRevoked:true}});
+        return;
+      }
       // Preparation may still be running in the admitted writer. A GET must not
       // downgrade that phase, clear the lock, or create a replacement claim.
       if (row.claim_started && !row.steps.claim) return;
@@ -67,6 +78,7 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       if (result.status !== 'SUCCESS') throw Error('TRANSACTION_UNKNOWN');
     }
     async function claim(row) {
+      if(row.parent_decision) return;
       const admission = await table().update({ claim_started: true, status: 'claim_pending' }).eq('id', row.id).eq('status', 'merchant_pending').eq('claim_started', false).select('id').maybeSingle();
       if (admission.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
       if (!admission.data) return;
@@ -74,18 +86,56 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       try { if (await network().pending() !== BigInt(row.amount_stroops)) throw Error('MERCHANT_PENDING_MISMATCH'); await dispatch(row, 'claim', 'claim_pending'); await reconcile(row); }
       catch { await save(row, { status: 'unknown' }); }
     }
+    async function executeException(row) {
+      const admission=await db.rpc('admit_purchase_exception',{p_id:row.id,p_parent:member.user_id,p_family:member.family_id});
+      if(admission.error)throw fail(503,'PROVIDER_UNAVAILABLE');
+      if(admission.data?.error)throw fail(404,admission.data.error);
+      if(!admission.data?.row)throw fail(503,'PROVIDER_UNAVAILABLE');
+      Object.assign(row,admission.data.row);
+      if(!admission.data.admitted){await reconcile(row);return;}
+      try {
+        const index=row.exception_stage,stage=EXCEPTION_STAGES[index];
+        if(index===0){
+          if(!await save(row,{status:'exception_pending',exception_consent:network().consent(row),evidence:{merchant:network().merchantPublicKey}}))return;
+          if(!await network().exceptionReady(row) || await network().escrow(device)<BigInt(row.amount_stroops) || await network().pending()!==0n)throw Error('BACKING_UNAVAILABLE');
+        }
+        await dispatch(row,stage,'exception_pending');
+        if(stage==='exception_authorize' && await network().pending()!==BigInt(row.amount_stroops))throw Error('MERCHANT_PENDING_MISMATCH');
+        await save(row,{exception_stage:index+1,exception_started:false});
+        if(index===EXCEPTION_STAGES.length-1)await reconcile(row);
+      } catch { await save(row,{status:'unknown',reason:'EXCEPTION_RECONCILIATION_REQUIRED'}); }
+    }
     if (match[1]) {
       const found = await table().select('*').eq('id', match[1]).eq('family_id', member.family_id).maybeSingle();
       if (found.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
       if (!found.data || member.role === 'student' && found.data.student_id !== member.user_id) throw fail(404, 'NOT_FOUND');
       const row = found.data;
       if (match[2] === 'photo') { res.setHeader('Content-Type', row.photo_mime); res.setHeader('X-Content-Type-Options', 'nosniff'); res.statusCode = 200; return res.end(Buffer.from(row.photo_base64, 'base64')); }
+      if(match[2]==='execute'){await executeException(row);return send(row.status==='claimed'?200:202,purchaseProjection(row));}
+      if(match[2]==='decision') {
+        let body=req.body;
+        if(body===undefined){let raw='';for await(const part of req){raw+=part;if(Buffer.byteLength(raw)>1024)throw fail(400,'INVALID_INPUT');}try{body=JSON.parse(raw);}catch{throw fail(400,'INVALID_INPUT');}}
+        if(typeof body==='string'){try{body=JSON.parse(body);}catch{throw fail(400,'INVALID_INPUT');}}
+        if(!body || Object.keys(body).sort().join(',')!=='binding,decision' || !['approve','reject'].includes(body.decision) || !/^[a-f0-9]{64}$/.test(body.binding??''))throw fail(400,'INVALID_INPUT');
+        if(row.approval_binding!==body.binding || approvalBinding(row)!==body.binding)throw fail(409,'PURCHASE_CHANGED');
+        const result=await db.rpc('decide_purchase_review',{p_id:row.id,p_parent:member.user_id,p_family:member.family_id,p_decision:body.decision,p_binding:body.binding});
+        if(result.error)throw fail(503,'PROVIDER_UNAVAILABLE');
+        if(result.data?.error)throw fail(result.data.error==='NOT_FOUND'?404:409,result.data.error);
+        if(!result.data?.row)throw fail(503,'PROVIDER_UNAVAILABLE');
+        Object.assign(row,result.data.row);
+        if(result.data.admitted)await executeException(row);
+        else await reconcile(row);
+        return send(row.status==='claimed'||row.status==='rejected'?200:202,purchaseProjection(row));
+      }
       await reconcile(row); await claim(row); return send(200, purchaseProjection(row));
     }
     if (req.method === 'GET') {
-      const result = await table().select('*').eq('student_id', member.user_id).eq('family_id', member.family_id).order('created_at', { ascending: false });
+      let list=table().select('*').eq('family_id',member.family_id);
+      if(member.role==='student')list=list.eq('student_id',member.user_id);
+      const result=await list.order('created_at',{ascending:false});
       if (result.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
       for (const row of result.data) await reconcile(row);
+      if(member.role==='parent')return send(200,{purchases:result.data.map(purchaseProjection)});
       const funding = await db.from('needs_funding').select('amount_stroops,wants_stroops').eq('family_id', member.family_id).eq('status', 'confirmed');
       if (funding.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
       const credits = funding.data.reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
@@ -118,13 +168,19 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       const assessment = await identify(bytes, body.mime);
       await save(row, { ai: assessment.ai, ai_usage: { usage: assessment.usage, model: assessment.model } });
       const reason = decidePurchase(row.ai, row.price_minor, '999999999999999999', row.rules);
-      if (reason) { await save(row, { status: 'blocked', reason }); return send(201, purchaseProjection(row)); }
+      if (reason && !REVIEW_REASONS.has(reason)) { await save(row, { status: 'blocked', reason }); return send(201, purchaseProjection(row)); }
       const reservation = await db.rpc('reserve_needs_purchase', { p_id: row.id });
       if (reservation.error) throw Error('RESERVATION_UNAVAILABLE');
       if (!reservation.data) { const read = await table().select('*').eq('id', row.id).single(); if (read.error) throw Error('READ_UNAVAILABLE'); return send(201, purchaseProjection(read.data)); }
       const reserved = await table().select('*').eq('id', row.id).single();
       if (reserved.error || !reserved.data || reserved.data.status !== 'reserved' || !reserved.data.reserved) throw Error('RESERVATION_STATE_UNAVAILABLE');
       row = reserved.data;
+      if(REVIEW_REASONS.has(reason)){
+        const review=await db.rpc('begin_purchase_review',{p_id:row.id,p_binding:approvalBinding(row),p_reason:reason});
+        if(review.error||!review.data)throw Error('REVIEW_UNAVAILABLE');
+        row=review.data;
+        return send(201,purchaseProjection(row));
+      }
       await save(row, { status: 'reserved', reserved: true, evidence: { merchant: network().merchantPublicKey } });
       if (await network().escrow(device) < BigInt(row.amount_stroops)) throw Error('BACKING_UNAVAILABLE');
       if (await network().pending() !== 0n) throw Error('MERCHANT_PENDING_CONFLICT');

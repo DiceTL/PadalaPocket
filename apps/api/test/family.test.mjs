@@ -15,7 +15,8 @@ function fixture(role = 'parent') {
       maybeSingle: async () => ({ data: saved && structuredClone(saved) }), order() { return this; },
       limit: async () => ({ data: rows.filter(row => filters.every(([k,v])=>row[k]===v)) }),
     }; },
-    async rpc(_, args) {
+    async rpc(name, args) {
+      if(name==='expire_purchase_reviews')return {data:null};
       if ((saved?.revision ?? 0) !== args.p_expected) return { data:null };
       saved = { revision:args.p_expected+1,settings:structuredClone(args.p_settings),updated_at:'2026-11-07T00:00:00Z' };
       return { data:structuredClone(saved) };

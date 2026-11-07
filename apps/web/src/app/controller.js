@@ -40,6 +40,7 @@ export function createAppController({ auth, api }) {
     if (mockMode || !state.user) return;
     const epoch = sessionEpoch, userId = state.user.userId;
     const jobs = [];
+    if(state.user.role==='parent' && api.approvals)jobs.push((async()=>{try{const approvals=await api.approvals();if(currentSession(epoch,userId))state={...state,approvals,approvalError:null};}catch(e){if(currentSession(epoch,userId))state={...state,approvalError:e.message};}})());
     if (state.user.role === 'parent' && typeof api.veloTopups === 'function') jobs.push(loadTopups());
     for (const [method, field, errorField] of [['familyRules','familyRules','rulesError'],['activity','activity','activityError']]) {
       if (typeof api[method] !== 'function') continue;
@@ -67,6 +68,22 @@ export function createAppController({ auth, api }) {
       finally { if(currentSession(epoch,userId)){state={...state,topupBusy:false};publish();} }
     },
     refreshFamily: loadFamily,
+    async decidePurchase(id,decision,binding) {
+      if(state.approvalBusy || state.user?.role!=='parent')return;
+      const epoch=sessionEpoch,userId=state.user.userId;
+      state={...state,approvalBusy:id,approvalError:null};publish();
+      try{
+        let result=decision==='continue'?await api.executeApproval(id):await api.approvals(id,decision,binding);
+        for(let stage=0;stage<7 && result.parentDecision?.decision==='approve' && ['approved','exception_pending'].includes(result.status) && !result.executionStarted;stage++){
+          if(!currentSession(epoch,userId))return;
+          state={...state,approvals:{purchases:state.approvals.purchases.map(p=>p.id===id?result:p)}};publish();
+          result=await api.executeApproval(id);
+        }
+        if(currentSession(epoch,userId))await loadFamily();
+      }
+      catch(e){if(currentSession(epoch,userId))state={...state,approvalError:e.message+' Refresh status before trying another action.'};}
+      finally{if(currentSession(epoch,userId)){state={...state,approvalBusy:null};publish();}}
+    },
     fetchPurchasePhoto: (id, signal) => api.purchasePhoto(id, signal),
     async saveFamilyRules(settings) {
       if (state.rulesBusy || state.user?.role !== 'parent' || !state.familyRules) return;
@@ -95,7 +112,7 @@ export function createAppController({ auth, api }) {
         const digest = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(payload)))), b => b.toString(16).padStart(2, '0')).join('');
         const storageKey = 'purchaseRequest:' + state.user.userId;
         const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
-        const priorTerminal = state.purchaseHistory?.purchases.some(p => p.requestKey === saved?.key && p.status === 'blocked');
+        const priorTerminal = state.purchaseHistory?.purchases.some(p => p.requestKey === saved?.key && ['blocked','rejected','expired'].includes(p.status));
         const key = saved?.digest === digest && !priorTerminal ? saved.key : crypto.randomUUID();
         localStorage.setItem(storageKey, JSON.stringify({ digest, key }));
         await api.purchases('POST', payload, key); if (!currentSession(epoch, userId)) return; await loadPurchases(); await loadFamily();

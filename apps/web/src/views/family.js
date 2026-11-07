@@ -7,6 +7,7 @@ function refreshButton(controller) { const button = el('button', 'button button-
 export function renderFamilyPage(content, state, controller) {
   if (state.activePage === 'Deposit' && state.user.role === 'parent') { renderTopups(content,state,controller); return true; }
   if (state.activePage === 'Allowance rules' && state.user.role === 'parent') { renderRules(content, state, controller); return true; }
+  if(state.activePage==='Approvals' && state.user.role==='parent'){renderActivity(content,state,controller,true);return true;}
   if (state.activePage === 'Activity') { renderActivity(content, state, controller); return true; }
   return false;
 }
@@ -49,8 +50,9 @@ function renderRules(content, state, controller) {
   if (state.rulesSaved) { const message = el('p', '', `Rules saved · revision ${state.familyRules.revision}.`); message.setAttribute('role', 'status'); panel.append(message); }
   content.append(panel);
 }
-function renderActivity(content, state, controller) {
-  const panel = el('section', 'preview-panel'); panel.append(el('h2', '', 'Needs purchases'), el('p', '', 'Actual submitted purchases. Pending or blocked purchases are not shown as paid.'), refreshButton(controller));
+function renderActivity(content, state, controller, approvalMode=false) {
+  if(approvalMode) state={...state,activity:state.approvals?{items:state.approvals.purchases.filter(p=>p.approvalBinding).map(p=>({...p,productName:p.ai?.productName,category:p.ai?.category}))}:null,activityError:state.approvalError};
+  const panel = el('section', 'preview-panel'); panel.append(el('h2', '', approvalMode?'Purchase approvals':'Needs purchases'), el('p', '', approvalMode?'Review the exact request and photo. Decisions close after ten minutes. Approving starts a Testnet payment; it is paid only after confirmation.':'Actual submitted purchases. Pending or blocked purchases are not shown as paid.'), refreshButton(controller));
   if (state.activityError) { const error = el('p', 'notice notice-error', state.activityError); error.setAttribute('role', 'alert'); panel.append(error); }
   if (!state.activity) panel.append(el('p', '', 'Activity has not loaded.'));
   else if (!state.activity.items.length) panel.append(el('p', '', 'No purchases yet.'));
@@ -62,6 +64,26 @@ function renderActivity(content, state, controller) {
     const details = el('div', 'live-activity-details'); details.append(el('h3', '', purchase.productName || 'Item assessment unavailable'), el('p', '', `${pesos(purchase.priceMinor)} · ${Number(purchase.amountStroops) / 10000000} Testnet XLM`), el('p', '', `Status: ${purchase.status === 'claimed' ? 'Paid · seller claimed' : purchase.status.replaceAll('_',' ')}`));
     if (purchase.reason) details.append(el('p', '', purchase.reason.replaceAll('_',' ')));
     details.append(el('p', '', new Date(purchase.createdAt).toLocaleString()));
+    if(approvalMode){
+      details.append(el('p','',`Seller: ${purchase.sellerId} · Category: ${purchase.category || 'Unknown'}`));
+      if(purchase.ai)details.append(el('p','',`AI assessment: ${purchase.ai.productName || 'Unclear'} · Uncertain: ${purchase.ai.uncertain?'yes':'no'} · Restricted item: ${purchase.ai.prohibited?'yes':'no'}`));
+      if(purchase.rules)details.append(el('p','',`Saved cap: ${pesos(purchase.rules.capMinor)} · Allowed categories: ${purchase.rules.allowedCategories.join(', ')} · Rules: ${purchase.rules.version}`));
+      if(purchase.approvalDeadline)details.append(el('p','',`Decision deadline: ${new Date(purchase.approvalDeadline).toLocaleString()}`));
+      if(purchase.parentDecision)details.append(el('p','',`Parent decision: ${purchase.parentDecision.decision} · ${new Date(purchase.parentDecision.decidedAt).toLocaleString()}`));
+      if(purchase.status==='awaiting_parent'){
+        const elapsed=Date.parse(purchase.approvalDeadline)<=Date.now();
+        for(const [decision,label] of [['approve','Approve and pay'],['reject','Reject purchase']]){
+          const button=el('button','button button-secondary',state.approvalBusy===purchase.id?'Processing decision…':label);button.type='button';button.disabled=Boolean(state.approvalBusy||elapsed);button.onclick=()=>controller.decidePurchase(purchase.id,decision,purchase.approvalBinding);details.append(button);
+        }
+        if(elapsed)details.append(el('p','','Deadline passed. Refresh to confirm expiry.'));
+      }
+      if(purchase.parentDecision?.decision==='approve' && ['approved','exception_pending'].includes(purchase.status)){
+        details.append(el('p','',`Confirmed payment stages: ${purchase.completedStages}/7`));
+        if(!purchase.executionStarted){const next=el('button','button button-primary','Continue approved payment');next.type='button';next.disabled=Boolean(state.approvalBusy);next.onclick=()=>controller.decidePurchase(purchase.id,'continue',purchase.approvalBinding);details.append(next);}
+      }
+      if(state.approvalBusy===purchase.id)details.append(el('p','','Payment may take a few minutes. Refresh status if the connection closes; do not create a replacement payment.'));
+      const evidence=el('details');evidence.append(el('summary','','Transaction evidence'));for(const [stage,tx] of Object.entries(purchase.transactions??{}))evidence.append(el('p','transaction-reference',`${stage}: ${tx.hash}`));details.append(evidence);
+    }
     let photoUrl;
     async function loadPhoto() {
       photo.disabled = true; photo.textContent = 'Loading photo…';

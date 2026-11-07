@@ -57,21 +57,21 @@ Evidence: [L-001](../handoff/L-001.md), [L-003A](../handoff/L-003A.md). Interrup
 - [x] Permitted Needs purchases use durable Noir authorization and merchant claim, with recorded Testnet hashes.
 - [x] Purchase reservations and immutable signed operations guard against duplicate spending; unknown execution stays distinct from success.
 - [ ] Verify classification with an actual apple photo. Catalog/prompt tests do not establish live image accuracy.
-- [ ] Connect parent review for over-cap/category-conflict requests; these currently remain blocked.
+- [x] New over-cap/category-conflict requests enter parent review after balance reservation; historical blocked requests stay blocked.
 - [ ] Add spending from Wants and private My Money through their own backed flows.
 
 Evidence: [R-002](../handoff/R-002.md), [L-007](../handoff/L-007.md). AI does not verify market price, delivery or authenticity. The current seller is fixed; arbitrary seller selection/QR payment is not implemented.
 
 ## Parent decisions
 
-- [ ] Parent sees only their family's pending purchase requests, including exact photo, seller, amount, category, AI assessment and deadline.
-- [ ] Parent approves/rejects the exact immutable request once, with safe handling of concurrent/stale decisions.
-- [ ] Requests expire after **10 real minutes** without payment or final allowance deduction.
-- [ ] Approved exceptions execute without increasing the ordinary spending cap or weakening routine policy.
-- [ ] Waiting, rejected, expired, payment-pending and settled outcomes appear distinctly in both roles.
+- [x] Parent sees only their family's pending purchase requests, including exact photo, seller, amount, category, AI assessment and deadline.
+- [x] Parent approves/rejects the exact immutable request once, with safe handling of concurrent/stale decisions.
+- [x] Requests expire after **10 real minutes** without payment or final allowance deduction.
+- [x] Approved exceptions execute without increasing the ordinary spending cap or weakening routine policy.
+- [x] Waiting, rejected, expired, payment-pending and settled outcomes appear distinctly in both roles.
 - [ ] Insufficient-funds outcomes notify the parent without creating debt or borrowing from another bucket.
 
-Required behavior: [L-002](../handoff/L-002.md), F-004/F-005 in the [product spec](product-spec.md). Earlier exception scripts prove feasibility, not an integrated Approvals feature.
+Local implementation and evidence: [L-002](../handoff/L-002.md), F-004/F-005 in the [product spec](product-spec.md). A bounded integrated exception is now verified on Testnet; final staged orchestration has database/unit checks. Production deployment remains pending. Earlier scripts remain separate feasibility evidence.
 
 ## Activity and responsive pages
 

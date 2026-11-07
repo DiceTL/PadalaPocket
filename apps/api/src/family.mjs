@@ -44,6 +44,7 @@ export async function family(req, res, { authenticate = authenticateMember, data
       if (!saved.data) throw fail(409, 'RULES_CHANGED');
       return send(200, { revision: Number(saved.data.revision), settings: saved.data.settings, updatedAt: saved.data.updated_at });
     }
+    const expired=await db.rpc('expire_purchase_reviews'); if(expired.error)throw fail(503,'PROVIDER_UNAVAILABLE');
     let query = db.from('needs_purchases').select(activityColumns).eq('family_id', member.family_id);
     if (member.role === 'student') query = query.eq('student_id', member.user_id);
     const result = await query.order('created_at', { ascending: false }).limit(100);

@@ -116,7 +116,7 @@ function renderShell(root, state, controller) {
   content.append(el('p', 'eyebrow', view.title));
   const title = el('h1', 'page-title', page); title.id = 'page-title';
   content.append(title);
-  content.append(el('p', 'muted page-description', !state.mock && state.activePage === 'Deposit' ? 'Top up your parent wallet through Velo on Stellar Testnet.' : !state.mock && state.activePage === 'Activity' ? 'Your submitted purchases and private item photos.' : !state.mock && state.activePage === 'Allowance rules' ? 'Manage the rules for future Needs purchases.' : !state.mock && state.user.role === 'parent' ? 'Distribute allowance into Needs and Wants on Stellar Testnet. Peso amounts are simulated.' : !state.mock && state.user.role === 'student' ? 'Submit a product photo and price, then track the real purchase status.' : view.message));
+  content.append(el('p', 'muted page-description', !state.mock && state.activePage === 'Approvals' ? 'Review purchases that need your decision and track approved payments.' : !state.mock && state.activePage === 'Deposit' ? 'Top up your parent wallet through Velo on Stellar Testnet.' : !state.mock && state.activePage === 'Activity' ? 'Your submitted purchases and private item photos.' : !state.mock && state.activePage === 'Allowance rules' ? 'Manage the rules for future Needs purchases.' : !state.mock && state.user.role === 'parent' ? 'Distribute allowance into Needs and Wants on Stellar Testnet. Peso amounts are simulated.' : !state.mock && state.user.role === 'student' ? 'Submit a product photo and price, then track the real purchase status.' : view.message));
   const dashboardOnly = !state.mock && renderDashboard(content,state,controller);
   if (!state.mock && (renderUnavailable(content,state,controller) || dashboardOnly || renderFamilyPage(content, state, controller))) {
     // The family view owns its loaded/empty/error states.
@@ -162,7 +162,7 @@ function renderShell(root, state, controller) {
     const priceLabel = el('label', 'field-label', 'Price in simulated pesos');
     const price = el('input', 'field-input'); price.type = 'text'; price.inputMode = 'decimal'; price.required = true; price.placeholder = '0.00'; priceLabel.append(price);
     const submit = el('button', 'button button-primary', state.purchaseBusy ? 'Checking purchase…' : 'Submit purchase');
-    submit.type = 'submit'; submit.disabled = Boolean(state.purchaseBusy || state.purchaseHistory?.purchases.some(p => !['blocked','claimed','failed'].includes(p.status)));
+    submit.type = 'submit'; submit.disabled = Boolean(state.purchaseBusy || state.purchaseHistory?.purchases.some(p => !['blocked','claimed','failed','rejected','expired'].includes(p.status)));
     const photoActions = el('div', 'photo-actions'); photoActions.append(camera, choosePhoto);
     form.append(photoLabel, photoActions, photoSelection, priceLabel, submit); form.addEventListener('submit', event => { event.preventDefault(); if (!selectedPhoto) { photoSelection.textContent = 'Take or choose a product photo first.'; return; } void controller.submitPurchase(selectedPhoto, price.value); }); panel.append(form);
     if (state.purchaseError) { const error = el('p', '', state.purchaseError); error.setAttribute('role', 'alert'); panel.append(error); }
@@ -171,6 +171,8 @@ function renderShell(root, state, controller) {
       const card = el('article', 'preview-panel'); card.append(el('h3', '', `Purchase: ${purchase.status}`));
       card.append(el('p', '', `Simulated ₱${Number(purchase.priceMinor) / 100} · ${Number(purchase.amountStroops) / 10000000} Testnet XLM`));
       if (purchase.ai) card.append(el('p', '', `AI identification: ${purchase.ai.productName || 'Unclear'} · ${purchase.ai.category.replaceAll('_', ' ')}`));
+      if(purchase.approvalDeadline)card.append(el('p','',`Parent decision deadline: ${new Date(purchase.approvalDeadline).toLocaleString()}`));
+      if(purchase.parentDecision)card.append(el('p','',`Parent decision: ${purchase.parentDecision.decision}. Payment confirmation is tracked separately.`));
       if (purchase.reason) card.append(el('p', '', purchase.reason.replaceAll('_', ' ')));
       for (const [stage, tx] of Object.entries(purchase.transactions)) card.append(el('p', 'transaction-evidence', `${stage}: ${tx.hash}`));
       if (purchase.status === 'merchant_pending') { const claim = el('button', 'button button-primary', 'Claim for demo seller'); claim.type = 'button'; claim.disabled = Boolean(state.purchaseBusy); claim.addEventListener('click', () => controller.claimPurchase(purchase.id)); card.append(claim); }

@@ -215,7 +215,7 @@ User authorizes implementation of the broader functions after the UI previews. O
 |---|---|---|
 | [L-001 Durable rules and private activity](../handoff/L-001.md) | Migration applied; local real-account save/reload, activity/private photos and full checks pass. Review, merge and production deployment remain | Review |
 | [L-003A Parent allowance distribution](../handoff/L-003A.md) | Immediate priority under DEC-075: manual saved-amount Needs/Wants distribution; migration applied, real 0.6/0.4 XLM split and replay verified, parent/student UI checked. Production deployment remains | Review |
-| [L-002 Parent purchase decisions](../handoff/L-002.md) | Priority 1: ten-minute expiry, exact-request parent decisions, isolated exception execution and live approval UI | Planned |
+| [L-002 Parent purchase decisions](../handoff/L-002.md) | Parent decisions, expiry, reserved funds, isolated exception execution and functional UI implemented. Migrations applied; bounded live claim/revocation and unchanged routine policy verified; final staged orchestration has database/unit checks. Review, merge and production deployment remain | Review |
 | [L-003 Backed family-wallet flows](../handoff/L-003.md) | Priority 2: backed Wants allocation/purchases, Savings release to private My Money and student-only My Money spending | Planned |
 | L-004 Weekly lifecycle | Deferred by DEC-074: parent-chosen schedule, backed repeat allocation/rollover, reminders and demo clock | Deferred |
 | L-005 Interactive withdrawal | Deferred by DEC-074: authenticated anchor initiation/reconciliation and frontend wiring | Deferred |

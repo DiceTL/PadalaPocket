@@ -29,6 +29,12 @@ export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-i
       const response = await fetchImpl('/api/velo-topups', { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(method === 'POST' ? { body: JSON.stringify({ expectedRevision }) } : {}) });
       const body = await response.json(); if (!response.ok) throw new ApiError(body.error, response.status); return body;
     },
+    async executeApproval(id) { return this.purchases('POST',{},undefined,`/${id}/execute`); },
+    async approvals(id, decision, binding) {
+      const token=await getAccessToken();
+      const response=await fetchImpl(id?`/api/purchases/${id}/decision`:'/api/purchases',{method:id?'POST':'GET',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...(id?{body:JSON.stringify({decision,binding})}:{})});
+      const body=await response.json(); if(!response.ok)throw new ApiError(body.error,response.status); return body;
+    },
     async familyRules(settings, expectedRevision) {
       if (mode !== 'live') throw new Error('Saved rules require the live API.');
       const token = await getAccessToken();

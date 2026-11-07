@@ -4,6 +4,8 @@ Draft for review, derived from [DEC-006–DEC-029](decision-ledger.md). Concept/
 
 ## Five-hour submission MVP
 
+This section records the DEC-055 reduced release scope. Later connected slices and DEC-070/DEC-084/DEC-085 extend parent review beyond the original blocked-only behavior; current evidence is in the [feature checklist](mvp-feature-checklist.md).
+
 DEC-055 narrows the current delivery target to one provisioned parent, student and fixed demonstration seller. The broader scope and feature table below remain the post-deadline roadmap wherever they exceed this section.
 
 Recording journey: parent signs in and funds a Needs allowance with confirmed Testnet backing; student signs in, supplies a photo and price; real AI identifies the item; server checks the fixed allowed categories, cap and available funds; a permitted purchase uses Noir authorization and merchant claim. Show the actual statuses and both transaction hashes. Preserve dual simulated-PHP/Testnet-XLM display and accepted rounding. Configure a small finite allowance/cap during provisioning; no settings editor is required.

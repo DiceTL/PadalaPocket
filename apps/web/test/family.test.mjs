@@ -15,3 +15,19 @@ test('a late rules save cannot restore data after sign-out',async()=>{
  let finish;const api={mode:'live',getMe:async()=>({userId:'parent',role:'parent'}),funding:async()=>({}),activity:async()=>({items:[]}),familyRules:async(settings)=>settings?new Promise(resolve=>{finish=resolve}):({revision:0,settings:{},categories:[]})};
  const controller=createAppController({auth:{mode:'live',signOut:async()=>{}},api});await controller.restore();const pending=controller.saveFamilyRules({capMinor:'600'});await controller.signOut();finish({revision:1,settings:{capMinor:'600'}});await pending;assert.equal(controller.getState().screen,'signin');assert.equal(controller.getState().familyRules,undefined);
 });
+test('parent decisions send the exact binding and reject duplicate clicks or late session restoration',async()=>{
+ const calls=[];const client=createApiClient({mode:'live',getAccessToken:async()=>'token',fetchImpl:async(url,options)=>{calls.push({url,options});return{ok:true,json:async()=>({status:'rejected'})}}});
+ await client.approvals('request','reject','binding');assert.equal(calls[0].url,'/api/purchases/request/decision');assert.deepEqual(JSON.parse(calls[0].options.body),{decision:'reject',binding:'binding'});assert.equal(calls[0].options.headers.Authorization,'Bearer token');
+ let finish,decisions=0;
+ const api={mode:'live',getMe:async()=>({userId:'parent',role:'parent'}),funding:async()=>({operations:[]}),approvals:async(id)=>{if(id){decisions++;return new Promise(resolve=>{finish=resolve})}return{purchases:[]}}};
+ const controller=createAppController({auth:{mode:'live',signOut:async()=>{}},api});await controller.restore();
+ const request=controller.decidePurchase('id','approve','binding');await controller.decidePurchase('id','approve','binding');assert.equal(decisions,1);
+ await controller.signOut();finish({status:'claimed'});await request;assert.equal(controller.getState().screen,'signin');assert.equal(controller.getState().approvals,undefined);
+});
+test('parent approval controller advances confirmed stages through separate requests',async()=>{
+ let stage=0,executions=0;
+ const purchase=()=>({id:'id',status:stage===7?'claimed':'exception_pending',parentDecision:{decision:'approve'},completedStages:stage,executionStarted:false});
+ const api={mode:'live',getMe:async()=>({userId:'parent',role:'parent'}),funding:async()=>({operations:[]}),approvals:async(id)=>{if(id)stage=1;return id?purchase():{purchases:[purchase()]}},executeApproval:async()=>{executions++;stage++;return purchase()}};
+ const controller=createAppController({auth:{mode:'live'},api});await controller.restore();await controller.decidePurchase('id','approve','binding');
+ assert.equal(executions,6);assert.equal(controller.getState().approvals.purchases[0].status,'claimed');assert.equal(controller.getState().approvalBusy,null);
+});

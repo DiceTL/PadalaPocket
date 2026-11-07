@@ -164,3 +164,7 @@ Proposed answers are suggestions, not decisions.
 3. **Operator role.** Do withdrawal and merchant-claim actions belong to the parent account acting as demo operator? *Proposed:* yes, per the technical spec, with no third role or login.
 4. **Reminder and clock.** Which role sees the F-002 funding reminder, and where does the demo clock live? *Proposed:* the parent sees the funding reminder, the student sees the weekly recap, and the clock lives in parent demo tools (the API is parent-only).
 5. **Purchase cap display.** The product spec names a purchase cap without defining whether the same cap applies to Needs and Wants. The PDF shows a Wants request above a ₱500 cap. Confirm whether the UI should present one shared cap or bucket-specific caps, and label the approval reason accordingly.
+
+## L-002 functional review UI
+
+Founder explicitly authorizes simple functional screens while visual polish is unfinished. Parent Approvals shows actual review requests, private photos, immutable price/seller/AI/rules, deadline, Approve and pay, Reject purchase, decision and transaction progress. Confirmed checkpoints offer Continue approved payment. Student purchase history shows deadline and parent decision separately from settlement. This delegates the minimum UI needed for L-002 under the established design authority.

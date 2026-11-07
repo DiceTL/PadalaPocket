@@ -1,3 +1,4 @@
+import { exceptionDevice, signExceptionConsent, verifyExceptionConsent } from './purchase-approval.mjs';
 import { CATEGORY_IDS, PRODUCT_IDENTIFICATION_PROMPT } from './purchase-categories.mjs';
 import sharp from 'sharp';
 import { Asset, Networks, TransactionBuilder } from '@stellar/stellar-sdk';
@@ -31,12 +32,24 @@ export function purchaseLedger() {
   const asset = Asset.native().contractId(Networks.TESTNET);
   return {
     merchantPublicKey: signers.merchant.publicKey,
+    consent: row => signExceptionConsent(row, process.env.OWNER_SECRET, signers.merchant.publicKey, asset),
+    exceptionReady: async row => !(await noir.getDeviceOwner(exceptionDevice(row))) && (await noir.getEscrowBalance(exceptionDevice(row)))===0n,
+    exceptionComplete: async row => (await noir.getEscrowBalance(exceptionDevice(row))) === 0n && (await noir.getPolicy(exceptionDevice(row))) === null,
     status: hash => noir.server.getTransaction(hash),
     escrow: device => noir.getEscrowBalance(device), pending: () => noir.getPendingBalance(signers.merchant.publicKey),
     check: (deviceHash, amount) => noir.checkPayment({ deviceHash, agent: signers.agent.publicKey, asset, amount: BigInt(amount), requireEscrow: true }),
     async prepare(stage, row, deviceHash) {
       if (row.evidence.merchant !== signers.merchant.publicKey) throw Error('MERCHANT_MISMATCH');
+      const target=exceptionDevice(row);
+      if(stage.startsWith('exception_') || stage==='needs_defund') verifyExceptionConsent(row,signers.owner.publicKey,signers.merchant.publicKey,asset);
       const config = {
+        exception_device:[signers.owner,{kind:'registerDevice',deviceHash:target,agent:signers.owner.publicKey}],
+        exception_policy:[signers.owner,{kind:'registerAgent',deviceHash:target,agent:signers.owner.publicKey,asset,maxAmount:BigInt(row.amount_stroops),expiresAt:new Date(Date.parse(row.parent_decision?.decidedAt)+86400000)}],
+        needs_defund:[signers.owner,{kind:'defundEscrow',deviceHash,token:asset,amount:BigInt(row.amount_stroops)}],
+        exception_fund:[signers.owner,{kind:'fundEscrow',deviceHash:target,token:asset,amount:BigInt(row.amount_stroops)}],
+        exception_authorize:[signers.owner,{kind:'authorize',deviceHash:target,merchant:signers.merchant.publicKey,asset,amount:BigInt(row.amount_stroops),nonce:BigInt(row.nonce)}],
+        exception_claim:[signers.merchant,{kind:'claim',token:asset}],
+        exception_revoke:[signers.owner,{kind:'revokeAgent',deviceHash:target}],
         policy: [signers.owner, { kind: 'registerAgent', deviceHash, agent: signers.agent.publicKey, asset, maxAmount: BigInt(row.rules.capStroops), expiresAt: new Date(Date.now() + 86400000) }],
         authorize: [signers.agent, { kind: 'authorize', deviceHash, merchant: signers.merchant.publicKey, asset, amount: BigInt(row.amount_stroops), nonce: BigInt(row.nonce) }],
         claim: [signers.merchant, { kind: 'claim', token: asset }],

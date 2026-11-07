@@ -18,14 +18,14 @@ OFW parents sending a student allowance may want visibility into allowance purch
 
 The parent signs in, saves an allowance amount, Needs/Wants split, purchase cap and allowed categories, and explicitly distributes Testnet funds into separate backed escrows. The student submits a product photo and price; the agent identifies the item and applies the saved Needs rules before attempting payment. Both roles can view actual allowance activity and authorized purchase photos.
 
-Parent Deposit integrates Velo checkout for a top-up to the parent wallet before a separate Noir allocation. Matching-receiver checkout creation and status retrieval are verified; a paid parent top-up has not yet been observed. Wants is funded and displayed, but Wants spending is unfinished. Parent approvals, Savings releases, private My Money spending, weekly automation and in-app withdrawals are unavailable; their screens say so.
+Parent Deposit integrates Velo checkout for a top-up to the parent wallet before a separate Noir allocation. Matching-receiver checkout creation and status retrieval are verified; a paid parent top-up has not yet been observed. Wants is funded and displayed, but Wants spending is unfinished. Parent approvals now have a connected local implementation with ten-minute expiry, immutable request review and isolated exception payments. A bounded Testnet exception was claimed and revoked with the routine policy unchanged. Savings releases, private My Money spending, weekly automation and in-app withdrawals remain unavailable. Approval release evidence remains in [L-002](handoff/L-002.md).
 
 ## How the agentic payment works
 
 1. **Fund:** The parent distributes the saved allowance total. Integer rounding conserves the total; the Needs share and Wants remainder go to separate parent-owned Noir escrows. Neither allocation credit is available until both transfers confirm.
 2. **Request:** The student chooses or captures a product photo, enters the price, and explicitly submits to the fixed demo seller. Price is supplied by the student, not inferred from the photo.
 3. **Identify:** Groq vision returns a product name, supported category, uncertainty and restricted-item flags. Image text is untrusted. The [category catalog](apps/api/src/purchase-categories.mjs) separates produce, staple groceries, water and other everyday products from sweets and electronics.
-4. **Decide:** Server rules check identification, parent-selected Needs categories, cap and sufficient available funds. Uncertain images, disallowed categories, restricted items, insufficient funds and over-cap purchases do not dispatch payment. Parent overrides are not implemented.
+4. **Decide:** Server rules check identification, parent-selected Needs categories, cap and sufficient available funds. Uncertain images and insufficient funds block payment. New over-cap/category-conflict requests reserve funds and wait up to ten minutes for a parent decision. Rejection/expiry releases the hold; approval uses an isolated exception escrow without increasing the routine cap. Payment advances through separately admitted transaction stages.
 5. **Pay:** Reserve the amount, check actual escrow backing and policy, then use the Noir SDK to authorize exactly the mapped Testnet amount for the configured merchant. The recorded notebook purchase was ₱2.42 simulated / 0.25 XLM.
 6. **Claim:** The server-held demo seller signer claims the authorized funds. Claimed requires ledger confirmation and a zero merchant-pending readback. Authorization alone is not seller receipt.
 7. **Observe:** Save signed envelopes/hashes before submission, preserve reservations for unknown outcomes, and reconcile existing hashes without blindly replacing transactions. Photos and activity remain authenticated and family-scoped.
@@ -165,7 +165,7 @@ Actual signed-in **local Testnet** views, captured during verification. These ar
 
 - Record and link the required two-minute demo, add registered Discord handles, and rehearse the public deployment.
 - Verify a paid Velo parent-wallet top-up through hosted checkout and subsequent Noir distribution.
-- Enable Wants spending, then exact-request parent approvals with ten-minute expiry and isolated exceptions.
+- Enable Wants spending and complete production release verification for parent approvals.
 - Connect Savings releases, private My Money spending, weekly scheduling/rollover and in-app test-anchor withdrawal.
 - Improve progress feedback for sequential Testnet confirmations and establish safe operator recovery for interrupted operations.
 - Verify supported photo categories on real images; model identification is fallible and does not prove price, delivery or medical/health properties.
@@ -183,3 +183,5 @@ Existing exception, wallet-topology and anchor experiments are feasibility evide
 - Illustrative design-preview notebook photo by Mk2010, CC BY-SA 3.0: [source and attribution](apps/web/public/demo-photos/README.md). It is not substituted for private purchase evidence.
 - AI-assisted implementation and documentation were reviewed through repository checks and recorded demo verification; this does not establish production security or validated market demand.
 - Event requirements come from the supplied [Velo + Noir Builder Handbook](seed/sources/velo-noir-builder-handbook.md); its original DOCX is preserved in seed/sources/. [AGENTS.md](AGENTS.md), [routing](AGENT_ROUTING.md), [decision ledger](docs/decision-ledger.md) and [research](work/evidence-ledger.md) retain project context.
+
+L-002 parent approvals are implemented locally under [DEC-084](docs/decision-ledger.md); see [the packet](handoff/L-002.md) for current verification limits. The owner signs each isolated exception; routine agent policy remains unchanged.
