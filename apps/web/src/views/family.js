@@ -13,7 +13,7 @@ export function renderFamilyPage(content, state, controller) {
 }
 function renderRules(content, state, controller) {
   const panel = el('section', 'preview-panel'); panel.append(el('h2', '', 'Saved family rules'));
-  panel.append(el('p', '', 'Needs cap and category changes apply to future purchases. Existing purchases keep their original rules. The saved amount and split are used when you distribute funds from the parent overview. Scheduling and Wants spending are not active yet.'));
+  panel.append(el('p', '', 'Purchase cap and category changes apply to future purchases. Existing purchases keep their original rules. The saved amount and split are used when you distribute funds from the parent overview. Scheduling is not active yet.'));
   if (state.rulesError) { const error = el('p', 'notice notice-error', state.rulesError); error.setAttribute('role', 'alert'); panel.append(error); }
   if (!state.familyRules) { panel.append(el('p', '', 'Rules have not loaded.'), refreshButton(controller)); content.append(panel); return; }
   const settings = state.rulesDraft || state.familyRules.settings;
@@ -25,7 +25,7 @@ function renderRules(content, state, controller) {
     if (name === 'needsPercent') { input.min = '0'; input.max = '100'; input.step = '1'; }
     wrap.append(input); form.append(wrap); inputs[name] = input;
   }
-  for (const [key, title] of [['needsCategories','Needs allowed categories'],['wantsCategories','Wants categories (setup only)']]) {
+  for (const [key, title] of [['needsCategories','Needs allowed categories'],['wantsCategories','Wants allowed categories']]) {
     const group = el('fieldset', 'live-category-group'); group.append(el('legend', '', title));
     for (const category of state.familyRules.categories) {
       const label = el('label', 'live-category-choice'), checkbox = el('input'); checkbox.type = 'checkbox'; checkbox.name = key; checkbox.value = category.id; checkbox.checked = settings[key].includes(category.id); checkbox.disabled = Boolean(state.rulesBusy);
@@ -52,7 +52,7 @@ function renderRules(content, state, controller) {
 }
 function renderActivity(content, state, controller, approvalMode=false) {
   if(approvalMode) state={...state,activity:state.approvals?{items:state.approvals.purchases.filter(p=>p.approvalBinding).map(p=>({...p,productName:p.ai?.productName,category:p.ai?.category}))}:null,activityError:state.approvalError};
-  const panel = el('section', 'preview-panel'); panel.append(el('h2', '', approvalMode?'Purchase approvals':'Needs purchases'), el('p', '', approvalMode?'Review the exact request and photo. Decisions close after ten minutes. Approving starts a Testnet payment; it is paid only after confirmation.':'Actual submitted purchases. Pending or blocked purchases are not shown as paid.'), refreshButton(controller));
+  const panel = el('section', 'preview-panel'); panel.append(el('h2', '', approvalMode?'Purchase approvals':'Allowance purchases'), el('p', '', approvalMode?'Review the exact request and photo. Decisions close after ten minutes. Approving starts a Testnet payment; it is paid only after confirmation.':'Actual submitted purchases. Pending or blocked purchases are not shown as paid.'), refreshButton(controller));
   if (state.activityError) { const error = el('p', 'notice notice-error', state.activityError); error.setAttribute('role', 'alert'); panel.append(error); }
   if (!state.activity) panel.append(el('p', '', 'Activity has not loaded.'));
   else if (!state.activity.items.length) panel.append(el('p', '', 'No purchases yet.'));
@@ -61,7 +61,7 @@ function renderActivity(content, state, controller, approvalMode=false) {
   for (const [index, purchase] of (state.activity?.items || []).entries()) {
     const card = el('article', 'live-activity-row');
     const photo = el('button', 'live-photo-button', 'Load item photo'); photo.type = 'button'; photo.setAttribute('aria-label', `View photo: ${purchase.productName || 'purchase'}`);
-    const details = el('div', 'live-activity-details'); details.append(el('h3', '', purchase.productName || 'Item assessment unavailable'), el('p', '', `${pesos(purchase.priceMinor)} · ${Number(purchase.amountStroops) / 10000000} Testnet XLM`), el('p', '', `Status: ${purchase.status === 'claimed' ? 'Paid · seller claimed' : purchase.status.replaceAll('_',' ')}`));
+    const details = el('div', 'live-activity-details'); details.append(el('h3', '', `${purchase.bucket === 'wants' ? 'Wants' : 'Needs'} · ${purchase.productName || 'Item assessment unavailable'}`), el('p', '', `${pesos(purchase.priceMinor)} · ${Number(purchase.amountStroops) / 10000000} Testnet XLM`), el('p', '', `Status: ${purchase.status === 'claimed' ? 'Paid · seller claimed' : purchase.status.replaceAll('_',' ')}`));
     if (purchase.reason) details.append(el('p', '', purchase.reason.replaceAll('_',' ')));
     details.append(el('p', '', new Date(purchase.createdAt).toLocaleString()));
     if(approvalMode){

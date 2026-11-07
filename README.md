@@ -16,9 +16,9 @@ OFW parents sending a student allowance may want visibility into allowance purch
 
 ## Solution
 
-The parent signs in, saves an allowance amount, Needs/Wants split, purchase cap and allowed categories, and explicitly distributes Testnet funds into separate backed escrows. The student submits a product photo and price; the agent identifies the item and applies the saved Needs rules before attempting payment. Both roles can view actual allowance activity and authorized purchase photos.
+The parent signs in, saves an allowance amount, Needs/Wants split, purchase cap and allowed categories, and explicitly distributes Testnet funds into separate backed escrows. The student submits a product photo and price; the agent identifies the item and applies the selected bucket’s saved rules before attempting payment. Both roles can view actual allowance activity and authorized purchase photos.
 
-Parent Deposit integrates Velo checkout for a top-up to the parent wallet before a separate Noir allocation. Matching-receiver checkout creation and status retrieval are verified; a paid parent top-up has not yet been observed. Wants is funded and displayed, but Wants spending is unfinished. Parent approvals now have a connected local implementation with ten-minute expiry, immutable request review and isolated exception payments. A bounded Testnet exception was claimed and revoked with the routine policy unchanged. Savings releases, private My Money spending, weekly automation and in-app withdrawals remain unavailable. Approval release evidence remains in [L-002](handoff/L-002.md).
+Parent Deposit integrates Velo checkout for a top-up to the parent wallet before a separate Noir allocation. Matching-receiver checkout creation and status retrieval are verified; a paid parent top-up has not yet been observed. Wants purchases now have a connected local implementation with isolated rules, reservations and escrow selection; release evidence is tracked in [L-003](handoff/L-003.md). Parent approvals now have a connected local implementation with ten-minute expiry, immutable request review and isolated exception payments. A bounded Testnet exception was claimed and revoked with the routine policy unchanged. Savings releases, private My Money spending, weekly automation and in-app withdrawals remain unavailable. Approval release evidence remains in [L-002](handoff/L-002.md).
 
 ## How the agentic payment works
 
@@ -165,7 +165,7 @@ Actual signed-in **local Testnet** views, captured during verification. These ar
 
 - Record and link the required two-minute demo, add registered Discord handles, and rehearse the public deployment.
 - Verify a paid Velo parent-wallet top-up through hosted checkout and subsequent Noir distribution.
-- Enable Wants spending and complete production release verification for parent approvals.
+- Complete release verification for Wants purchases; connect Savings releases and private My Money spending.
 - Connect Savings releases, private My Money spending, weekly scheduling/rollover and in-app test-anchor withdrawal.
 - Improve progress feedback for sequential Testnet confirmations and establish safe operator recovery for interrupted operations.
 - Verify supported photo categories on real images; model identification is fallible and does not prove price, delivery or medical/health properties.

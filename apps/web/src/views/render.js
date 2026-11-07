@@ -145,13 +145,18 @@ function renderShell(root, state, controller) {
   } else if (!state.mock && state.user.role === 'student') {
     const panel = el('section', 'preview-panel');
     panel.append(el('h2', '', 'Pay the demo seller'));
-    panel.append(el('p', '', 'Use your Needs balance. Peso amounts are simulated; payments use Stellar Testnet.'));
+    panel.append(el('p', '', 'Choose your Needs or Wants balance. Peso amounts are simulated; payments use Stellar Testnet.'));
     const available = state.purchaseHistory?.availableNeedsStroops;
     if (available !== undefined) panel.append(el('p', '', `Available Needs: ${Number(available) / 10000000} Testnet XLM`));
-    if (state.purchaseHistory?.availableWantsStroops !== undefined) panel.append(el('p', '', `Funded Wants: ${Number(state.purchaseHistory.availableWantsStroops)/10000000} Testnet XLM. Wants spending is not enabled yet.`));
+    if (state.purchaseHistory?.availableWantsStroops !== undefined) panel.append(el('p', '', `Available Wants: ${Number(state.purchaseHistory.availableWantsStroops)/10000000} Testnet XLM.`));
     const rules = state.purchaseHistory?.rules;
     if (rules) panel.append(el('p', '', `Purchase limit: ₱${Number(rules.capMinor) / 100}. Allowed: ${rules.allowedCategories.join(', ').replaceAll('_', ' ')}.`));
     const form = el('form', 'signin-form');
+    const bucketLabel = el('label', 'field-label', 'Pay from');
+    const bucket = el('select', 'field-input'); bucket.name = 'bucket'; bucket.disabled = Boolean(state.purchaseBusy);
+    for (const [value, title] of [['needs','Needs'],['wants','Wants']]) { const option = el('option', '', title); option.value = value; bucket.append(option); }
+    bucketLabel.append(bucket); form.append(bucketLabel);
+    if (state.purchaseHistory?.wantsRules) panel.append(el('p', '', `Wants allowed: ${state.purchaseHistory.wantsRules.allowedCategories.join(', ').replaceAll('_',' ') || 'No categories selected; parent review required'}.`));
     const photoLabel = el('label', 'field-label', 'Product photo (PNG or JPEG, up to 2 MiB)');
     const photo = el('input', 'field-input'); photo.type = 'file'; photo.accept = 'image/png,image/jpeg'; photo.hidden = true; photoLabel.append(photo);
     const choosePhoto = el('button', 'camera-trigger', 'Choose a photo'); choosePhoto.type = 'button'; choosePhoto.addEventListener('click', () => photo.click());
@@ -164,11 +169,11 @@ function renderShell(root, state, controller) {
     const submit = el('button', 'button button-primary', state.purchaseBusy ? 'Checking purchase…' : 'Submit purchase');
     submit.type = 'submit'; submit.disabled = Boolean(state.purchaseBusy || state.purchaseHistory?.purchases.some(p => !['blocked','claimed','failed','rejected','expired'].includes(p.status)));
     const photoActions = el('div', 'photo-actions'); photoActions.append(camera, choosePhoto);
-    form.append(photoLabel, photoActions, photoSelection, priceLabel, submit); form.addEventListener('submit', event => { event.preventDefault(); if (!selectedPhoto) { photoSelection.textContent = 'Take or choose a product photo first.'; return; } void controller.submitPurchase(selectedPhoto, price.value); }); panel.append(form);
+    form.append(photoLabel, photoActions, photoSelection, priceLabel, submit); form.addEventListener('submit', event => { event.preventDefault(); if (!selectedPhoto) { photoSelection.textContent = 'Take or choose a product photo first.'; return; } void controller.submitPurchase(selectedPhoto, price.value, bucket.value); }); panel.append(form);
     if (state.purchaseError) { const error = el('p', '', state.purchaseError); error.setAttribute('role', 'alert'); panel.append(error); }
     const refresh = el('button', 'button button-secondary', 'Refresh purchase status'); refresh.type = 'button'; refresh.addEventListener('click', () => controller.refreshPurchases()); panel.append(refresh);
     for (const purchase of state.purchaseHistory?.purchases || []) {
-      const card = el('article', 'preview-panel'); card.append(el('h3', '', `Purchase: ${purchase.status}`));
+      const card = el('article', 'preview-panel'); card.append(el('h3', '', `${purchase.bucket === 'wants' ? 'Wants' : 'Needs'} purchase: ${purchase.status}`));
       card.append(el('p', '', `Simulated ₱${Number(purchase.priceMinor) / 100} · ${Number(purchase.amountStroops) / 10000000} Testnet XLM`));
       if (purchase.ai) card.append(el('p', '', `AI identification: ${purchase.ai.productName || 'Unclear'} · ${purchase.ai.category.replaceAll('_', ' ')}`));
       if(purchase.approvalDeadline)card.append(el('p','',`Parent decision deadline: ${new Date(purchase.approvalDeadline).toLocaleString()}`));

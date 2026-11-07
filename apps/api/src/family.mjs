@@ -18,10 +18,10 @@ export async function readFamilyRules(db, familyId) {
   if (!validSettings(result.data.settings)) throw fail(503, 'INVALID_STORED_RULES');
   return { revision: Number(result.data.revision), settings: result.data.settings, updatedAt: result.data.updated_at };
 }
-export function purchaseRulesFromSettings({ revision, settings }) {
-  return { version: revision ? `family-v1-${revision}` : 'needs-demo-v2', capMinor: settings.capMinor, capStroops: phpToStroops(settings.capMinor), allowedCategories: settings.needsCategories, sellerId: 'demo-seller', mappingVersion: MONEY_MAPPING.version };
+export function purchaseRulesFromSettings({ revision, settings }, bucket = 'needs') {
+  return { version: revision ? `family-v1-${revision}` : 'needs-demo-v2', capMinor: settings.capMinor, capStroops: phpToStroops(settings.capMinor), allowedCategories: bucket === 'wants' ? settings.wantsCategories : settings.needsCategories, sellerId: 'demo-seller', mappingVersion: MONEY_MAPPING.version };
 }
-const activityColumns = 'id,student_id,status,reason,seller_id,price_minor,amount_stroops,ai,created_at,reserved';
+const activityColumns = 'id,student_id,status,reason,seller_id,price_minor,amount_stroops,ai,created_at,reserved,bucket';
 export async function family(req, res, { authenticate = authenticateMember, database = createClient } = {}) {
   res.setHeader('Content-Type', 'application/json'); res.setHeader('Cache-Control', 'no-store');
   const send = (status, body) => { res.statusCode = status; res.end(JSON.stringify(body)); };
@@ -34,7 +34,7 @@ export async function family(req, res, { authenticate = authenticateMember, data
     if (req.method === 'PUT' && member.role !== 'parent') throw fail(403, 'FORBIDDEN');
     const db = database(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
     if (path.endsWith('rules')) {
-      if (req.method === 'GET') return send(200, { ...await readFamilyRules(db, member.family_id), categories: CATEGORY_CATALOG, activePurchaseBucket: 'needs', schedulingEnabled: false });
+      if (req.method === 'GET') return send(200, { ...await readFamilyRules(db, member.family_id), categories: CATEGORY_CATALOG, activePurchaseBucket: 'needs', activePurchaseBuckets: ['needs','wants'], schedulingEnabled: false });
       let body = req.body;
       if (body === undefined) { let raw = ''; for await (const chunk of req) { raw += chunk; if (Buffer.byteLength(raw) > 4096) throw fail(413, 'INVALID_INPUT'); } try { body = JSON.parse(raw); } catch { throw fail(400, 'INVALID_INPUT'); } }
       if (typeof body === 'string') { try { body = JSON.parse(body); } catch { throw fail(400, 'INVALID_INPUT'); } }
@@ -49,7 +49,7 @@ export async function family(req, res, { authenticate = authenticateMember, data
     if (member.role === 'student') query = query.eq('student_id', member.user_id);
     const result = await query.order('created_at', { ascending: false }).limit(100);
     if (result.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
-    const items = result.data.map(row => ({ id: row.id, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), bucket: 'needs', productName: row.ai?.productName ?? null, category: row.ai?.category ?? null, createdAt: row.created_at, photoPath: `/api/purchases/${row.id}/photo` }));
+    const items = result.data.map(row => ({ id: row.id, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), bucket: row.bucket ?? 'needs', productName: row.ai?.productName ?? null, category: row.ai?.category ?? null, createdAt: row.created_at, photoPath: `/api/purchases/${row.id}/photo` }));
     return send(200, { items, limit: 100 });
   } catch (error) { send(error.status ?? 503, { error: { code: error.code ?? 'PROVIDER_UNAVAILABLE', message: error.code ?? 'Family service unavailable.', retryable: false } }); }
 }

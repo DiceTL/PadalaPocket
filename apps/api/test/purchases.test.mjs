@@ -26,7 +26,7 @@ function fixture({ role = 'student', ai = { productName: 'Notebook', category: '
     };
     const q = { select() { return this; }, eq(k,v) { filters.push([k,v]); return this; }, order: run, maybeSingle() { single = true; return run(); }, single() { single = true; return run(); }, update(patch) { mutation = patch; return this; }, insert(row) { insert = row; return this; }, then(resolve,reject) { return run().then(resolve,reject); } }; return q;
   }
-  const db = { from(name) { calls.db++; if (name === 'needs_funding') return { select() { return this; }, eq() { return this; }, then(resolve) { return Promise.resolve({ data: [{ amount_stroops: '10000000' }] }).then(resolve); } }; return table(); }, rpc: async (name, args={}) => {
+  const db = { from(name) { calls.db++; if (name === 'needs_funding') return { select() { return this; }, eq() { return this; }, then(resolve) { return Promise.resolve({ data: [{ amount_stroops: '10000000', wants_stroops: '8000000' }] }).then(resolve); } }; return table(); }, rpc: async (name, args={}) => {
     if(name==='expire_purchase_reviews')return {data:null};
     const {p_id}=args;
     if(name==='admit_purchase_exception'){
@@ -274,3 +274,20 @@ test('an admitted stage cannot be executed by a second writer before its checkpo
  assert.equal(duplicate.body.executionStarted,true);assert.deepEqual(f.calls.prepare,['exception_device']);
  finish();await first;assert.equal(f.rows[0].exception_stage,1);assert.equal(f.rows[0].exception_started,false);
 });
+test('Wants uses its own policy and escrow, and replay cannot switch buckets', async () => {
+  const f=fixture();
+  f.deps.loadRules=async()=>({revision:3,settings:{...DEFAULT_SETTINGS,needsCategories:[],wantsCategories:['school_supplies']}});
+  const devices=[]; const prepare=f.ledger.prepare;
+  f.ledger.prepare=async(stage,row,device)=>{devices.push(device);return prepare(stage,row,device);};
+  const result=await f.request('POST',{...payload,bucket:'wants'});
+  assert.equal(result.body.status,'claimed');assert.equal(result.body.bucket,'wants');
+  const {createHash}=await import('node:crypto');
+  assert.deepEqual(devices,Array(3).fill(createHash('sha256').update('PadalaPocket Wants family').digest('hex')));
+  assert.equal((await f.request('POST',{...payload,bucket:'needs'})).statusCode,409);
+  const replay=await f.request('POST',{...payload,bucket:'wants'});assert.equal(replay.body.id,result.body.id);assert.equal(f.calls.submit.length,3);
+});
+test('available Wants subtracts only Wants reservations', async()=>{
+  const f=fixture({rows:[{id,status:'claimed',student_id:student,family_id:'family',bucket:'wants',amount_stroops:'2500000',reserved:true,steps:{}}]});
+  const result=await f.request('GET');assert.equal(result.body.availableNeedsStroops,'10000000');assert.equal(result.body.availableWantsStroops,'5500000');
+});
+test('unknown bucket fails before photo identification',async()=>{const f=fixture();assert.equal((await f.request('POST',{...payload,bucket:'savings'})).statusCode,400);assert.equal(f.calls.ai,0);});

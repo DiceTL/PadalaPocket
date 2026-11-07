@@ -9,7 +9,7 @@ export function approvalBinding(row) {
   const fields = ['id', 'family_id', 'student_id', 'fingerprint', 'seller_id', 'price_minor', 'amount_stroops', 'photo_hash', 'created_at'];
   if (fields.some(key => row[key] === undefined || row[key] === null) || !row.rules || !row.ai) throw Error('INVALID_APPROVAL_REQUEST');
   return createHash('sha256').update(JSON.stringify([
-    'PadalaPocket:purchase-approval:v1', ...fields.map(key => String(row[key])), row.rules, row.ai,
+    'PadalaPocket:purchase-approval:v1', ...fields.map(key => String(row[key])), row.rules, row.ai, ...(row.bucket === 'wants' ? [row.bucket] : []),
   ])).digest('hex');
 }
 

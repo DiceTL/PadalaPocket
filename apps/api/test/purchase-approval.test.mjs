@@ -33,3 +33,7 @@ test('owner consent signature cannot be reused for a changed purchase, merchant 
  assert.throws(()=>verifyExceptionConsent(row,owner.publicKey(),Keypair.random().publicKey(),asset),/INVALID_CONSENT/);
  assert.throws(()=>verifyExceptionConsent({...row,nonce:2},owner.publicKey(),merchant,asset),/INVALID_CONSENT/);
 });
+test('Wants consent binds bucket while historical Needs binding stays compatible',()=>{
+ const row=makeRow();assert.equal(approvalBinding(row),approvalBinding({...row,bucket:'needs'}));
+ assert.notEqual(approvalBinding(row),approvalBinding({...row,bucket:'wants'}));
+});

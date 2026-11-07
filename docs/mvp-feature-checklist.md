@@ -40,7 +40,7 @@ DEC-083 establishes this goal and ordering. Exact copy, visual treatment and tut
 - [x] Funding records and transaction hashes persist; repeated requests do not intentionally create a second allocation.
 - [x] Student sees confirmed Needs availability and funded Wants; parent totals are labeled allocations rather than remaining spendable balances.
 - [x] Partial/unknown allocation results stay unavailable and block conflicting money operations.
-- [ ] Wants purchases actually enforce the saved Wants rules. Saving those settings alone does not activate spending.
+- [x] Wants purchases enforce saved Wants rules in the local implementation; release evidence and deployment limits are in [L-003](../handoff/L-003.md).
 - [ ] Parent can choose the recurring weekly day/time and have it execute. A saved weekly amount currently supports manual distribution only.
 
 Evidence: [L-001](../handoff/L-001.md), [L-003A](../handoff/L-003A.md). Interrupted funding recovery remains deliberately disabled; there is no general automatic recovery guarantee.
@@ -58,7 +58,8 @@ Evidence: [L-001](../handoff/L-001.md), [L-003A](../handoff/L-003A.md). Interrup
 - [x] Purchase reservations and immutable signed operations guard against duplicate spending; unknown execution stays distinct from success.
 - [ ] Verify classification with an actual apple photo. Catalog/prompt tests do not establish live image accuracy.
 - [x] New over-cap/category-conflict requests enter parent review after balance reservation; historical blocked requests stay blocked.
-- [ ] Add spending from Wants and private My Money through their own backed flows.
+- [x] Add spending from Wants through its own backed escrow.
+- [ ] Add private My Money spending through its own backed flow.
 
 Evidence: [R-002](../handoff/R-002.md), [L-007](../handoff/L-007.md). AI does not verify market price, delivery or authenticity. The current seller is fixed; arbitrary seller selection/QR payment is not implemented.
 
@@ -107,7 +108,7 @@ Evidence: [L-006](../handoff/L-006.md). The historical paid Velo proof uses a se
 
 ## Remaining wallet and weekly lifecycle
 
-- [ ] Wants can pay from its own confirmed balance without consuming Needs.
+- [x] Wants can pay from its own confirmed balance without consuming Needs; one bounded live Testnet purchase verified both escrow balances.
 - [ ] Reconciled week-end Needs leftovers move to Savings; Wants leftovers move to My Money exactly once.
 - [ ] Student requests Savings release; parent approval transfers the approved amount to My Money, while rejection transfers nothing.
 - [ ] My Money has a real student-controlled balance/history and spending without photo, parental approval or parental category/cap checks.

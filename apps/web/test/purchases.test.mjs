@@ -21,3 +21,14 @@ test('student reload restores real purchase history; explicit claim reloads back
 test('mock purchase client cannot silently call the live endpoint', async () => {
   const api = createApiClient({ mode: 'mock', fetchImpl: () => assert.fail('live request') }); await assert.rejects(api.purchases(), /live API/);
 });
+test('student submission passes selected bucket and gives each bucket a distinct request key',async()=>{
+ const previous={FileReader:globalThis.FileReader,localStorage:globalThis.localStorage};const storage=new Map();const calls=[];
+ globalThis.localStorage={getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v)};
+ globalThis.FileReader=class {readAsDataURL(){this.result='data:image/png;base64,cGhvdG8=';this.onload();}};
+ try {
+  const controller=createAppController({auth:{mode:'live'},api:{mode:'live',getMe:async()=>({userId:'student',role:'student'}),purchases:async(method,payload,key)=>{if(method==='POST')calls.push({payload,key});return{purchases:[]};}}});
+  await controller.restore();const file={type:'image/png',size:5};
+  await controller.submitPurchase(file,'1.00','wants');await controller.submitPurchase(file,'1.00','needs');
+  assert.deepEqual(calls.map(c=>c.payload.bucket),['wants','needs']);assert.notEqual(calls[0].key,calls[1].key);
+ }finally{globalThis.FileReader=previous.FileReader;globalThis.localStorage=previous.localStorage;}
+});

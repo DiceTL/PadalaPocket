@@ -98,7 +98,7 @@ export function createAppController({ auth, api }) {
       finally { if (currentSession(epoch, userId)) { state = { ...state, rulesBusy: false }; publish(); } }
     },
     refreshPurchases: loadPurchases,
-    async submitPurchase(file, price) {
+    async submitPurchase(file, price, bucket = 'needs') {
       if (state.purchaseBusy || !file) return;
       const epoch = sessionEpoch, userId = state.user?.userId;
       state = { ...state, purchaseBusy: true, purchaseError: null }; publish();
@@ -108,7 +108,7 @@ export function createAppController({ auth, api }) {
         const [whole, fraction = ''] = price.split('.');
         const priceMinor = (BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0'))).toString();
         const photoBase64 = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result.split(',')[1]); reader.onerror = reject; reader.readAsDataURL(file); });
-        const payload = { sellerId: 'demo-seller', priceMinor, mime: file.type, photoBase64 };
+        const payload = { bucket, sellerId: 'demo-seller', priceMinor, mime: file.type, photoBase64 };
         const digest = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(payload)))), b => b.toString(16).padStart(2, '0')).join('');
         const storageKey = 'purchaseRequest:' + state.user.userId;
         const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');

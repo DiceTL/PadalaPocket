@@ -9,7 +9,7 @@ import { readFamilyRules, purchaseRulesFromSettings } from './family.mjs';
 const fail = (status, code) => Object.assign(Error(code), { status, code });
 const uuid = /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-export const purchaseProjection = row => ({ id: row.id, requestKey: row.request_key, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), rules: row.rules, ai: row.ai, createdAt: row.created_at, approvalBinding: row.approval_binding ?? null, approvalDeadline: row.approval_deadline ?? null, parentDecision: row.parent_decision ?? null, executionStarted: Boolean(row.exception_started), completedStages: row.exception_stage ?? 0, transactions: Object.fromEntries(Object.entries(row.steps).map(([name, step]) => [name, { hash: step.hash }])), evidence: row.evidence });
+export const purchaseProjection = row => ({ id: row.id, bucket: row.bucket ?? 'needs', requestKey: row.request_key, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), rules: row.rules, ai: row.ai, createdAt: row.created_at, approvalBinding: row.approval_binding ?? null, approvalDeadline: row.approval_deadline ?? null, parentDecision: row.parent_decision ?? null, executionStarted: Boolean(row.exception_started), completedStages: row.exception_stage ?? 0, transactions: Object.fromEntries(Object.entries(row.steps).map(([name, step]) => [name, { hash: step.hash }])), evidence: row.evidence });
 export async function purchases(req, res, { authenticate = authenticateMember, database = createClient, validate = validatePhoto, identify = identifyPhoto, ledger = purchaseLedger, loadRules = readFamilyRules } = {}) {
   res.setHeader('Cache-Control', 'no-store'); res.setHeader('Content-Type', 'application/json');
   const send = (status, body) => { res.statusCode = status; res.end(JSON.stringify(body)); };
@@ -41,7 +41,7 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
     };
     let chain;
     const network = () => chain ??= ledger();
-    const device = hash('PadalaPocket Needs ' + member.family_id);
+    const device = row => hash('PadalaPocket ' + (row.bucket === 'wants' ? 'Wants ' : 'Needs ') + member.family_id);
     async function reconcile(row) {
       if (row.status === 'unknown' && row.reason === 'AI_UNAVAILABLE' && !row.reserved && !row.ai && Object.keys(row.steps).length === 0) { await save(row, { status: 'blocked' }); return; }
       if (['blocked','claimed','failed','awaiting_parent','approved','rejected','expired'].includes(row.status)) return;
@@ -71,7 +71,7 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
     }
     async function dispatch(row, stage, pendingStatus) {
       if (row.steps[stage]) throw Error('STEP_ALREADY_EXISTS');
-      const step = await network().prepare(stage, row, device);
+      const step = await network().prepare(stage, row, device(row));
       if (!await save(row, { steps: { ...row.steps, [stage]: step }, status: pendingStatus })) throw Error('STALE_OPERATION');
       await network().submit(step.signed);
       const result = await network().status(step.hash);
@@ -97,7 +97,7 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
         const index=row.exception_stage,stage=EXCEPTION_STAGES[index];
         if(index===0){
           if(!await save(row,{status:'exception_pending',exception_consent:network().consent(row),evidence:{merchant:network().merchantPublicKey}}))return;
-          if(!await network().exceptionReady(row) || await network().escrow(device)<BigInt(row.amount_stroops) || await network().pending()!==0n)throw Error('BACKING_UNAVAILABLE');
+          if(!await network().exceptionReady(row) || await network().escrow(device(row))<BigInt(row.amount_stroops) || await network().pending()!==0n)throw Error('BACKING_UNAVAILABLE');
         }
         await dispatch(row,stage,'exception_pending');
         if(stage==='exception_authorize' && await network().pending()!==BigInt(row.amount_stroops))throw Error('MERCHANT_PENDING_MISMATCH');
@@ -139,23 +139,25 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       const funding = await db.from('needs_funding').select('amount_stroops,wants_stroops').eq('family_id', member.family_id).eq('status', 'confirmed');
       if (funding.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
       const credits = funding.data.reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
-      const held = result.data.filter(row => row.reserved).reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
-      return send(200, { purchases: result.data.map(purchaseProjection), rules: purchaseRulesFromSettings(await loadRules(db, member.family_id)), availableNeedsStroops: (credits - held).toString(), availableWantsStroops: funding.data.reduce((sum,r)=>sum+BigInt(r.wants_stroops??'0'),0n).toString() });
+      const held = result.data.filter(row => row.reserved && row.bucket !== 'wants').reduce((sum, row) => sum + BigInt(row.amount_stroops), 0n);
+      const familyRules = await loadRules(db, member.family_id);
+      return send(200, { purchases: result.data.map(purchaseProjection), rules: purchaseRulesFromSettings(familyRules), availableNeedsStroops: (credits - held).toString(), wantsRules: purchaseRulesFromSettings(familyRules, 'wants'), availableWantsStroops: (funding.data.reduce((sum,r)=>sum+BigInt(r.wants_stroops??'0'),0n) - result.data.filter(row=>row.reserved && row.bucket==='wants').reduce((sum,row)=>sum+BigInt(row.amount_stroops),0n)).toString() });
     }
     const key = req.headers['idempotency-key']; if (!uuid.test(key ?? '')) throw fail(400, 'INVALID_INPUT');
     let body = req.body;
     if (body === undefined) { let raw = ''; for await (const part of req) { raw += part; if (Buffer.byteLength(raw) > 3000000) throw fail(400, 'INVALID_INPUT'); } try { body = JSON.parse(raw); } catch { throw fail(400, 'INVALID_INPUT'); } }
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch { throw fail(400, 'INVALID_INPUT'); } }
-    if (!body || Object.keys(body).sort().join(',') !== 'mime,photoBase64,priceMinor,sellerId' || body.sellerId !== 'demo-seller' || typeof body.priceMinor !== 'string' || !/^[1-9][0-9]{0,8}$/.test(body.priceMinor) || !['image/png','image/jpeg'].includes(body.mime) || typeof body.photoBase64 !== 'string' || body.photoBase64.length > 2796204) throw fail(400, 'INVALID_INPUT');
+    if (!body || !['mime,photoBase64,priceMinor,sellerId','bucket,mime,photoBase64,priceMinor,sellerId'].includes(Object.keys(body).sort().join(',')) || body.bucket !== undefined && !['needs','wants'].includes(body.bucket) || body.sellerId !== 'demo-seller' || typeof body.priceMinor !== 'string' || !/^[1-9][0-9]{0,8}$/.test(body.priceMinor) || !['image/png','image/jpeg'].includes(body.mime) || typeof body.photoBase64 !== 'string' || body.photoBase64.length > 2796204) throw fail(400, 'INVALID_INPUT');
     const bytes = Buffer.from(body.photoBase64, 'base64');
     if (!bytes.length || bytes.length > 2097152 || bytes.toString('base64') !== body.photoBase64) throw fail(400, 'INVALID_PHOTO');
-    const fingerprint = hash(JSON.stringify([body.sellerId, body.priceMinor, body.mime, hash(bytes)]));
+    const bucket = body.bucket ?? 'needs';
+    const fingerprint = hash(JSON.stringify([body.sellerId, body.priceMinor, body.mime, hash(bytes), ...(bucket === 'wants' ? [bucket] : [])]));
     const existing = await table().select('*').eq('student_id', member.user_id).eq('request_key', key).maybeSingle();
     if (existing.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
     if (existing.data) { if (existing.data.fingerprint !== fingerprint) throw fail(409, 'IDEMPOTENCY_CONFLICT'); await reconcile(existing.data); return send(200, purchaseProjection(existing.data)); }
     try { await validate(bytes, body.mime); } catch { throw fail(400, 'INVALID_PHOTO'); }
-    const savedRules = purchaseRulesFromSettings(await loadRules(db, member.family_id));
-    const inserted = await table().insert({ family_id: member.family_id, student_id: member.user_id, request_key: key, fingerprint, seller_id: body.sellerId, price_minor: body.priceMinor, amount_stroops: phpToStroops(body.priceMinor), photo_base64: body.photoBase64, photo_mime: body.mime, photo_hash: hash(bytes), rules: savedRules }).select('*').single();
+    const savedRules = purchaseRulesFromSettings(await loadRules(db, member.family_id), bucket);
+    const inserted = await table().insert({ family_id: member.family_id, bucket, student_id: member.user_id, request_key: key, fingerprint, seller_id: body.sellerId, price_minor: body.priceMinor, amount_stroops: phpToStroops(body.priceMinor), photo_base64: body.photoBase64, photo_mime: body.mime, photo_hash: hash(bytes), rules: savedRules }).select('*').single();
     if (inserted.error) {
       if (inserted.error.code !== '23505') throw fail(503, 'PROVIDER_UNAVAILABLE');
       const replay = await table().select('*').eq('student_id', member.user_id).eq('request_key', key).maybeSingle();
@@ -182,10 +184,10 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
         return send(201,purchaseProjection(row));
       }
       await save(row, { status: 'reserved', reserved: true, evidence: { merchant: network().merchantPublicKey } });
-      if (await network().escrow(device) < BigInt(row.amount_stroops)) throw Error('BACKING_UNAVAILABLE');
+      if (await network().escrow(device(row)) < BigInt(row.amount_stroops)) throw Error('BACKING_UNAVAILABLE');
       if (await network().pending() !== 0n) throw Error('MERCHANT_PENDING_CONFLICT');
       await dispatch(row, 'policy', 'policy_pending');
-      const check = await network().check(device, row.amount_stroops);
+      const check = await network().check(device(row), row.amount_stroops);
       if (!check.ok) throw Error('POLICY_BLOCKED');
       await dispatch(row, 'authorize', 'authorization_pending');
       await reconcile(row); await claim(row);
