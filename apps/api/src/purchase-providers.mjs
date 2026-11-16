@@ -11,10 +11,11 @@ export async function validatePhoto(bytes, mime) {
 }
 export async function identifyPhoto(bytes, mime) {
   if (!process.env.GROQ_API_KEY) throw Error('AI_UNAVAILABLE');
+  const model = process.env.GROQ_VISION_MODEL || 'qwen/qwen3.8-27b';
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST', redirect: 'error', signal: AbortSignal.timeout(30000),
     headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'qwen/qwen3.8-27b', reasoning_effort: 'none', max_completion_tokens: 512, response_format: { type: 'json_object' }, messages: [
+    body: JSON.stringify({ model, reasoning_effort: 'none', max_completion_tokens: 512, response_format: { type: 'json_object' }, messages: [
       { role: 'system', content: PRODUCT_IDENTIFICATION_PROMPT },
       { role: 'user', content: [{ type: 'text', text: 'Identify this product.' }, { type: 'image_url', image_url: { url: `data:${mime};base64,${bytes.toString('base64')}` } }] },
     ] }),
@@ -24,7 +25,7 @@ export async function identifyPhoto(bytes, mime) {
   const diagnostic = { httpStatus: response.status, finishReason: result.choices?.[0]?.finish_reason ?? null, usage: result.usage ?? null };
   try { ai = JSON.parse(result.choices?.[0]?.message?.content ?? 'null'); } catch { throw Object.assign(Error('AI_UNAVAILABLE'), { aiDiagnostic: diagnostic }); }
   if (!ai || !(ai.productName === null || typeof ai.productName === 'string' && ai.productName.length <= 200) || ![...CATEGORY_IDS,'unknown'].includes(ai.category) || typeof ai.uncertain !== 'boolean' || typeof ai.prohibited !== 'boolean') throw Object.assign(Error('AI_UNAVAILABLE'), { aiDiagnostic: diagnostic });
-  return { ai, usage: result.usage ?? null, model: 'qwen/qwen3.8-27b' };
+  return { ai, usage: result.usage ?? null, model };
 }
 export function purchaseLedger() {
   const noir = new NoirAgentClient({ network: 'testnet' }); noir.server.httpClient.defaults.timeout = 15000;
