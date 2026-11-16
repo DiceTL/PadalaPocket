@@ -4,6 +4,28 @@
 
 This shared overview image is also embedded in the event README. Detailed ownership, contracts and implementation boundaries follow below.
 
+## Current MVP architecture target — DEC-093–DEC-099
+
+The selected target is up to ten financially enabled families with isolated app-managed Testnet wallets and one hard-configured seller. Registration/linking need not wait for financial capacity. The existing image above depicts the provisioned demo, not an implemented multi-family deployment. Exact provisioning, key custody, signer permissions and recovery, pooled Velo receipt attribution and family accounting remain open; neither the Nov 14 [Velo experiment](../work/evidence-ledger.md#ev-027) nor this choice validates them. Seller unattended SEP-24 is also unresolved. No real fiat.
+
+```mermaid
+flowchart LR
+    Families["Families: up to 10 financially enabled"] --> API["Authenticated API / agent"]
+    Others["Additional families: registration/linking only"] --> API
+    API -. "Provisioning, signing and custody design open" .-> Wallets["Isolated app-managed family Testnet wallets"]
+    API -. "Create / verify linked checkout" .-> Velo["Velo checkout"]
+    Velo -. "Confirmed payment; evidence contract open" .-> Pool["Project Testnet wallet"]
+    Pool -. "Reserve once; confirmed transfer" .-> Wallets
+    Wallets --> Noir["Noir Testnet escrows / payments"]
+    Noir --> Seller["One configured seller"]
+    Seller -. "Unattended SEP-24 feasibility open" .-> Anchor["Test anchor: simulated fiat only"]
+    Operator["Authorized operator CLI target"] -. "Disable / safe queries" .-> API
+```
+
+This diagram shows the target and unresolved links, not shipped features. Disable requires reconciliation and confirmed recovery before capacity is released, subject to unavoidable reserves/fees; it does not recycle seller funds. Operational and privacy requirements are in the [product spec](product-spec.md#current-mvp-operational-choices--dec-093dec-099), with remaining design questions in [handoff](../work/backend-decision-questions.md).
+
+DEC-102 selects the target route shown: verified project receipt → one family-backed reservation → confirmed transfer to that family's parent wallet → available balance. Transaction evidence, safe reservation, custody and recovery contracts remain open; no transfer or family credit is implemented by this decision.
+
 ## Connected-function extension — DEC-070/071
 
 L-001 extends the existing Node/Supabase design with server-only versioned family rules and a role-filtered Needs activity read. Purchase rows retain immutable policy snapshots; private photos stay in the existing protected purchase journal. No new service, client database grants, money custody or ledger routing is introduced. L-002 now connects parent decisions and isolated exceptions as described below; release evidence remains in its packet. Remaining L-003–L-005 wallet, weekly and anchor flows are unfinished. Existing deadline sections below describe the earlier reduced release. Status is canonical in the implementation plan.

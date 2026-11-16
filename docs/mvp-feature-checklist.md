@@ -1,154 +1,260 @@
 # MVP feature checklist
 
-Evidence snapshot: **2026-11-07**. Current implementation: one provisioned parent, one student and one fixed demo seller, using Stellar Testnet and illustrative PHP amounts. Target MVP additionally requires real email signup and linked parent/child account creation under DEC-083; that capability is unfinished. One child per family remains the bounded target; support for additional children is not implied. This covers the broader connected MVP authorized by DEC-070 and later decisions, beyond the reduced submission journey in DEC-055.
+Repository/evidence review: **2026-11-14**. Backend-first acceptance map for the broader connected MVP, not just the reduced submission journey. Existing runtime evidence is dated in the linked packets; this document review did not rerun tests, send email, call AI or submit payments.
 
-**Reading this checklist:** checked items have implementation evidence in the linked packets; they do not mean merged, deployed or production-ready. Unchecked items are unfinished acceptance criteria or unverified outcomes. This document is an evidence/acceptance checklist, not a second task tracker: [implementation plan](implementation-plan.md) owns task status, [product spec](product-spec.md) owns requirements, and [decision ledger](decision-ledger.md) owns accepted changes. Older draft defaults must be read with their later decisions. Do not calculate a completion percentage by counting boxes: the work and risk differ substantially between features.
+## How to read this checklist
 
-## Accounts and access
+- `[x]` means the specifically described behavior has implementation and/or recorded verification evidence. Limits such as local-only or historical proof are explicit; it does **not** mean current production acceptance.
+- `[ ] Missing` means required functionality is absent. `[ ] Verify` means the implementation exists but the named acceptance evidence is incomplete. `[ ] Decide` means a contract or approach is still unsettled. `[ ] Release` means configuration, integration or deployment remains.
+- [Implementation plan](implementation-plan.md) is the only task-status source. Packets contain evidence, [product spec](product-spec.md) owns requirements, and [decision ledger](decision-ledger.md) owns accepted changes. This checklist changes no packet status and authorizes no new implementation.
+- Finish backend behavior and backend acceptance first; then finish browser integration and presentation. A missing API, money journal, notification event or account-state persistence is not frontend-only work. Do not calculate completion percentages from checkbox counts.
+- Financial evidence currently serves the provisioned demo family and one fixed seller. Separate-email signup/linking exists, but new families cannot transact. Testnet XLM and simulated PHP at the frozen mapping are not redeemable pesos or real GCash payout.
 
-- [x] Provisioned parent and student can sign in using Supabase Auth.
-- [x] Server derives trusted family/role identity and enforces access permissions.
-- [x] Durable application records survive a refresh/new request.
-- [x] Server signing keys and provider secrets stay outside browser code.
-- [ ] Parent can create a real account with email/password through the app, verify email ownership and sign in afterward; no seeded credentials are needed.
-- [ ] Parent can create or initiate creation of a separate linked child account; the child can sign in independently. Separate email/password credentials and email-bound setup codes are specified in [L-008](../handoff/L-008.md); mailbox delivery remains unverified.
-- [ ] New families receive their own authorized records and money resources; signup cannot attach them to the existing demo family or reuse its private balances/signing authority.
-- [ ] Duplicate email, invalid credentials, pending verification, expired verification and delivery failures have clear outcomes and a retry path.
-- [ ] Normal registration, sign-in and dashboards use the real family's information and truthful empty states, with no example-parent identities or sample balances.
+## Completion summary — decisions, work and release gates
 
-Password reset and broader invitation features remain separate scope decisions; child-account linking is required by DEC-083.
+**Use this as the completion gate, not another task tracker.** The detailed acceptance sections below and [open backend questions](../work/backend-decision-questions.md#remaining-questions-and-feasibility) remain the source for each criterion; task state stays only in the [implementation plan](implementation-plan.md). DEC-093–DEC-100 are confirmed choices, not questions to reopen or evidence of delivery. Their [acceptance checklist](#current-decision-acceptance--dec-093dec-100) supplements, rather than replaces, the original accounts, allowance, approval, Savings, private-money, weekly, withdrawal and PWA scope.
 
-Evidence: [R-001](../handoff/R-001.md), [R-002](../handoff/R-002.md). Self-service families are a target, not a verified implementation. Multiple children per family and arbitrary sellers remain outside the bounded MVP.
+### What must happen, in order
 
-## New-account guidance — implement last
+1. **Resolve the remaining product/team choices.** Agree measurable AI and login/dashboard targets after diagnosis; finalize each role's tutorial trigger, progress, completion and resume details once journeys stabilize. The weekly in-flight allowance amount/schedule restriction is decided; its race atomicity and failed/unknown/interrupted/resumed lock timing remain technical safety design questions. The ten-family target, deposit limits, disable/new-family rules, student notices, withdrawal intent and onboarding-last order are already accepted. No arbitrary performance threshold, replacement model/provider or production real-money support is selected here.
+2. **Investigate, then approve technical contracts before building their dependents.** Resolve supported Velo reporting and pooled family attribution; secure key storage/backup/restore, exact resource topology and provisioning; backed exactly-once credit, pending/cancel races, fees/reserves and disable recovery/capacity; shared-seller Noir claim aggregation and unattended/resumable SEP-24; and cross-deployment dispatch fencing/unknown recovery. Diagnose actual Groq access/results and Auth/API/database/browser latency. [The eleven open questions](../work/backend-decision-questions.md#remaining-questions-and-feasibility) own these investigations; architecture/provider suggestions are not approvals. Credentials, storage material/provider selection and bounded financial test authorization remain prerequisites, not permission to change secrets or transact.
+3. **Finish missing backend flows and their functional bare pages/routing first.** Close independent-family provisioning/account readiness and first-sign-in names; paid-deposit attribution/backed credit and limits/cancel; available parent-wallet projection; Savings requests/decisions/releases and private My Money spending/history; student bucket notices; two-step weekly reminder/event; app-driven seller withdrawal/status; and operator listing/errors/confirmed disable. Include durable authority, reservations, journals and supported reconciliation for each path. See [sections 1–9](#backend-completion-map) and [DEC-093–DEC-100 acceptance](#current-decision-acceptance--dec-093dec-100). Existing connected rules, purchase/review, bucket and weekly screens are not missing scaffolds; retain them and add only their missing contracts/integration.
+4. **Prove backend/functional completion with targeted evidence.** Exercise the matrix below against the combined intended release, carrying forward dated evidence for unchanged behavior and adding targeted regressions where contracts, signers, migrations or routes changed. Passing doubles, pure arithmetic or one old demo payment cannot close a new integration. Functional completion means every required backend flow and usable authenticated route works with truthful states and documented contracts; it does not mean designer acceptance or full project completion.
+5. **Finish onboarding last, with the final journeys.** Founder-owned functional information/tutorial pages and routing follow the working flows; verify independent per-account persistence and resume. Human frontend/design ownership remains unchanged for visual handoff, approved assets and presentation. Functional work must not wait for a visual redesign, but bare pages do not waive [frontend/responsive/accessibility](#11-frontend-integration-and-presentation-remaining) or [PWA/device](#12-installable-app--pwa-acceptance) acceptance.
+6. **Close full-project release and presentation acceptance.** Integrate the human-owned design/assets, finish device/PWA checks and the [release evidence](#13-release-and-final-backend-handoff-evidence), review/merge/configuration/deployment gates, judging README/actual architecture/setup and accessible two-minute recording/rehearsal. A limited working demo, a video URL or backend-only completion is not full project completion. Deferred packets remain deferred unless their own acceptance is met; this summary authorizes no implementation, submission, auth/readiness flip or scope cut.
 
-- [ ] Before signup, an information board explains that the parent and child need separate linked accounts and identifies the setup order: parent account, child account, then allowance setup.
-- [ ] Each newly created parent account receives a tutorial covering child setup, funding, Needs/Wants rules, approvals and activity.
-- [ ] Each newly created child account receives a tutorial covering their buckets, photo purchases, purchase status and privacy boundaries.
-- [ ] Tutorial progress/completion persists per account; a new child gets their own tutorial even if the parent has completed theirs. Resume interrupted onboarding without restarting completed steps on every sign-in.
-- [ ] Explain Testnet funds and illustrative PHP clearly in setup; account creation must not imply that a real peso wallet is ready.
-- [ ] Implement and verify the information board/tutorial after the functional journeys are finished, using their final controls and behavior.
+### Exact evidence required before “complete”
 
-DEC-083 establishes this goal and ordering. Exact copy, visual treatment and tutorial steps still follow design ownership; no onboarding is implemented by this checklist.
+Record the command/check, dated result, release commit/environment, sanitized operation identities/proof links and limitation in the owning packet. Separate automated/mock evidence, local API + hosted database evidence and actual deployed/live Testnet evidence. Reuse verified primitives; do not repeat successful live payments merely for a blanket retest.
 
-## Parent rules and allowance distribution
+| Gate | Required targeted tests / release proof |
+|---|---|
+| Identity and deploy parity | Corrected real inbox confirmation/resend → deployed enrollment/linking; registration/error matrix; intended deployed commit, ordered migrations and signer/configuration parity. Use real parent/student sessions and fresh-clone setup with the user's own resources. Local success or an applied hosted migration alone does not prove deployed acceptance. |
+| Custody, topology and capacity | After storage/access/recovery choices are approved and configured, first rehearse a disposable **unfunded** key: store → fresh-runtime restart/backup restore → public-key match and message signature verification; deny unauthorized retrieval/signing and check bundles/logs/errors for secrets or signed envelopes. This is a proposed test, not completed custody evidence. Then use explicitly bounded provisioning proof for family/network/purpose bindings, parent-owned Needs/Wants/Savings, distinct student My Money authority, agent policy/cap and genuine seller claim authority; verify backing/reserve/fee budget before wallet-ready. Exercise ten enabled slots, overflow registration/linking with financial gates, concurrent slot admission and no unprovisioned family access. |
+| Deposits and family accounting | Authorized two-family concurrent/repeated receipt observation and financial execution against the real database: one authenticated receipt credits only its intended family once, only after confirmed backing; independent funds/operations do not leak or consume another family's entitlement. Test ₱10 minimum, centavos, full ₱5,000 and cumulative-cap boundaries, one pending deposit, use of previously confirmed funds, safe-project-funds rejection and operator-only remaining cap. Cancel-versus-paid races and unknowns must reconcile without double credit or premature unblock. Server validation defeats forged callbacks, mismatched receiver/amount/asset/intent and cross-family IDs. Never manufacture paid family balances from checkout status. |
+| Allowance, purchases and approvals | Targeted regression of saved-rule revisions/snapshots, integer conservation, fees/reserves outside spendable funds, isolated buckets/holds and exact-request consent; add missing available parent balance and routine Wants live acceptance. Real-image category/uncertainty/restricted cases, AI unavailable/no-payment, insufficient/zero notices, approval/reject/ten-real-minute expiry races and duplicate submissions must preserve truthful status. Verify confirmed authorization **and seller claim**, refresh restoration, private photos and role/family denial. Measure AI/login/dashboard components against targets agreed after diagnosis, not an invented benchmark. |
+| Savings, private money and weekly | Actual confirmed Savings → My Money release and no-photo private spend/history; duplicate/concurrent/insufficient/unknown cases conserve funds. Deny parent access through IDs, APIs, lists, totals and notices, including new paths. Prove both-role reminder → weekly event, UI and server prevention of amount/schedule changes during either advance, direct API and concurrent-change races, latest saved allowance at event start, real-time expiry, rollover before next allocation, whole-allocation skip, replay/concurrency and pending/failure recaps. Exercise the approved safety design for interrupted, failed, unknown and resumed operations. Network time stays real; no production scheduler is implied. |
+| Shared seller and withdrawal | Prove supported Noir claim aggregation and coordination for two families sharing one seller, without unsupported per-purchase withdrawal attribution or other-family exposure. Verify current anchor limits, below-minimum accumulation, maximum batching, authenticated initiation/transfer and actual pending/failed/completed lookup; forged redirects and repeated initiation cannot settle twice. Demonstrate the agreed interactive/unattended behavior in the app, stop on unknown/failure and label fiat **simulated**, never real PHP/GCash payout. Historical operator anchor proof is not app acceptance. |
+| Recovery and operator lifecycle | Exercise agreed interruption boundaries across separate workers/deployments and expired requests for each money path: exact saved transaction identity, dispatch authority, safe checkpoint continuation and unknown fences. A missing hash/`NOT_FOUND` is not authority to clear a hold, flip readiness/Auth or create a replacement. Test operator safe queries, menu/list/error redaction and 30-day history; mutation requires explicit authorization, preview and confirmation. Disable blocks new work, reconciles unknowns, confirms recoverable return before slot release and retains keys/journals; test unavoidable costs, no seller recycling, permanent old-family disable and create/join-new-family role reuse/fresh cap with private old history. |
+| Browser, device and final handoff | Integrate every finished route with actual family data and truthful empty/loading/error/pending states; independent tutorial progress/resume and first-sign-in names. Obtain human design/assets approval, responsive and keyboard/focus/touch/accessibility evidence. Complete fresh logo/install UI checks, deployed manifest/cache headers, Android/desktop install and documented iOS installation, installed role layouts/sign-out/private-read denial, offline/reconnect/update restoration without duplicate operations. Finish combined release checks and judging README/architecture/SDK+transaction links/setup/screenshots/video/rehearsal; these are not replaced by a backend handoff. |
 
-- [x] Parent can save allowance amount, Needs/Wants split, purchase cap and category selections.
-- [x] Rule revisions prevent stale saves; new purchases snapshot their rules without rewriting earlier purchases.
-- [x] Parent can explicitly distribute the saved amount into separately backed Needs and Wants Noir escrows.
-- [x] Integer splitting preserves the total; fees/reserves remain separate from principal.
-- [x] Funding records and transaction hashes persist; repeated requests do not intentionally create a second allocation.
-- [x] Student sees confirmed Needs availability and funded Wants; parent totals are labeled allocations rather than remaining spendable balances.
-- [x] Partial/unknown allocation results stay unavailable and block conflicting money operations.
-- [x] Wants purchases enforce saved Wants rules in the local implementation; release evidence and deployment limits are in [L-003](../handoff/L-003.md).
-- [ ] Parent can choose the recurring weekly day/time and have it execute. A saved weekly amount currently supports manual distribution only.
+**What the recent evidence does—and does not—close:** [EV-027](../work/evidence-ledger.md#ev-027) observed one 0.10-XLM Velo payment as paid using the public frontend reporter, not a documented supported merchant reporting interface. [EV-028](../work/evidence-ledger.md#ev-028) used the actual handler with isolated Auth/database doubles and a live receipt read: checkout history/status only, no family credit, real database concurrency or new payment. [EV-029](../work/evidence-ledger.md#ev-029) is read-only wallet/source investigation plus pure identifier/integer checks, not provisioning, custody/restore or signing proof. Current global demo signers and `WALLET_SETUP_REQUIRED` for new families remain the boundary; none of these proofs establishes new-family end-to-end readiness.
 
-Evidence: [L-001](../handoff/L-001.md), [L-003A](../handoff/L-003A.md). Interrupted funding recovery remains deliberately disabled; there is no general automatic recovery guarantee.
+**Definition of done:** all applicable detailed criteria below have truthful, environment-qualified evidence, approved open contracts are reflected in their canonical specs/scoped packets, and the implementation plan records the corresponding accepted work. Call out functional-complete separately while designer/device/presentation/release gates remain open; call the project complete only after those gates also close. No unapproved design proposal, mock balance or historical single-family proof substitutes for that evidence.
 
-## Student Needs purchases and AI
 
-- [x] Pay a seller offers **Take a photo** and **Choose a photo**; camera use requires permission.
-- [x] Student enters a price and submits JPEG/PNG evidence, with a 2 MiB limit, to the fixed demo seller.
-- [x] Real vision-provider integration identifies a product/category; server rules determine permission.
-- [x] Shared catalog contains 15 everyday categories with examples, including fresh produce, water, groceries and school supplies.
-- [x] Fresh apples belong to fresh produce in the classification instructions; the demo family's Needs permissions include fresh produce.
-- [x] Needs purchases check category permission, cap and available funds before financial execution.
-- [x] Uncertain images, AI failures, insufficient funds and policy failures have explicit outcomes.
-- [x] Permitted Needs purchases use durable Noir authorization and merchant claim, with recorded Testnet hashes.
-- [x] Purchase reservations and immutable signed operations guard against duplicate spending; unknown execution stays distinct from success.
-- [ ] Verify classification with an actual apple photo. Catalog/prompt tests do not establish live image accuracy.
-- [x] New over-cap/category-conflict requests enter parent review after balance reservation; historical blocked requests stay blocked.
-- [x] Add spending from Wants through its own backed escrow.
-- [ ] Add private My Money spending through its own backed flow.
+## Backend completion map
 
-Evidence: [R-002](../handoff/R-002.md), [L-007](../handoff/L-007.md). AI does not verify market price, delivery or authenticity. The current seller is fixed; arbitrary seller selection/QR payment is not implemented.
+This index groups the remaining work; the detailed criteria below are canonical within this checklist, not a second task tracker.
 
-## Parent decisions
+| Area | Implemented boundary | What prevents backend/functionality completion |
+|---|---|---|
+| Accounts | Verified-email enrollment, separate identities, email-bound student linking | Corrected deployed email round trip; independent family wallets/signing/receiving ownership; full new-family journey |
+| Rules/funding | Saved rules and confirmed, repeat-safe separate Needs/Wants allocation | Available parent funding-wallet read contract/evidence; current release parity |
+| Purchases/approvals | Needs/Wants routing, photo AI, holds, exact-request review and Noir claim | Broader real-image evidence; routine Wants live acceptance; student insufficient/zero-bucket notifications |
+| Savings/My Money | Backed rollover credits and student-private balance projection | Savings requests/releases; no-photo private spending/history; complete privacy checks for those new paths |
+| Weekly lifecycle | Saved PHT schedule, one-boundary test advance, real rollover/reallocation, skip notice | 24-hour demo reminder; due-event semantics where still proposed; current release/signers |
+| Velo | Validated matching-receiver checkout creation/read | Paid current-wallet top-up and deployed deposit-to-distribution acceptance; new-family ownership model |
+| Withdrawal | Separate successful operator/anchor proof only | Authenticated app initiation, durable session/transfer handling, status/reconciliation and app acceptance |
+| Safety/recovery | Durable admission, reservations, exact saved transactions and fail-closed unknowns | Documented bounded handling for unsupported interruption windows; no general automatic recovery exists |
+| Onboarding | Signup/setup controls exist | Account-specific tutorial persistence/contract still needed; information board/tutorial UI comes last |
 
-- [x] Parent sees only their family's pending purchase requests, including exact photo, seller, amount, category, AI assessment and deadline.
-- [x] Parent approves/rejects the exact immutable request once, with safe handling of concurrent/stale decisions.
-- [x] Requests expire after **10 real minutes** without payment or final allowance deduction.
-- [x] Approved exceptions execute without increasing the ordinary spending cap or weakening routine policy.
-- [x] Waiting, rejected, expired, payment-pending and settled outcomes appear distinctly in both roles.
-- [ ] Insufficient-funds outcomes notify the parent without creating debt or borrowing from another bucket.
+## 1. Accounts, family linking and financial onboarding
 
-Local implementation and evidence: [L-002](../handoff/L-002.md), F-004/F-005 in the [product spec](product-spec.md). A bounded integrated exception is now verified on Testnet; final staged orchestration has database/unit checks. Production deployment remains pending. Earlier scripts remain separate feasibility evidence.
+Evidence: [L-008](../handoff/L-008.md), [R-001](../handoff/R-001.md); implementation: [accounts](../apps/api/src/accounts.mjs), [identity](../apps/api/src/identity.mjs), [enrollment migration](../supabase/migrations/20261107124811_l008_account_creation.sql).
 
-## Activity and responsive pages
+### Implemented / recorded
 
-- [x] Parent sees family Needs purchase history; student sees their own purchase history.
-- [x] Both roles can view purchase photos through authorized private reads.
-- [x] Overview/Home show real connected data, with loading, empty and error states.
-- [x] Live pages use the preview visual system with mobile/desktop navigation and layouts; role routes survive reload/back navigation.
-- [x] Unimplemented destinations explicitly say they are unavailable; sample previews remain separately labeled.
-- [ ] Every future connected workflow passes mobile and desktop checks after integration, including dialogs, keyboard use and error states.
+- [x] Provisioned parent/student sign in through Supabase Auth; server derives trusted family and role from membership, not browser input, query parameters or signup metadata.
+- [x] Separate-email/password signup, confirmation resend, Parent/Student choice and setup transition exist. The account-type choice is an untrusted navigation hint, not permission assignment.
+- [x] Enrollment requires verified email. A parent creates a family; a separately verified student joins using the parent-generated code. One parent and one student per family are enforced.
+- [x] Setup codes are server-hashed, bound to the student email, expire after 24 hours and are single-use. Enrollment/code redemption use durable transactional protection; replay and invalid-code cases have recorded hosted-database evidence.
+- [x] Generated-link synthetic parent/student verification and enrollment were exercised; temporary accounts were removed. This is not inbox-delivery evidence.
+- [x] Founder observed a real signup email, including spam placement, but its link opened localhost. Canonical production confirmation URL handling was subsequently implemented under DEC-090.
+- [x] New families default to `wallet_ready=false`; financial routes reject them with `WALLET_SETUP_REQUIRED`. They do not inherit demo funds or signer authority.
 
-Evidence: [L-001](../handoff/L-001.md), [UI-002](../handoff/UI-002.md). An available tab does not establish a functioning backend workflow.
+### Unfinished backend / acceptance
 
-## Visual assets and product identity
+- [ ] Release/Verify: configure Supabase Site URL and allowed deployed redirects, confirm email/SMTP setup for users outside the project team, deploy canonical-origin handling, then observe a newly sent confirmation/resend link returning to the deployed app and permitting verified enrollment.
+- [ ] Verify: record the complete registration error matrix: duplicate email, invalid credentials, pending verification, expired confirmation, resend/delivery failure and expired/wrong-email/used setup code. Code/rollback cases do not establish every deployed user-facing outcome.
+- [ ] Decide: exact independent-family key custody, signing, recovery, provisioning and Velo accounting/support under the selected app-managed wallet target (DEC-093); current demo secrets cannot simply be reused for unrelated families.
+- [ ] Missing: provision and durably bind independent family wallets/escrows/signing authority and receiving configuration before enabling financial access. No completed provisioning workflow or wallet registry currently establishes this.
+- [ ] Verify: two independently enrolled families cannot read each other's rules, activity, photos, codes or money operations, including guessed IDs and direct API calls; a student cannot act as parent.
+- [ ] Verify: complete a new-family signup → corrected inbox confirmation → linked independent student → wallet-ready setup → backed allowance → actual purchase journey, using real family information and truthful empty states rather than seeded demo identity.
 
-- [ ] Add a coherent set of purposeful assets for account setup, allowance/buckets, empty states and guidance, replacing the current largely text-and-card presentation where visuals help understanding.
-- [ ] Use a consistent illustration/icon style across parent and student pages, with final asset choices reviewed under the existing human design authority.
-- [x] Supply app identity assets suitable for the PWA icons and installed launch experience; actual OS launch appearance remains to be checked.
-- [ ] Assets remain legible at mobile/desktop sizes, preserve useful text alternatives and avoid slowing the main purchase/funding journeys.
-- [ ] Record licenses/attribution for sourced assets; decorative artwork never substitutes for actual purchase photos or account data.
+Password reset, broader invitations and multiple children are not silently added to this scope. A leaked-password-protection configuration warning is recorded in L-008; review it as configuration evidence, not a claim of a verified exploit or completed security audit.
 
-These are accepted improvement goals under DEC-083, not a claim that the current UI has no assets: it already includes fonts, icons and explicitly labeled preview imagery.
+## 2. Parent rules, money mapping and allowance distribution
 
-## Velo parent deposits
+Evidence: [L-001](../handoff/L-001.md), [L-003A](../handoff/L-003A.md), [L-003](../handoff/L-003.md); implementation: [family](../apps/api/src/family.mjs), [funding](../apps/api/src/funding.mjs).
 
-- [x] Parent can create/read an authenticated hosted Testnet checkout with a durable idempotency journal.
-- [x] Server validates amount, asset, checkout identity and receiver against the parent wallet.
-- [x] Matching-receiver checkout creation/status have been observed with the activated parent-owned Velo project.
-- [x] Browser callback parameters cannot credit the wallet; distribution is a separate explicit operation.
-- [ ] Observe a paid checkout depositing into this parent wallet and verify the resulting funds before allocation.
-- [ ] Verify the complete deployed Deposit → payment → refreshed status → distribution journey.
+- [x] Parent saves integer weekly amount, adjustable Needs/Wants ratio, purchase cap and independent category selections. Students cannot mutate rules.
+- [x] Revision checks reject stale saves; purchases snapshot rules so later edits do not rewrite existing assessments, requests or approvals.
+- [x] Manual distribution uses saved settings/revision and a stable idempotency key. Integer conversion/splitting conserves principal, assigns the split remainder to Wants and keeps fees/reserves outside spendable allowance.
+- [x] Separate parent-owned Noir Needs/Wants escrows receive actual Testnet transfers. Both credits require whole-allocation confirmation; a chosen ratio or pending/partial transfer creates no spendable balance.
+- [x] Durable funding steps save exact signed transactions/hashes before dispatch; shared-signer admission prevents conflicting unresolved funding. Same-key replay returns the existing operation.
+- [x] A real 0.6-XLM Needs / 0.4-XLM Wants distribution, replay and authenticated parent/student views are recorded in L-003A.
+- [x] Server checks actual owner funds, reserves and fees before submission. Parent allocation totals are not presented as the student's remaining spendable balance.
+- [ ] Missing: add the authenticated, family-authorized read/projection contract for F-001's actual available **parent funding-wallet balance**, distinguishing spendable funds from reserves, fees and cumulative allocations. Existing ledger sufficiency checks are internal; no dedicated available-wallet projection is established by the current API. Browser display/integration follows that backend contract.
+- [ ] Release/Verify: deploy current sweep-adjusted availability code and compare parent/student balances to confirmed journals and escrow backing. L-004 warns the older deployed display does not subtract recorded sweeps, while hosted reservation SQL already does.
 
-Evidence: [L-006](../handoff/L-006.md). The historical paid Velo proof uses a separate checkout; it is not proof of this parent deposit journey. Gas sponsorship and webhooks are not implemented claims.
+## 3. Photo AI, Needs/Wants purchases and seller settlement
 
-## Remaining wallet and weekly lifecycle
+Evidence: [R-002](../handoff/R-002.md), [L-002](../handoff/L-002.md), [L-003](../handoff/L-003.md), [L-007](../handoff/L-007.md); implementation: [purchases](../apps/api/src/purchases.mjs), [providers](../apps/api/src/purchase-providers.mjs), [rules](../apps/api/src/purchase-rules.mjs).
 
-- [x] Wants can pay from its own confirmed balance without consuming Needs; one bounded live Testnet purchase verified both escrow balances.
-- [x] Reconciled week-end Needs leftovers move to Savings; Wants leftovers move to My Money exactly once.
-- [ ] Student requests Savings release; parent approval transfers the approved amount to My Money, while rejection transfers nothing.
-- [x] Student sees confirmed rollover credits in private My Money; parent weekly projections exclude that balance.
-- [ ] My Money has a real student-controlled balance/history and spending without photo, parental approval or parental category/cap checks.
-- [ ] Parent APIs, views, notifications and totals exclude private My Money balances/purchases. Public-ledger anonymity is not promised.
-- [ ] Parent-chosen weekly schedule allocates once per due event; an insufficient parent balance skips the full allocation and notifies the parent.
-- [ ] Reminder appears 24 hours before the next allocation; recap reflects confirmed rollover results.
-- [x] Provide an explicit **Advance to next week (test)** button in parent testing/demo tools, separate from normal scheduled funding.
-- [ ] Show the application test date and target week; run the real due-event sequence (reconcile/expire requests, rollover, then next allocation) exactly once, with visible pending, skipped, confirmed and failure results.
-- [ ] Repeated clicks, reloads and concurrent requests cannot repeat a rollover or allocation. Unresolved money operations block unsafe advancement.
-- [x] Test advancement remains isolated to the authorized Testnet/demo context; it does not change Stellar time, transaction validity or the ten-real-minute purchase approval timeout.
-- [ ] Withdrawals initiate and reconcile an authenticated test-anchor session in the app, showing actual returned status and disclosed simulated fiat payout.
+- [x] Student submits Needs or Wants, the fixed seller, entered price and JPEG/PNG photo up to 2 MiB. Server decodes images and rejects invalid/oversized content; the photo does not verify price, delivery or authenticity.
+- [x] Groq vision returns structured product/category, uncertainty and restricted-item assessment. Server rules—not AI text—determine eligibility; image text is untrusted.
+- [x] Shared catalog contains 15 everyday categories. Fresh produce is distinct from sweets/juice/electronics; demo Needs permissions include fresh produce. Catalog/prompt tests are not real-image accuracy evidence.
+- [x] Selected-bucket confirmed funds, categories and cap are enforced. Historical purchases default to Needs; new requests bind bucket and immutable payload to idempotency and consent.
+- [x] Routine eligible purchases proceed without a new parent decision. New category/cap exceptions reserve funds and enter review; uncertain/unavailable AI and insufficient funds do not silently approve payment.
+- [x] Dedicated Needs/Wants escrows and reservations prevent a Wants purchase from consuming Needs. Needs/Wants activity identifies the selected bucket.
+- [x] Reserve → backing/policy check → Noir authorization → seller claim is journaled. Paid requires confirmed claim and merchant-pending readback; authorization or an unknown outcome is not seller receipt.
+- [x] Real notebook identification/payment/claim has recorded deployed Testnet evidence. L-002 also records founder-confirmed production apple approval-to-claim; the old assertion that no apple photo was exercised is superseded.
+- [x] A bounded Wants exception payment was verified on Testnet with unchanged Needs backing, emptied exception escrow and revoked exception policy.
+- [ ] Verify: record routine, non-exception Wants live payment acceptance. Its implementation and recorded automated coverage are not the same as the existing live exception proof.
+- [ ] Verify: representative real photos exercise the supported category boundaries, apple versus sweets/juice/electronics, uncertain/misclassified inputs and restricted-item no-payment behavior. Do not invent an accuracy percentage or treat a successful apple/notebook as coverage of all 15 categories.
+- [ ] Missing: notify the student on insufficient selected-bucket funds and when the selected bucket becomes zero after a successful purchase, without approval, debt or cross-bucket borrowing (DEC-097).
 
-Scope: [L-003](../handoff/L-003.md), L-004/L-005 in the [implementation plan](implementation-plan.md), F-002/F-006–F-008 in the [product spec](product-spec.md). [L-004](../handoff/L-004.md) now connects Savings, private My Money credits, recap and the manual weekly test control; one real Testnet rollover/reallocation is verified locally. A background scheduler, 24-hour reminder, Savings release, private spending and Withdrawal remain unfinished. Vercel deployment requires the new student server signer. Earlier wallet/anchor experiments are separate evidence.
+DEC-099 includes AI latency/reliability in planning. User reports uncertain/unavailable results; expired Groq model/key is an unverified possible cause. Diagnose and measure before agreeing targets or selecting a provider/model; do not suppress uncertainty.
 
-## PWA goal — DEC-082
+- [ ] Missing/Verify (DEC-101): let the student cancel a slow scan or continue waiting; after cancellation or failure require the student to provide photo and details again. Prove cancellation races, late responses and retries cannot initiate a purchase. No implementation or provider choice is implied.
 
-Implemented locally under DEC-091; evidence in [L-009](../handoff/L-009.md). Deployment and physical-device installation remain unverified. Task status belongs in the implementation plan.
+## 4. Parent decisions, expiry and private allowance activity
 
-- [ ] Supply app name, icons, launch URL, theme and standalone display metadata; verify browser-specific install requirements.
-- [ ] Install and launch successfully on supported Android/desktop browsers; document iOS Add to Home Screen behavior and any limitations.
-- [ ] Installed parent/student pages fit mobile and desktop screens, safe areas and keyboard changes without clipped controls.
-- [x] Show a useful offline/unavailable state and reconnect path; never substitute fixture balances for unavailable live data.
-- [x] Require connectivity and server confirmation for funding, purchases and parent decisions; never present an offline action as paid/approved.
-- [x] Prevent private photos, authenticated API responses and credentials from leaking through the PWA cache; only the public offline document is stored.
-- [ ] Verify sign-out from the installed app clears the signed-in view and blocks private reads. PWA work introduces no private cache artifacts to remove; existing browser Auth session cleanup remains required.
-- [ ] Handle updates without losing a purchase/checkout reference or resubmitting financial operations; refresh/relaunch restores durable status.
-- [ ] Verify installed launch, offline recovery, update behavior and sign-out on representative supported devices/browsers.
+Evidence: [L-002](../handoff/L-002.md), [L-001](../handoff/L-001.md), [R-002](../handoff/R-002.md).
 
-Push notifications and queued offline payments are not part of this goal. Scheduling reminders does not itself imply push delivery. Implementation scope, architecture and verification are recorded in L-009.
+- [x] Parent reads only their family's pending requests, exact photo, seller, amount, category, assessment and deadline. Student reads their own allowance activity; parent history includes Needs and Wants.
+- [x] Approval/rejection binds the exact immutable request once. Durable decision admission handles stale/concurrent decisions; changed amount, seller, photo or bucket cannot reuse consent.
+- [x] Ten **real** minutes from request creation determine expiry. Rejection/expiry releases the hold without payment or final allowance deduction; test-week advancement does not extend the deadline.
+- [x] Approved exceptions use an isolated escrow and owner consent without increasing the routine cap. Defund/fund/authorize/claim/revocation steps retain exact signed operation evidence.
+- [x] Seven-stage exception execution advances one authenticated request/checkpoint at a time. Confirmed checkpoints can continue; an interrupted writer without a safe checkpoint remains fenced.
+- [x] Founder confirmed deployed staged approval reached claimed and deployed rejection produced no transaction steps at `51b288a`. This supersedes the old checklist's deployment-pending statement for L-002, not all later changes.
+- [x] Waiting, rejected, expired, pending and settled states are distinct. Authenticated private-photo reads enforce family/owner access and no-store handling; activity does not expose signing envelopes or raw photo bytes.
+- [ ] Verify: final combined release preserves ownership, role checks, private-photo denial, decision races, real-time expiry and truthful status after refresh. Earlier deployed proof does not certify newer combined code.
 
-## Release and submission gates
+## 5. Savings release and private My Money — backend still missing
 
-- [x] Repository has an environment example, ordered setup documentation and recorded Testnet proof links.
-- [x] Event README includes team names, architecture and local screenshots.
-- [ ] Verify a stranger can run the current release from a fresh clone with their own credentials; earlier setup evidence does not establish the latest combined release.
-- [ ] Verify the final deployed version matches the intended commit and completes the real parent/student journey.
-- [ ] Complete review/merge/deployment gates still recorded in the implementation plan; local evidence alone does not close them.
-- [ ] Record/rehearse the two-minute demo and fill in its URL. Video URL and Discord handles are intentionally blank for now.
+Evidence: [L-003](../handoff/L-003.md), [L-004](../handoff/L-004.md); existing projection: [weekly](../apps/api/src/weekly.mjs). Current router has no Savings-release or private-spending handler.
 
-Evidence and setup: [README](../README.md), [R-004](../handoff/R-004.md). No production-money readiness or independent security audit is claimed.
+### Implemented boundary
 
-Account implementation evidence: [L-008](../handoff/L-008.md) adds signup, confirmation resend, verified-email family enrollment and student linking. Actual Supabase confirmation was checked with generated links and synthetic accounts, without sending mail. Keep signup acceptance open until SMTP/inbox delivery is verified; new-family financial acceptance remains open until independent wallets are provisioned.
+- [x] Confirmed weekly Needs leftovers back Savings; confirmed Wants leftovers back student-owned My Money. Credits appear only after the relevant transfer stages confirm, not while money is in transit.
+- [x] Student can read confirmed Savings/My Money rollover balances. Parent weekly projections exclude My Money balance and private credit fields; local real-account privacy and balance-screen checks are recorded.
+
+### Missing functionality and acceptance
+
+- [ ] Missing: student creates a durable Savings request for an exact available amount; reserve/admit requests so concurrent or repeated decisions cannot release the same principal twice.
+- [ ] Missing: parent approves/rejects the exact Savings request. Approval executes and confirms Savings → My Money once; rejection transfers nothing and releases any hold. Purchase-request expiry must not silently become the Savings policy.
+- [ ] Missing: release status/history and unknown/failure reconciliation preserve the request, saved transfer identity and backing until the outcome is established.
+- [ ] Missing: student pays from My Money without a photo, AI identification, parental category/cap checks or parent approval, while enforcing actual available funds and authorized student execution.
+- [ ] Missing: private My Money purchase/transfer history and exact-once monetary execution. Existing photo-based Needs/Wants routes are not a private-spending implementation.
+- [ ] Verify: parent cannot access private balance or spending through IDs, lists, totals, notifications, exports or any newly added endpoint. Parent knowledge of an approved release amount does not permit access to subsequent private spending.
+- [ ] Verify: concurrent/duplicate release and private-spend attempts, insufficient funds, interrupted transfers and cross-family access preserve balances and authority. App privacy does not promise anonymity on Stellar's public ledger.
+
+## 6. Weekly schedule, test advancement, reminder and recap
+
+Evidence: [L-004](../handoff/L-004.md), DEC-088; implementation: [weekly](../apps/api/src/weekly.mjs), [weekly plan](../apps/api/src/weekly-plan.mjs), [weekly ledger](../apps/api/src/weekly-ledger.mjs).
+
+- [x] Parent saves weekday/time in Asia/Manila with revision checks. Student cannot change schedule or advance time.
+- [x] Explicit **Advance to next week (test)** computes one next scheduled boundary and journals the demo event. It advances application time while submitting actual Testnet transfers; it changes neither Stellar time nor the ten-real-minute approval deadline.
+- [x] Admission checks real expiry and blocks unresolved purchase/funding/weekly work before sweeping unreserved confirmed leftovers. Completed rollover precedes the next saved-rules allocation.
+- [x] Needs → Savings and Wants → My Money transfer stages conserve principal, persist exact signed operations and gate destination credit on confirmation. Same-event replay does not create another rollover/allocation.
+- [x] Insufficient parent funds skip the **whole next allocation**, store a parent-readable event notice and create no partial allowance/debt. Recorded automated depleted-parent evidence exists; a separate live depleted-wallet event is not claimed.
+- [x] One real Testnet event moved 9,117,769 Needs stroops into Savings and 5,913,223 Wants stroops into My Money, then allocated 6,000,000/4,000,000 stroops into the next allowance. Independent escrow reads and confirmed transaction results are recorded.
+- [x] Recorded SQL/automated checks cover concurrent admission, blocked conflicting work, depleted-parent skip, PHT/year boundaries and privacy; browser continuation is also recorded. Successful rollover/reallocation and completed-event replay have live Testnet evidence, but separate live concurrency/blocked/depleted-wallet cases are not recorded. Connected schedule, test-control, balance and recap screens already exist locally.
+- [ ] Missing: the two-step reminder then weekly event, durable event identity and notification/read paths for both roles; remind immediately without rewinding when already within 24 hours. Schedule changes supersede the old occurrence; the event uses the latest saved allowance amount at its beginning (DEC-098, DEC-100).
+- [ ] Missing/Verify: prevent parent changes to allowance amount or schedule while either advance action runs, in UI and server including direct API and concurrent requests; do not infer a blanket block on other settings. Decide and prove atomic race handling and safe failed/interrupted/unknown/resumed lock timing; arbitrary multiple-event chronological advancement is not established.
+- [ ] Verify: agreed reminder → expiry/reconciliation → rollover → next allocation sequence reports actual date/target, confirmed recap, skip/pending/failure states and replay/concurrency behavior without duplicate events.
+- [ ] Release/Verify: apply the weekly schema, configure a distinct funded server-only `STUDENT_SECRET`, deploy matching code and verify production role views/continuation. Local API plus hosted database evidence is not deployed Vercel acceptance.
+
+**Not a new MVP gate:** a background production scheduler remains absent and explicitly deferred. Manual test advancement is implemented; do not describe it as automatic weekly execution.
+
+## 7. Velo parent deposits
+
+Evidence: [L-006](../handoff/L-006.md); implementation: [Velo top-ups](../apps/api/src/velo-topups.mjs).
+
+- [x] Parent-only checkout creation/read uses saved allowance settings, stable UUID idempotency and a durable server journal. Server validates native Testnet asset, exact amount, intent identity, safe checkout origin and configured parent receiver.
+- [x] Receiver mismatch withholds the checkout URL. Browser callback parameters cannot mark a checkout paid or credit a wallet; status comes from server-side Velo retrieval.
+- [x] Parent-owned Velo project is activated; matching-receiver 1-XLM checkout creation/status is recorded. Earlier mismatch/activation errors are historical, not the current blocker.
+- [x] Parent top-up and Noir allowance distribution remain separate explicit operations. No Noir fee sponsorship, automatic allocation or webhook implementation is claimed.
+- [ ] Verify: pay the current checkout from a separate funded Testnet sender; confirm server-observed paid status and actual receipt in the configured parent wallet. Earlier separately configured paid Velo proof does not establish this top-up.
+- [ ] Release/Verify: deployed Deposit → checkout payment → refreshed server status → available parent funds → confirmed Noir distribution, including repeated status reads and unchanged operation identity.
+- [ ] Decide/Missing: resolve supported Velo reporting, pooled receiver/family attribution and independent wallet provisioning before offering financial access to new families. [Nov 14 proof](../work/evidence-ledger.md#ev-027) is not family credit or deployment.
+
+## 8. Interactive test-anchor withdrawal — backend still missing
+
+Evidence: [B-004](../handoff/B-004.md), [B-013](../handoff/B-013.md); L-005 remains deferred in the [implementation plan](implementation-plan.md). Listing the gap does not reactivate that packet.
+
+- [x] A separate operator experiment completed authenticated SEP-10/SEP-24 withdrawal after a confirmed 1-XLM Testnet transfer and observed actual anchor `completed` status. This is feasibility evidence, not an app endpoint.
+- [ ] Missing/Decide: attempt withdrawal after confirmed claim at the current anchor minimum, accumulate below it, batch at most its maximum and stop on failed/unknown without unsafe retry. Unattended interactive SEP-24 feasibility is unresolved; the researched 1–10 XLM limits are time-sensitive.
+- [ ] Missing: durable seller withdrawal status and reconciliation, sanitized summary for the student's own claim without other-family information or unsupported per-purchase attribution; browser redirects cannot declare completion.
+- [ ] Verify: actual application-driven anchor journey and returned pending/failed/completed status; disclose simulated fiat, not real payout.
+
+## 9. Cross-cutting money safety, notifications and recovery
+
+Evidence: [R-002](../handoff/R-002.md), [L-002](../handoff/L-002.md), [L-003A](../handoff/L-003A.md), [L-004](../handoff/L-004.md); current [router](../apps/api/src/router.mjs), [funding recovery](../apps/api/src/funding-recovery.mjs).
+
+- [x] Financial authority comes from validated Auth membership. Service-only journals/RPCs, database locks and admission guards—not process-local/browser locks—coordinate the shared demo signer and pending work.
+- [x] Available allowance subtracts reserved purchases and swept principal. Partial multi-leg transfers remain in transit; confirmed destination credit cannot be manufactured from pending movement.
+- [x] Signed operations/hashes are saved before submission where supported; exact-hash reconciliation and confirmed checkpoints avoid blind replacement transactions. Unknown outcomes retain reservations/fences and never become success merely after a timeout.
+- [ ] Missing: student insufficient/zero-bucket notifications and both-role demo reminder, with family-scoped recipient access and idempotent event identity. A weekly skip notice is narrower; push delivery is not required.
+- [ ] Decide/Verify: establish an evidence-supported bounded operator/reconciliation procedure for unsupported interrupted admission/dispatch windows. Never clear a hold or generate a replacement merely because no hash was found.
+- [ ] Verify: explicitly document and exercise the supported recovery boundary for each money path. Funding setup closure currently fails with `RECOVERY_DISABLED_NO_DISPATCH_FENCE`; exception/weekly interrupted admissions without safe checkpoints can remain fenced. There is **no general automatic recovery guarantee**.
+- [ ] Verify: all newly implemented release/spend/notification/withdrawal/provisioning paths enforce tenant/role isolation, conservation, duplicate protection and truthful pending/error states; old demo-path tests cannot establish those future contracts.
+
+## 10. Onboarding state — backend-dependent work before frontend-only handoff
+
+Scope: DEC-083/DEC-089, [product spec](product-spec.md#account-creation-guidance-and-visual-assets--dec-083). Build the information board/tutorial **last**, after functional flows stabilize.
+
+- [ ] Decide/Missing: define and implement durable per-account tutorial progress/completion and a read/update contract consistent with the final journeys. Do not assume a new database table or a particular storage architecture is already approved.
+- [ ] Verify: parent and student have independent progress, interrupted guidance resumes, and completed steps do not restart at every sign-in. A newly linked student does not inherit the parent's completion.
+
+## 11. Frontend integration and presentation remaining
+
+These are browser/design work **after the corresponding backend exists**. Existing real login/setup, rules, Needs/Wants selection/activity, approvals, Velo Deposit, weekly controls and Savings/My Money credit screens are already connected locally; do not rebuild them as missing scaffolds.
+
+- [ ] Connect final independent-wallet readiness/setup, actual parent funding balance, Savings requests/decisions, private My Money spending/history, notification/reminder and interactive withdrawal contracts. These are not frontend-only until their backend criteria above are met.
+- [ ] Implement the pre-signup information board and separate parent/student tutorials last, using final controls and persisted account progress. Explain separate emails, setup order, Testnet money and unavailable financial setup truthfully.
+- [ ] Complete human-reviewed purposeful illustrations/icons for setup, buckets, empty states and guidance; preserve coherent style, mobile legibility, text alternatives and source licenses. New brand/mascot concept files are proposals, not approved application changes.
+- [ ] Verify every final flow on mobile/desktop: keyboard/focus, dialogs, touch targets, loading/empty/error states, repeated-submit protection, photo permissions/fallback and long-confirmation/continue feedback. A tab or preview does not establish working functionality.
+- [ ] Keep actual family data and truthful empty/unavailable states in normal routes; retain sample-data labels only in separately identified design/mock previews. Never show private My Money data in parent UI or make pending money look paid.
+
+## 12. Installable app / PWA acceptance
+
+Evidence: [L-009](../handoff/L-009.md), DEC-091. This is packaging/browser/release work, not an unfinished money API.
+
+- [x] Manifest, app name/launch URL, standalone metadata, icons including maskable/Apple assets, native worker and public offline fallback exist.
+- [x] Earlier production-build Chromium evidence covers offline navigation/retry, network-only APIs/photos, cache contents limited to the public offline page and updates waiting for windows to close. No offline payment queue is implemented.
+- [x] Install prompt/manual help, connectivity notice and no-forced-refresh update handling exist. Authenticated responses/photos are not stored by the PWA worker; offline financial requests cannot be presented as approved/paid.
+- [ ] Verify: fresh build/browser checks for the later supplied-logo icons, login-only install/help visibility and sign-in shortcut removal. Earlier checks explicitly precede these edits.
+- [ ] Release/Verify: deployed manifest/assets/cache headers, Android/desktop install and standalone launch; verify/document iOS Safari Add to Home Screen. Native-prompt eligibility alone is not OS installation proof.
+- [ ] Verify: installed parent/student layouts, keyboard/safe areas, sign-out and denied private reads on representative devices. No worker private cache does not establish installed-session cleanup by itself.
+- [ ] Verify: installed offline/reconnect and update/relaunch during an interrupted checkout/purchase restore durable references/status without duplicate submission or lost operation identity. No push or offline payments are required.
+
+## 13. Release and final backend handoff evidence
+
+- [x] Repository includes environment guidance, ordered migrations, setup documentation, transaction proof links and local screenshots. README now contains team handles and a demo-video URL; the old blank-fields statement is superseded.
+- [ ] Release: complete review/merge/configuration/deployment gates recorded in the implementation plan. Do not mark L/UI packets Done from this evidence checklist alone.
+- [ ] Verify: intended deployed commit and migrations match, all required signers/configuration are present, and real parent/student sessions complete the final journey with correct balances/private access. Historical `51b288a` approval or earlier reduced-demo evidence does not establish current-tree parity.
+- [ ] Verify: supported interrupted-operation observation/continuation works within deployed request limits; explicitly report fenced cases rather than promising automatic repair.
+- [ ] Verify: an independent user can run the current release from a fresh clone with their own service credentials and Testnet resources. Earlier setup checks do not establish the latest combined release or unimplemented multi-family custody.
+- [ ] Verify: rehearse the final two-minute demo, confirm the linked recording is accessible and matches demonstrated capabilities, and record remaining limitations. A video URL alone does not close R-004 acceptance.
+- [ ] Verify: backend handoff includes final authenticated request/response/error contracts and evidence for each completed function; the only remaining implementation is genuinely browser/presentation work, not missing money, account-state or notification behavior.
+
+## Explicit boundaries and deferred work
+
+- Background production scheduling, multiple children, arbitrary sellers/QR payment, real PHP/GCash settlement, production custody/compliance, push notifications and queued offline payments are not newly required by this update.
+- General automatic interrupted-payment repair is not implemented; safe fencing is intentional. Any new recovery mechanism needs a scoped, evidence-backed contract.
+- AI and login/dashboard latency need diagnosis and measurements before targets or provider choices; preserve honest unavailable/uncertain states (DEC-099).
+- Product/architecture details including key custody, supported Velo reporting and any still-proposed due-event behavior require the normal decision/spec/handoff process before implementation. Frontend design remains under human design authority.
+
+## Current decision acceptance — DEC-093–DEC-100
+
+- [ ] Support at most ten financially enabled families with isolated app-managed Testnet wallets and one configured seller; extra families may register/link without financial access. No provisioning is implied by the decision.
+- [ ] Enforce simulated deposits of ₱10 minimum and ₱5,000 lifetime cumulative per family, centavos and a single full-cap deposit allowed, unlimited count within cap; one pending blocks only another deposit. Parent may cancel unpaid subject to payment-race reconciliation; unknown remains blocked. Explain limit or temporarily unavailable safe project funds; only operator sees remaining cap.
+- [ ] Verify DEC-102 family-bound Velo/Stellar receipt, unique underlying payment, backed reservation and confirmed project-to-family-parent transfer before credit; reconcile unknowns and cancellation races without double credit.
+- [ ] Prevent allowance amount and schedule changes while either demo advance action runs in UI and server, including direct API and concurrent requests; use the latest saved allowance at weekly-event start. Do not infer a blanket block on other settings. Resolve and verify race atomicity and safe failed/interrupted/unknown/resumed lock timing (DEC-100).
+- [ ] Make ₱-prefixed simulated PHP primary, XLM legible and touch/keyboard accessible, and confirm both values and simulation at ₱9.68/XLM.
+- [ ] Implement explicit operator disable only, with uncertain work reconciled first, confirmed recoverable funds returned to project wallet, necessary records/keys retained and slot freed only after confirmation. Account for unavoidable reserves/fees; never assume unsafe cleanup or seller recycling. Disabled family cannot re-enable; existing users can create/join a new family in either role, fresh cap, private old history. Collect first/last name once at first sign-in; no account name editing.
+- [ ] Provide a local CLI introduction and menu: error history, all-family listing, disable, return/exit. Include linked parent/student names/emails, financial status, totals and pending separately, including disabled families. Agent-readable noninteractive queries must be safe; mutation requires explicit authorization, preview and confirmation. Retain significant resolved/unresolved errors 30 days, newest first, redacting credentials/keys/photos/PII; never automatically delete financial journals; no emails/status page. This does not claim the CLI exists.
+- [ ] Investigate supported Velo reporting, pooled attribution, signing/custody/recovery, unattended SEP-24, exact fees/reserves/cleanup and cancellation races; retain the specific unresolved questions in [handoff discussion](../work/backend-decision-questions.md).

@@ -1,12 +1,12 @@
 # PadalaPocket MVP product spec
 
-Draft for review, derived from [DEC-006–DEC-029](decision-ledger.md). Concept/demo scope accepted; proposed defaults below are not team decisions. The reduced submission build is authorized under DEC-055.
+Requirements derive from the [decision ledger](decision-ledger.md), including current MVP choices DEC-093–DEC-100. Historical proposals below remain proposals unless superseded by later decisions. The DEC-055 submission scope is historical.
 
 ## Five-hour submission MVP
 
 This section records the DEC-055 reduced release scope. Later connected slices and DEC-070/DEC-084/DEC-085 extend parent review beyond the original blocked-only behavior; current evidence is in the [feature checklist](mvp-feature-checklist.md).
 
-DEC-055 narrows the current delivery target to one provisioned parent, student and fixed demonstration seller. The broader scope and feature table below remain the post-deadline roadmap wherever they exceed this section.
+Historically DEC-055 narrowed the submission to one provisioned parent, student and fixed seller. DEC-093 supersedes that limitation for the current MVP target; historical evidence and delivery status remain distinct.
 
 Recording journey: parent signs in and funds a Needs allowance with confirmed Testnet backing; student signs in, supplies a photo and price; real AI identifies the item; server checks the fixed allowed categories, cap and available funds; a permitted purchase uses Noir authorization and merchant claim. Show the actual statuses and both transaction hashes. Preserve dual simulated-PHP/Testnet-XLM display and accepted rounding. Configure a small finite allowance/cap during provisioning; no settings editor is required.
 
@@ -36,7 +36,7 @@ For students aged 13+ receiving allowance from an OFW parent, PadalaPocket provi
 
 ## Scope
 
-One parent, one student and one demonstration seller. Working parent-funded Needs/Wants allowance, AI photo identification, purchase approval/expiry, Savings, private My Money, weekly lifecycle via labeled demo time, Noir/Velo Testnet integration and test-anchor withdrawal.
+Up to ten financially enabled families, each with one parent and one student and isolated app-managed Testnet wallets, paying one hard-configured seller. Other families may register/link without financial access. Working parent-funded Needs/Wants allowance, AI identification, purchase approval/expiry, Savings, private My Money, weekly demo lifecycle, Noir/Velo Testnet integration and simulated test-anchor withdrawal. Custody and provisioning details remain open.
 
 Defer multiple children, additional purchase-type support, real peso/GCash settlement, production scheduling and seller-generated payment requests. Category catalog and six-category demo selection remain canonical in [idea](../seed/idea.md#category-catalog). Event requirements/deadline remain in [context](../seed/context.md).
 
@@ -45,13 +45,15 @@ Defer multiple children, additional purchase-type support, real peso/GCash settl
 | ID | Feature | Acceptance criteria |
 |---|---|---|
 | F-001 | Parent funding and allowance setup | Parent sees available funding-wallet balance and configures weekly allowance, Needs/Wants ratio, purchase cap and allowed categories per bucket. Ratio defaults to 60/40 and is adjustable. Demo shows a confirmed Testnet allocation reducing available parent funds and increasing student allowance; a browser animation alone cannot establish funding. |
-| F-002 | Weekly lifecycle and demo clock | A clearly labeled control advances demo time to week start and week end. Week-start demonstration allocates the configured allowance; week-end demonstration moves leftover Needs to Savings and leftover Wants to My Money. Show the scheduled-funding reminder 24 hours before the next allocation. Keep demo time distinct from real ledger timestamps and do not claim a production scheduler. |
+| F-002 | Weekly lifecycle and demo clock | Two explicit steps advance first to the 24-hour reminder, then the weekly event; if already within 24 hours remind immediately without rewinding. Notify both parent and student. A schedule change supersedes the old occurrence; use the latest saved allowance amount when the event begins. While either advance action is running, the parent cannot change allowance amount or schedule; enforce this in the UI and server, including direct API calls and concurrent changes (DEC-100). No blanket restriction on other settings is implied. Settle confirmed leftovers and allocate as allowed; preserve actual network and approval time. Atomic race handling and lock timing for failed, interrupted, unknown or resumed operations remain technical safety questions. |
 | F-003 | Allowance purchase and AI identification | Student supplies seller details, manually enters price and submits a product photo. AI identifies the pictured product and checks category consistency against the allowance rules. Show the photo, student-entered price, identification and outcome in parent-visible allowance history. No claim that the photo proves actual goods delivered or verifies market price. |
 | F-004 | Purchase decisions and exceptions | Within-balance purchases passing identification/category/cap checks can proceed automatically. Over-cap or category-conflict purchases wait for parent approval. The parent can approve or reject the particular recipient/amount/photo request. No approval within 10 minutes means expiry without payment or final allowance deduction. My Money is exempt. |
-| F-005 | Failure handling | Insufficient selected-bucket funds means rejection and parent-app notification, not an approval request or automatic borrowing. Uncertain AI identification explains the supported limitation and asks for another photo; it does not approve payment. Technical failures and unknown payment outcomes must remain distinct from confirmed success. |
+| F-005 | Failure handling | Reject insufficient selected-bucket funds and notify the student, not the parent; notify the student when that bucket becomes zero after a successful purchase. No approval request, debt or cross-bucket borrowing. Uncertain/unavailable AI explains the limitation and never approves payment; technical failures and unknown payment outcomes remain distinct from success. |
 | F-006 | Savings release | Student requests an amount from Savings. Parent approval transfers that amount into My Money; rejection causes no transfer. Savings is intended for emergencies and later use beyond allowance dependence. Approval releases the amount rather than restricting subsequent purchases. |
 | F-007 | My Money freedom and privacy | My Money purchases require no photo, parental approval or parental category/cap check. Parent app access must not expose the current balance or purchase details through views, notifications, exports or APIs. Student sees their own balance/history. Parent may know amounts they allocated or approved for release. Insufficient balance and technical constraints still apply. |
-| F-008 | Genuine Testnet payment and withdrawal | Agent payments use the required deployed Noir contracts through the Noir SDK; Velo SDK has a demonstrated role. Record confirmed transaction hashes and distinguish allowance deduction/merchant pending funds from merchant claim into its wallet. Demonstrate authenticated test-anchor withdrawal and actual returned status; disclose simulated fiat payout and never claim pesos arrived in GCash. |
+| F-008 | Genuine Testnet payment and withdrawal | Distinguish purchase authorization and confirmed seller claim. After confirmed claim, attempt withdrawal when withdrawable seller funds meet the anchor minimum; accumulate below it, batch at most the anchor maximum and stop on failed/unknown results without unsafe retry. Show each student their own claim and sanitized aggregate seller withdrawal status, without other families or unsupported per-purchase attribution. The researched 1–10 XLM reference-anchor limits are time-sensitive; unattended SEP-24 feasibility is unresolved. Fiat payout is simulated, never real GCash. |
+
+Student may cancel a slow photo scan or continue waiting. A cancelled scan discards any late AI response and must not proceed to purchase; after a cancelled or failed scan, the student starts again by providing the photo and purchase details (DEC-101). These are requirements, not a claim of implementation.
 
 ## Demo journey
 
@@ -61,11 +63,11 @@ Money display under DEC-045/046/049: show simulated Philippine pesos alongside t
 2. Advance to week start and demonstrate allowance transfer into Needs/Wants.
 3. Student photographs a permitted item; AI identifies it and the agent makes a Testnet payment. Merchant claims it.
 4. Demonstrate an exception requiring parent approval; separately exercise rejection, expiry, unclear-photo retry and insufficient funds. Not every case must occupy the two-minute submission video.
-5. Advance to the reminder and week end; show notification and leftover transfers. Advance to the next week start to show recurring allocation.
+5. Advance to the reminder, then the weekly event; show both roles' reminder and confirmed rollover/allocation or truthful pending/skip state.
 6. Student requests Savings funds; parent approves transfer into My Money. Demonstrate private spending without a photo or parental restrictions.
 7. Demonstrate the test-anchor withdrawal with simulated fiat payout.
 
-Demo time advances application scheduling/expiry demonstrations only. Stellar contract expiry and transaction validity use real network time; the demo control must not pretend to change the network clock.
+Demo time advances application scheduling only. Stellar network time and real purchase-approval expiry never move with it.
 
 ## Important security and correctness rules
 
@@ -79,7 +81,7 @@ Demo time advances application scheduling/expiry demonstrations only. Stellar co
 
 ## Proposed defaults for one review
 
-These reduce further question-by-question planning; each remains a proposal:
+These were proposed for review; later decisions supersede any conflicting item (including DEC-072, DEC-073 and DEC-098):
 
 - Use Philippine time (Asia/Manila) for the demo week and Monday 00:00 as its boundary.
 - Parent selects categories independently per bucket; student chooses a funded bucket and category before allowance review. AI checks consistency, not the family's underlying purpose for an item.
@@ -92,9 +94,9 @@ These reduce further question-by-question planning; each remains a proposal:
 ## Feasibility and review items
 
 - Prove Noir SDK → signing → selected Velo SDK role → ledger confirmation → merchant claim. Standard Velo checkout recognition of Noir calls cannot be assumed. Parent approval of an over-cap purchase does not itself override Noir's on-chain cap; define and verify an exception path without weakening routine policy.
-- Prove real AI identification for the selected categories, including uncertain and misclassified images. AI provider, model, data handling, confidence behavior and credentials are not chosen.
-- Prove test-anchor authentication and withdrawal after merchant claim. Public capability discovery is the only completed service check so far; see [evidence ledger](../work/evidence-ledger.md), EV-020–EV-021.
-- Decide the exact QR format/demo mapping and explicit peso-display-to-Testnet-asset mapping. No real conversion rate is implied.
+- Evaluate real-image identification accuracy and latency with uncertain/misclassified images; the current Groq integration exists, but the reported expiry cause and any future provider/model choice remain unverified.
+- Unattended SEP-24 and current anchor limits remain open despite the separate completed Testnet experiment; see [B-004](../handoff/B-004.md) and [EV-020](../work/evidence-ledger.md).
+- QR mapping remains open where relevant; DEC-046/049 already select the simulated peso mapping and rounding.
 - Agree proposed defaults above, money rounding, rule-change effects and pending balance accounting before dependent build tasks. No real-world uptake or savings metrics are promised.
 - Establish frontend/backend skills, hosting/resources, actual remaining working hours and design authority. Design ownership remains in [design brief](design-brief.md).
 
@@ -103,3 +105,12 @@ These reduce further question-by-question planning; each remains a proposal:
 Requirements live here; accepted choices and supersessions live in [decision ledger](decision-ledger.md); research and limitations live in [evidence ledger](../work/evidence-ledger.md). Task status lives only in [implementation plan](implementation-plan.md). This draft records acceptance criteria, not completed implementation or verification.
 
 Account credentials decision (DEC-089): parent and student use separate email/password identities and verify their emails. A parent creates a family and an email-bound expiring setup code; the student redeems it after their own verification. New-family payment access requires independent wallet provisioning; it cannot reuse demo custody. Tutorials remain the last planned onboarding work.
+
+## Current MVP operational choices — DEC-093–DEC-099
+
+- Parent simulated deposits accept centavos from ₱10 through the family's remaining ₱5,000 lifetime cumulative cap, including all ₱5,000 at once; unlimited count within the cap. One pending deposit blocks only another deposit, not use of confirmed funds. Parent can cancel an unpaid pending deposit only with race reconciliation; unknown stays blocked. Explain minimum, cap or temporarily unavailable safe project funds on rejection. Remaining cap is operator-visible, not parent-visible.
+- DEC-102 selects a confirmed project-wallet receipt and transfer to the correct family parent wallet before the deposit is available; repeated use of the same payment must not credit twice. Uncertain outcomes remain pending. This flow is not yet implemented.
+- Present simulated PHP prefixed ₱ as primary, with legible XLM accessible by touch and keyboard; confirmation shows both and the simulation disclosure at ₱9.68/XLM. No real fiat.
+- Only explicit operator disable frees capacity, after uncertain operations are reconciled and confirmed recoverable family funds returned to the project wallet; keep necessary keys/records, account for unavoidable fees/reserves, and never pretend unsafe cleanup succeeded. No automatic seller-to-project recycling. A disabled family cannot re-enable; existing users can sign in and create/join a new family in either role with a fresh cap and private prior history. Collect first and last name once at first sign-in; no account name editing in MVP.
+- A local operator CLI is intended to introduce itself and offer error history, all-family list, disable, return and exit. List linked names/emails, financial status, deposit totals and pending separately, including disabled families. Provide safe agent-readable noninteractive queries and explicitly authorized mutation with preview and confirmation. Retain significant backend errors, including resolved, newest first for 30 days; redact credentials, keys, photos and PII. Do not automatically delete financial journals. No error emails or status page. This is a target, not an existing-script claim.
+- AI uncertain/unavailable and latency, and login/dashboard latency, are user-reported concerns, not diagnosed causes or measured results. Measure before setting targets; do not suppress failures or choose a provider/model by implication. Founder handles functional tutorial pages/routing last; visual ownership remains with the human frontend designer.
