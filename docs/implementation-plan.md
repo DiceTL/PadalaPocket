@@ -2,6 +2,8 @@
 
 Feature acceptance/evidence snapshot: [MVP feature checklist](mvp-feature-checklist.md). PWA support is an accepted goal under DEC-082; implementation is not started or authorized by the checklist alone and requires a scoped handoff. Task status remains here.
 
+Current backend-only execution: [T01–T37 completion plan](backend-mvp-completion-plan.md), [task-status table](#backend-mvp-completion--t01t37) and [feature acceptance mapping](mvp-feature-checklist.md#backend-task-to-acceptance-map). Update linked checklist evidence as part of each backend task; do not treat backend completion as browser or full-release acceptance.
+
 DEC-083 adds real email signup/linked child setup, purposeful visual assets and explicit next-week testing to the target. Prepare scoped handoffs before implementation; existing R/L/UI acceptance is not extended automatically. Build the information board and per-new-account tutorial last, after the functional journeys are complete. These additions are not delivered features.
 
 Revised 2026-11-07 under [DEC-034/DEC-042–DEC-049](decision-ledger.md). This is the only task-status source. S-001 is accepted at implementation commit `58f4b6c`: fresh committed-clone checks and deployed health verification passed; remote CI is green per founder report. Evidence and limitations live in [S-001](../handoff/S-001.md). S-002 is Done; see its acceptance packet. C-001 is Done: backend acceptance and reported green branch/PR/main CI are recorded in its packet. B-001 is merged as `e1382f0`; founder confirms passing PR/main CI. B-002 is accepted and merged with passing branch/main CI per founder confirmation. B-003 is Done: separate bucket backing verified, backend review accepted, founder reports branch/main CI passed; merged as `5c9f034` (B-003 branch commit `0a41be6`). B-004 is Done. DEC-055 supersedes the original remaining sequence with the deadline plan below. Product requirements remain in [product spec](product-spec.md), system design in [architecture](architecture.md), interfaces in [technical spec](technical-spec.md), and UI authority in [design brief](design-brief.md).
@@ -252,3 +254,50 @@ DEC-075 supersedes the order below: bounded L-003A allowance distribution comes 
 | Packet | Scope | State |
 |---|---|---|
 | [L-009 Installable PWA](../handoff/L-009.md) | Manifest/icons, login-only installation help, public offline fallback and safe update lifecycle implemented; prior full checks and production-build Chromium privacy/offline/update tests pass. The latest logo/login UI follow-up still needs a fresh build/browser check; deployment and real-device installation remain | Review |
+
+## Backend MVP completion — T01–T37
+
+The [approved backend completion plan](backend-mvp-completion-plan.md) owns task scope, ordered execution, done-checks, accepted defaults and review requirements. This table alone owns T-task status; packets own evidence, and the [MVP feature checklist mapping](mvp-feature-checklist.md#backend-task-to-acceptance-map) owns the connection to feature acceptance. Existing B/L/UI statuses are not changed by adding this sequence.
+
+After each task, follow the plan’s [evidence and checklist update procedure](backend-mvp-completion-plan.md#evidence-and-checklist-update-procedure): record evidence in the packet, update every affected checklist criterion truthfully in the same change, then update the owning row here. A passing done-check is not evidence of a missing independent review, merge or deployment. Stop before the next task until the owner says “next”.
+
+| Task / packet | Acceptance evidence or remaining gate | State |
+|---|---|---|
+| [T01 Contract baseline](../handoff/T01.md) | Offline contract baseline PASS recorded on 2026-11-16; merge/CI acceptance not recorded in the packet. | Review |
+| [T02 Execution environment](../handoff/T02.md) | Local environment and earlier baseline PASS after corrections; retain owner-reported review history. DEC-103 commissions no additional T02 review; merge/CI acceptance remains unrecorded. | Review |
+| [T03 Groq access](../handoff/T03.md) | `vision-access` passed with the owner-provided replacement credential and one real image; earlier local checks passed. Merge/CI acceptance remains unrecorded. | Review |
+| [T04 Account delivery](../handoff/T04.md) | Corrected `identity` PASS with fresh unenrolled fixtures and both owner-observed deployed callbacks; all three earlier checks pass. Targeted Terra re-review resolved all findings. Merge/CI acceptance remains unrecorded; older link-error history is retained. | Review |
+| [T05 Financial journal](../handoff/T05.md) | Not started; follows T04 and the approved sequence. | Planned |
+| [T06 Coordinated dispatch](../handoff/T06.md) | Not started; follows T05 and the approved sequence. | Planned |
+| [T07 Reconciliation](../handoff/T07.md) | Not started; follows T06 and the approved sequence. | Planned |
+| [T08 Writer cutover](../handoff/T08.md) | Not started; follows T07 and the approved sequence. | Planned |
+| [T09 Vault access](../handoff/T09.md) | Not started; follows T08 and the approved sequence. | Planned |
+| [T10 Key restoration](../handoff/T10.md) | Not started; follows T09 and the approved sequence. | Planned |
+| [T11 Family provisioning](../handoff/T11.md) | Not started; follows T10 and the approved sequence. | Planned |
+| [T12 Family capacity](../handoff/T12.md) | Not started; follows T11 and the approved sequence. | Planned |
+| [T13 Deposit admission](../handoff/T13.md) | Not started; follows T12 and the approved sequence. | Planned |
+| [T14 Velo receipt](../handoff/T14.md) | Not started; follows T13 and the approved sequence. | Planned |
+| [T15 Deposit credit](../handoff/T15.md) | Not started; follows T14 and the approved sequence. | Planned |
+| [T16 Deposit cancellation](../handoff/T16.md) | Not started; follows T15 and the approved sequence. | Planned |
+| [T17 Parent balance](../handoff/T17.md) | Not started; follows T16 and the approved sequence. | Planned |
+| [T18 Family allowance](../handoff/T18.md) | Not started; follows T17 and the approved sequence. | Planned |
+| [T19 Shared seller claims](../handoff/T19.md) | Not started; follows T18 and the approved sequence. | Planned |
+| [T20 Parent decisions](../handoff/T20.md) | Not started; follows T19 and the approved sequence. | Planned |
+| [T21 Scan cancellation](../handoff/T21.md) | Not started; follows T20 and the approved sequence. | Planned |
+| [T22 Vision behavior](../handoff/T22.md) | Not started; follows T21 and the approved sequence. | Planned |
+| [T23 Bucket notices](../handoff/T23.md) | Not started; follows T22 and the approved sequence. | Planned |
+| [T24 Savings release](../handoff/T24.md) | Not started; follows T23 and the approved sequence. | Planned |
+| [T25 My Money](../handoff/T25.md) | Not started; follows T24 and the approved sequence. | Planned |
+| [T26 Weekly boundaries](../handoff/T26.md) | Not started; follows T25 and the approved sequence. | Planned |
+| [T27 Weekly safety](../handoff/T27.md) | Not started; follows T26 and the approved sequence. | Planned |
+| [T28 Anchor adapter](../handoff/T28.md) | Not started; follows T27 and the approved sequence. | Planned |
+| [T29 Withdrawal execution](../handoff/T29.md) | Not started; follows T28 and the approved sequence. | Planned |
+| [T30 Withdrawal privacy](../handoff/T30.md) | Not started; follows T29 and the approved sequence. | Planned |
+| [T31 Operator access](../handoff/T31.md) | Not started; follows T30 and the approved sequence. | Planned |
+| [T32 Family disable](../handoff/T32.md) | Not started; follows T31 and the approved sequence. | Planned |
+| [T33 Account progress](../handoff/T33.md) | Not started; follows T32 and the approved sequence. | Planned |
+| [T34 Backend performance](../handoff/T34.md) | Not started; follows T33 and the approved sequence. | Planned |
+| [T35 Combined acceptance](../handoff/T35.md) | Not started; follows T34 and the approved sequence. | Planned |
+| [T36 Deployment acceptance](../handoff/T36.md) | Not started; follows T35 and the approved sequence. | Planned |
+| [T37 Backend handoff](../handoff/T37.md) | Not started; follows T36 and the approved sequence. | Planned |
+

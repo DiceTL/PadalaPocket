@@ -17,6 +17,8 @@ An allowance payment agent for OFW parents and students: identify a purchase fro
 
 > Testnet prototype for one parent, one student and one fixed seller. PHP values are simulated at the frozen ₱9.68/XLM mapping; Testnet XLM has no redeemable peso value. No real GCash payout. The public API health endpoint was checked on 2026-11-07; full parity of the latest local changes with production has not been reverified. The [implementation plan](docs/implementation-plan.md) owns task status.
 
+The current MVP target extends this historical demo to up to ten financially enabled families with isolated app-managed Testnet wallets and the same fixed seller. Provisioning, custody, pooled Velo accounting and unattended anchor withdrawal are unresolved, not deployment claims; additional families may register/link without financial access. See [target architecture](docs/architecture.md#current-mvp-architecture-target--dec-093dec-099) and [open decisions](work/backend-decision-questions.md).
+
 ## Problem
 
 PadalaPocket focuses on students aged 13 and above receiving an allowance from a parent working abroad. The problem we explore is what happens after the parent sends the allowance: how can the family agree on what it covers, keep essential and discretionary spending within separate budgets, and review an unexpected purchase while living apart?

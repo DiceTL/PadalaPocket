@@ -21,6 +21,7 @@
     "dev:api": "npm run dev --workspace @padalapocket/api",
     "test": "npm run test --workspaces",
     "check:contracts": "node scripts/check-contracts.mjs",
+    "verify:backend": "node scripts/verify-backend.mjs",
     "check": "npm run check:contracts && npm test && npm run build",
     "build": "npm run build --workspaces"
   }

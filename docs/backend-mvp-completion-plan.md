@@ -2,7 +2,7 @@
 
 **Accepted:** D1 A and the Decision Sheet defaults. **Your Groq API key has expired; replacing it is a required setup task, not something to diagnose again.**
 
-This is a read-only planning deliverable. No project files, configuration, migrations or credentials were changed.
+Execution requirements live here; task status lives only in the [implementation plan](implementation-plan.md#backend-mvp-completion--t01t37). Each task has a scoped [handoff packet](../handoff/T01.md) for acceptance evidence and links to the [MVP feature checklist](mvp-feature-checklist.md#backend-task-to-acceptance-map). Creating packets does not start later tasks.
 
 ## 1. Current backend state
 
@@ -27,6 +27,19 @@ This is a read-only planning deliverable. No project files, configuration, migra
 - T01 creates one verification entry point: `npm run verify:backend -- <check-name>`. Each Done-check below is one invocation returning exit code **0 for pass**, nonzero for fail.
 - Verification uses the existing Node test framework, real isolated database checks and bounded live scripts as appropriate. Test doubles do not establish provider or deployed acceptance.
 - Financial checks use synthetic accounts and Testnet funds. Existing unrelated family data and historical journals remain intact.
+- Before starting a task, open its packet linked under the phase below. The task row here owns its scope/done-check; Part 3 owns model, effort and independent-review requirements. Packets link these contracts rather than redefining them.
+
+### Evidence and checklist update procedure
+
+Every backend task completion includes these documentation updates in the same change:
+
+1. Record the actual command, dated PASS/FAIL result, environment, changed files, sanitized proof and limits in `handoff/Txx.md`. Record required independent review and corrections; changes after review need another review. Never include credentials, signing material or raw provider responses.
+2. Follow the packet's checklist links and the [task-to-acceptance map](mvp-feature-checklist.md#backend-task-to-acceptance-map). Update every affected detailed checklist item, including any matching decision-acceptance item, with a dated packet evidence link.
+3. Check `[x]` only when the entire described criterion has evidence. For a partly delivered item, keep `[ ]`, state the verified backend portion and remaining work, and link the packet. Split backend and browser/release criteria only when both parts remain explicit. A passing backend API check never closes missing UI, inbox, device, live-provider or deployment acceptance.
+4. Refresh affected checklist summaries if the implemented boundary changed. For prerequisite-only tasks, record “no feature criterion closed” and link the foundation evidence instead of marking a product feature complete.
+5. Update only the task's row in the [implementation plan](implementation-plan.md#backend-mvp-completion--t01t37). Check success, review, merge and deployment evidence remain distinct; do not create another status field in packets or this plan.
+
+These are required task-delivery edits, not an automatic checkbox script. They do not rerun paid/live proofs or authorize shared migrations, deployments, funding, credentials or frontend edits. User approvals still apply. Stop after the current task and wait for “next”.
 
 **Part 1 — Test-first rule**
 
@@ -43,6 +56,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 
 ### Phase 1 — Establish contracts and execution access
 
+Packets: [T01](../handoff/T01.md), [T02](../handoff/T02.md), [T03](../handoff/T03.md), [T04](../handoff/T04.md).
+
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
 | **T01** | Capture the existing client’s routes, methods, payloads, consumed fields and errors; add the verification entry point using existing tests and proof scripts. | All existing screens | `contract-baseline`: existing client requests and responses pass without changing frontend files. |
@@ -51,6 +66,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 | **T04** | Correct deployed Auth URL/email configuration and verify signup, confirmation, resend, enrollment and student-code errors through existing account contracts. | Registration and linking | `identity`: the real confirmation/enrollment journey succeeds and unauthorized, expired and reused-code cases fail correctly. |
 
 ### Phase 2 — Implement durable financial execution
+
+Packets: [T05](../handoff/T05.md), [T06](../handoff/T06.md), [T07](../handoff/T07.md), [T08](../handoff/T08.md).
 
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
@@ -61,6 +78,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 
 ### Phase 3 — Secure keys and provision families
 
+Packets: [T09](../handoff/T09.md), [T10](../handoff/T10.md), [T11](../handoff/T11.md), [T12](../handoff/T12.md).
+
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
 | **T09** | Configure Supabase Vault with narrow server-only access; bind each secret reference to its family, role, public address, network and version. Never expose generic secret retrieval to clients. | Financial account setup | `custody-access`: public, student, parent and cross-family attempts cannot retrieve signing keys; authorized backend signing succeeds. |
@@ -69,6 +88,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 | **T12** | Admit at most ten linked families atomically and expose readiness without changing `/api/me` compatibility; overflow families retain registration/linking access but no financial authority. | Setup and unavailable states | `family-capacity`: concurrent admissions enable no more than ten families; partial setup and overflow remain financially fenced. |
 
 ### Phase 4 — Complete deposits and parent balances
+
+Packets: [T13](../handoff/T13.md), [T14](../handoff/T14.md), [T15](../handoff/T15.md), [T16](../handoff/T16.md), [T17](../handoff/T17.md).
 
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
@@ -79,6 +100,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 | **T17** | Expose available parent principal, pending transfers and deposit history; exclude reserves, operating float and allocations already moved to Noir. Keep existing `paid` presentation truthful. | Parent balance, Deposit and Overview | `parent-balance`: projected funds reconcile to confirmed holdings and reservations; pending receipts never appear spendable. |
 
 ### Phase 5 — Finish allowance, purchases and AI behavior
+
+Packets: [T18](../handoff/T18.md), [T19](../handoff/T19.md), [T20](../handoff/T20.md), [T21](../handoff/T21.md), [T22](../handoff/T22.md), [T23](../handoff/T23.md).
 
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
@@ -91,6 +114,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 
 ### Phase 6 — Complete Savings, My Money and weekly execution
 
+Packets: [T24](../handoff/T24.md), [T25](../handoff/T25.md), [T26](../handoff/T26.md), [T27](../handoff/T27.md).
+
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
 | **T24** | Implement exact-amount Savings requests, holds and parent approval/rejection; confirm Savings-to-My-Money transfers before destination credit. | Savings requests and approvals | `savings-release`: duplicate/concurrent decisions release principal once; rejection moves nothing and uncertainty retains the hold. |
@@ -99,6 +124,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 | **T27** | Enforce the amount/schedule restriction throughout running advances and safe unresolved continuations; coordinate rollover, next allocation and all shared financial resources. | Rules, schedule and weekly recap | `weekly-safety`: settings races are rejected, rollover conserves funds and insufficient parent principal skips the entire new allocation without debt. |
 
 ### Phase 7 — Complete seller withdrawal and operator lifecycle
+
+Packets: [T28](../handoff/T28.md), [T29](../handoff/T29.md), [T30](../handoff/T30.md), [T31](../handoff/T31.md), [T32](../handoff/T32.md).
 
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
@@ -109,6 +136,8 @@ This is a read-only planning deliverable. No project files, configuration, migra
 | **T32** | Implement permanent family disable, blocked new actions, retained recovery keys/journals and confirmed recoverable return before slot release; exclude shared seller proceeds. | Family lifecycle and support | `family-disable`: known recoverable funds return once, unknown work retains its slot, and former members create/join a fresh isolated family in either role. |
 
 ### Phase 8 — Finish account state and release acceptance
+
+Packets: [T33](../handoff/T33.md), [T34](../handoff/T34.md), [T35](../handoff/T35.md), [T36](../handoff/T36.md), [T37](../handoff/T37.md).
 
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
@@ -166,55 +195,71 @@ This is a read-only planning deliverable. No project files, configuration, migra
 
 ### Part 3 — Model, effort and second review
 
-Use **Terra by default**. Use **Sol** for tasks involving authorization, privacy, concurrency or financial implementation. Use **Astra only to review the final changes for T06, T09 and T15**; it does not implement those tasks.
+Review policy approved under [DEC-103](decision-ledger.md). Implementation models and efforts in the table remain unchanged. Independent review examines the changed code and relevant evidence, not a redesign or a repeated repository-wide audit. Actual credit savings and reviewer reliability remain **UNVERIFIED**.
 
-Model reliability and actual credit savings are **UNVERIFIED**. These assignments use the stated tier ranking and the consequences of an error; the done-checks remain mandatory.
+**T04 has a standalone Terra review. There is no T02–T04 checkpoint and no new T02/T03 review assignment.** Existing review history remains evidence, not a newly commissioned review.
 
-A second review is an independent examination of the code changes, not a redesign. Sol performs that review unless the table assigns Astra. Changes made after review require another review of those changes.
+| Review scope | Reviewer / effort | Focus |
+|---|---|---|
+| T04 only | Terra / Medium | Configuration, credential handling and test validity; escalate actual application permission changes to Sol |
+| T05–T08 | Astra / Medium | Journals, stale workers, dispatch/recovery fences and old writers |
+| T09–T12 | Astra / Medium | Key access/restoration, family ownership, provisioning and capacity |
+| T13–T17 | Astra / Medium | Receipt reuse, backed credit, cancellation and spendable balances |
+| T18–T21 | Sol / Medium | Family authority, shared claims, exact consent and scan cancellation |
+| T23–T27 | Sol / Medium | Recipient/private-money privacy, conservation and weekly races |
+| T28–T30 | Sol / Medium | Anchor instructions, duplicate withdrawal and disclosure |
+| T31–T32 | Sol / Medium | Operator privilege, recovery and safe slot release |
+| T33 | Terra / Medium | Account ownership and independent progress; escalate new permission boundaries to Sol |
+
+- Every task still requires its done-check and applicable earlier checks. No new standalone review for T01, T03, T22 or T34–T37.
+- Review **before risky use**, not merely at the end of a group: dispatch before authority cutover/financial dispatch; custody and restore before funded provisioning; receipt/credit logic before live credit. Split a checkpoint at that prerequisite, then review only subsequent changes at group closure. This adds targeted passes when necessary, not repeated whole-group reviews.
+- Corrections require a targeted independent re-review of the corrected/new changes, not re-review of unchanged work.
+- Nonfinancial next tasks may proceed while review is pending. Task order, owner “next”, explicit operation approvals and review/merge/release acceptance gates still apply; passing checks do not fabricate review acceptance.
+- T04/T33 Terra reviews do not authorize Terra to implement or approve new signing, custody, financial execution or application permission boundaries; escalate those changes to Sol/Astra as appropriate.
 
 | Task | Model | Effort | Second review |
 |---|---|---|---|
 | **T01 — Contract baseline** | Terra | Medium | N — inventory and checks, not authorization changes |
-| **T02 — Execution environment** | Sol | Medium | Sol — permissions and credential boundaries |
+| **T02 — Execution environment** | Sol | Medium | No new review — retain recorded history; no T02–T04 checkpoint |
 | **T03 — Groq access** | Terra | Medium | N |
-| **T04 — Account delivery** | Sol | Medium | Sol — identity and enrollment authorization |
-| **T05 — Financial journal** — Risk if wrong: duplicate requests reserve or credit money twice. | Sol | Medium | Sol |
-| **T06 — Coordinated dispatch** — Risk if wrong: an old worker sends a duplicate transfer. | **Sol implements; Astra reviews only** | **High implementation:** races across workers require careful reasoning. | **Astra, Medium:** inspect duplicate-dispatch paths that passing tests miss; Sol-only reliability here is **UNVERIFIED**. |
-| **T07 — Reconciliation** — Risk if wrong: an uncertain transfer is released or repeated incorrectly. | Sol | Medium | Sol |
-| **T08 — Writer cutover** — Risk if wrong: old deployments retain permission to send outside the safeguards. | Sol | **High:** account for old and current writers together. | Sol |
-| **T09 — Vault access** — Risk if wrong: one permission error exposes family signing keys. | **Sol implements; Astra reviews only** | **High implementation:** SQL permissions and application access must agree. | **Astra, Medium:** inspect key-exposure paths beyond the tested callers; Sol-only reliability here is **UNVERIFIED**. |
-| **T10 — Key restoration** — Risk if wrong: restored data cannot recover the correct wallet. | Sol | Medium | Sol |
-| **T11 — Family provisioning** — Risk if wrong: a family receives incorrectly owned resources or cannot access its funds. | Sol | Medium | Sol |
-| **T12 — Family capacity** — Risk if wrong: concurrent setup enables excess or incomplete families. | Sol | Medium | Sol — financial-access authorization |
-| **T13 — Deposit admission** — Risk if wrong: concurrent deposits exceed the cap or reserve the same funds twice. | Sol | Medium | Sol |
-| **T14 — Velo receipt** — Risk if wrong: an incorrect or reused payment is accepted as deposit backing. | Sol | Medium | Sol |
-| **T15 — Deposit credit** — Risk if wrong: one payment creates duplicate credit or funds the wrong family. | **Sol implements; Astra reviews only** | **High implementation:** payment, reservation and transfer records must remain consistent through interruptions. | **Astra, Medium:** inspect double-credit paths across database and ledger boundaries; Sol-only reliability here is **UNVERIFIED**. |
-| **T16 — Deposit cancellation** — Risk if wrong: cancellation releases funds while payment still succeeds. | Sol | Medium | Sol |
-| **T17 — Parent balance** — Risk if wrong: reserved, pending or operating funds appear spendable. | Sol | Medium | Sol |
-| **T18 — Family allowance** — Risk if wrong: an action uses another family’s key or funds. | Sol | Medium | Sol |
-| **T19 — Shared seller claims** — Risk if wrong: shared claims duplicate settlement or assign it to the wrong purchase. | Sol | Medium | Sol |
-| **T20 — Parent decisions** — Risk if wrong: payment proceeds without valid consent or after rejection/expiry. | Sol | Medium | Sol |
-| **T21 — Scan cancellation** — Risk if wrong: a late scan result starts payment after cancellation. | Sol | Medium | Sol — payment authorization |
+| **T04 — Account delivery** | Sol | Medium | Terra, Medium — standalone review of T04 changes |
+| **T05 — Financial journal** — Risk if wrong: duplicate requests reserve or credit money twice. | Sol | Medium | Astra, Medium — grouped T05–T08 checkpoint; no separate task review |
+| **T06 — Coordinated dispatch** — Risk if wrong: an old worker sends a duplicate transfer. | **Sol implements; Astra reviews only** | **High implementation:** races across workers require careful reasoning. | Astra, Medium — grouped T05–T08 checkpoint; no separate task review |
+| **T07 — Reconciliation** — Risk if wrong: an uncertain transfer is released or repeated incorrectly. | Sol | Medium | Astra, Medium — grouped T05–T08 checkpoint; no separate task review |
+| **T08 — Writer cutover** — Risk if wrong: old deployments retain permission to send outside the safeguards. | Sol | **High:** account for old and current writers together. | Astra, Medium — grouped T05–T08 checkpoint; no separate task review |
+| **T09 — Vault access** — Risk if wrong: one permission error exposes family signing keys. | **Sol implements; Astra reviews only** | **High implementation:** SQL permissions and application access must agree. | Astra, Medium — grouped T09–T12 checkpoint; no separate task review |
+| **T10 — Key restoration** — Risk if wrong: restored data cannot recover the correct wallet. | Sol | Medium | Astra, Medium — grouped T09–T12 checkpoint; no separate task review |
+| **T11 — Family provisioning** — Risk if wrong: a family receives incorrectly owned resources or cannot access its funds. | Sol | Medium | Astra, Medium — grouped T09–T12 checkpoint; no separate task review |
+| **T12 — Family capacity** — Risk if wrong: concurrent setup enables excess or incomplete families. | Sol | Medium | Astra, Medium — grouped T09–T12 checkpoint; no separate task review |
+| **T13 — Deposit admission** — Risk if wrong: concurrent deposits exceed the cap or reserve the same funds twice. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
+| **T14 — Velo receipt** — Risk if wrong: an incorrect or reused payment is accepted as deposit backing. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
+| **T15 — Deposit credit** — Risk if wrong: one payment creates duplicate credit or funds the wrong family. | **Sol implements; Astra reviews only** | **High implementation:** payment, reservation and transfer records must remain consistent through interruptions. | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
+| **T16 — Deposit cancellation** — Risk if wrong: cancellation releases funds while payment still succeeds. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
+| **T17 — Parent balance** — Risk if wrong: reserved, pending or operating funds appear spendable. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
+| **T18 — Family allowance** — Risk if wrong: an action uses another family’s key or funds. | Sol | Medium | Sol, Medium — grouped T18–T21 checkpoint; no separate task review |
+| **T19 — Shared seller claims** — Risk if wrong: shared claims duplicate settlement or assign it to the wrong purchase. | Sol | Medium | Sol, Medium — grouped T18–T21 checkpoint; no separate task review |
+| **T20 — Parent decisions** — Risk if wrong: payment proceeds without valid consent or after rejection/expiry. | Sol | Medium | Sol, Medium — grouped T18–T21 checkpoint; no separate task review |
+| **T21 — Scan cancellation** — Risk if wrong: a late scan result starts payment after cancellation. | Sol | Medium | Sol, Medium — grouped T18–T21 checkpoint; no separate task review |
 | **T22 — Vision behavior** | Terra | Medium | N — changes stay within assessment and behavior checks, not financial authorization |
-| **T23 — Bucket notices** | Sol | Medium | Sol — recipient authorization and privacy |
-| **T24 — Savings release** — Risk if wrong: the same Savings principal is released more than once. | Sol | Medium | Sol |
-| **T25 — My Money** — Risk if wrong: private funds are overspent or disclosed to the parent. | Sol | Medium | Sol |
-| **T26 — Weekly boundaries** — Risk if wrong: repeated advancement starts the same financial event twice. | Sol | Medium | Sol |
-| **T27 — Weekly safety** — Risk if wrong: interrupted rollover or allocation duplicates or misplaces principal. | Sol | **High:** coordinate several money movements and concurrent settings changes. | Sol |
-| **T28 — Anchor adapter** — Risk if wrong: invalid authentication or transfer instructions direct funds incorrectly. | Sol | Medium | Sol |
-| **T29 — Withdrawal execution** — Risk if wrong: a withdrawal is duplicated or consumes reserved funds. | Sol | Medium | Sol |
-| **T30 — Withdrawal privacy** | Sol | Medium | Sol — cross-family disclosure |
-| **T31 — Operator access** | Sol | Medium | Sol — privileged actions and secret redaction |
-| **T32 — Family disable** — Risk if wrong: funds become inaccessible or a slot is released before recovery finishes. | Sol | Medium | Sol |
-| **T33 — Account progress** | Sol | Medium | Sol — per-account authorization and privacy |
+| **T23 — Bucket notices** | Sol | Medium | Sol, Medium — grouped T23–T27 checkpoint; no separate task review |
+| **T24 — Savings release** — Risk if wrong: the same Savings principal is released more than once. | Sol | Medium | Sol, Medium — grouped T23–T27 checkpoint; no separate task review |
+| **T25 — My Money** — Risk if wrong: private funds are overspent or disclosed to the parent. | Sol | Medium | Sol, Medium — grouped T23–T27 checkpoint; no separate task review |
+| **T26 — Weekly boundaries** — Risk if wrong: repeated advancement starts the same financial event twice. | Sol | Medium | Sol, Medium — grouped T23–T27 checkpoint; no separate task review |
+| **T27 — Weekly safety** — Risk if wrong: interrupted rollover or allocation duplicates or misplaces principal. | Sol | **High:** coordinate several money movements and concurrent settings changes. | Sol, Medium — grouped T23–T27 checkpoint; no separate task review |
+| **T28 — Anchor adapter** — Risk if wrong: invalid authentication or transfer instructions direct funds incorrectly. | Sol | Medium | Sol, Medium — grouped T28–T30 checkpoint; no separate task review |
+| **T29 — Withdrawal execution** — Risk if wrong: a withdrawal is duplicated or consumes reserved funds. | Sol | Medium | Sol, Medium — grouped T28–T30 checkpoint; no separate task review |
+| **T30 — Withdrawal privacy** | Sol | Medium | Sol, Medium — grouped T28–T30 checkpoint; no separate task review |
+| **T31 — Operator access** | Sol | Medium | Sol, Medium — grouped T31–T32 checkpoint; no separate task review |
+| **T32 — Family disable** — Risk if wrong: funds become inaccessible or a slot is released before recovery finishes. | Sol | Medium | Sol, Medium — grouped T31–T32 checkpoint; no separate task review |
+| **T33 — Account progress** | Sol | Medium | Terra, Medium — account ownership/progress |
 | **T34 — Backend performance** | Terra | Medium | N — preserve authorization and financial logic; existing checks are the gate |
 | **T35 — Combined acceptance** — Risk if wrong: failed financial or isolation checks are reported as passing. | **Terra — run established checks only** | Medium | N — failures return to the relevant implementation task |
 | **T36 — Deployment acceptance** — Risk if wrong: checks accept the wrong release or configuration. | **Terra — execute the approved procedure and checks only** | Medium | N — owner authorizes deployment; code changes return to their assigned task |
 | **T37 — Backend handoff** | Terra | Medium | N — documentation and established setup checks |
 
-**Execution limits:** T35 and T36 do not authorize Terra to repair financial, signing, custody, authorization or privacy code. T34 does not authorize changes to financial or authorization behavior. Such work returns to its assigned task, model and review requirement.
+**Execution limits:** T35 and T36 run established procedures/checks only; failures return to the assigned implementation task. T34 does not authorize financial or authorization changes. Reviewer changes do not change implementation authority.
 
-**Allocation:** Sol implements **30 tasks**; Terra implements **7**; Astra implements **0** and reviews **3 tasks only**; Luna is used for **0** tasks. Five implementation tasks use High effort; all other implementation and review work uses Medium.
+**Allocation:** Sol implements **30 tasks**; Terra implements **7**; Astra implements **0**. Nine scheduled review scopes: **3 Astra**, **4 Sol**, **2 Terra** (T04 and T33). Seven are grouped checkpoints; prerequisite/correction passes can add reviews. Five implementation tasks retain High effort; other implementation and review work remains Medium. No review is being executed by this documentation change.
 
 ## 3. Start here — first five tasks
 

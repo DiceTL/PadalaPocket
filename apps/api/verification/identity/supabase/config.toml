@@ -1,0 +1,8 @@
+# T04: only the declared Site URL is managed. SMTP and existing redirect entries stay unchanged.
+project_id = "padalapocket-identity-verification"
+
+[auth]
+site_url = "https://padalapocket.vercel.app"
+
+[auth.email]
+enable_confirmations = true

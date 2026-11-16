@@ -9,6 +9,46 @@ Repository/evidence review: **2026-11-14**. Backend-first acceptance map for the
 - [Implementation plan](implementation-plan.md) is the only task-status source. Packets contain evidence, [product spec](product-spec.md) owns requirements, and [decision ledger](decision-ledger.md) owns accepted changes. This checklist changes no packet status and authorizes no new implementation.
 - Finish backend behavior and backend acceptance first; then finish browser integration and presentation. A missing API, money journal, notification event or account-state persistence is not frontend-only work. Do not calculate completion percentages from checkbox counts.
 - Financial evidence currently serves the provisioned demo family and one fixed seller. Separate-email signup/linking exists, but new families cannot transact. Testnet XLM and simulated PHP at the frozen mapping are not redeemable pesos or real GCash payout.
+- Backend execution uses the approved [T01–T37 completion plan](backend-mvp-completion-plan.md), its scoped packets and the [required evidence/checklist update procedure](backend-mvp-completion-plan.md#evidence-and-checklist-update-procedure). Its accepted defaults supersede older “Decide” wording below; implementation/live acceptance remains open until evidenced. Task status still belongs only in the implementation plan.
+
+## Backend task-to-acceptance map
+
+After each task, update the specific affected bullets in the linked sections and their matching [decision acceptance](#current-decision-acceptance--dec-093dec-100), not just this index. Add a dated packet link to every changed criterion. A task can contribute evidence without closing a whole feature; keep combined backend/UI/release items unchecked until all parts are proved. T35–T37 validate earlier work rather than automatically checking all mapped items.
+
+| Task packets | Checklist criteria to inspect/update |
+|---|---|
+| [T01](../handoff/T01.md), [T02](../handoff/T02.md) | [Verification foundations](#backend-verification-foundations) only; neither proves deployed identity, custody or financially enabled families. |
+| [T03](../handoff/T03.md) | [Photo AI](#3-photo-ai-needswants-purchases-and-seller-settlement): replacement credential/model access, not category accuracy or UI cancellation. |
+| [T04](../handoff/T04.md) | [Accounts](#1-accounts-family-linking-and-financial-onboarding): confirmation/resend, enrollment and registration/code errors. |
+| [T05](../handoff/T05.md), [T06](../handoff/T06.md), [T07](../handoff/T07.md), [T08](../handoff/T08.md) | [Safety/recovery](#9-cross-cutting-money-safety-notifications-and-recovery): journals, holds, dispatch fencing, reconciliation and writer cutover; feature-specific money paths still need their own evidence. |
+| [T09](../handoff/T09.md), [T10](../handoff/T10.md) | [Accounts](#1-accounts-family-linking-and-financial-onboarding) and [custody evidence gate](#exact-evidence-required-before-complete): protected keys, bindings and actual restore; not provisioning. |
+| [T11](../handoff/T11.md), [T12](../handoff/T12.md) | [Accounts](#1-accounts-family-linking-and-financial-onboarding) and [decision acceptance](#current-decision-acceptance--dec-093dec-100): independent wallets/resources, readiness, ten-slot admission and overflow. |
+| [T13](../handoff/T13.md) | [Deposits](#7-velo-parent-deposits) and decision acceptance: amount/count/cumulative limits, pending admission and legacy request compatibility. |
+| [T14](../handoff/T14.md), [T15](../handoff/T15.md) | [Deposits](#7-velo-parent-deposits) and decision acceptance: actual receipt validation, unique attribution, confirmed family transfer and no premature credit. |
+| [T16](../handoff/T16.md) | [Deposits](#7-velo-parent-deposits), [safety/recovery](#9-cross-cutting-money-safety-notifications-and-recovery) and decision acceptance: cancellation/payment races and pending isolation. |
+| [T17](../handoff/T17.md) | [Parent funding](#2-parent-rules-money-mapping-and-allowance-distribution) and [deposits](#7-velo-parent-deposits): available parent principal and truthful pending/history projections; UI remains separate. |
+| [T18](../handoff/T18.md) | [Funding](#2-parent-rules-money-mapping-and-allowance-distribution), [purchases](#3-photo-ai-needswants-purchases-and-seller-settlement) and [accounts](#1-accounts-family-linking-and-financial-onboarding): two-family financial authority, bucket conservation and routine Wants acceptance. |
+| [T19](../handoff/T19.md) | [Purchases](#3-photo-ai-needswants-purchases-and-seller-settlement) and [withdrawal](#8-interactive-test-anchor-withdrawal--backend-still-missing): shared-seller claim coordination/attribution, not anchor completion. |
+| [T20](../handoff/T20.md) | [Parent decisions](#4-parent-decisions-expiry-and-private-allowance-activity): exact consent, holds, decision/expiry races and settlement through coordinated execution. |
+| [T21](../handoff/T21.md), [T22](../handoff/T22.md) | [Photo AI](#3-photo-ai-needswants-purchases-and-seller-settlement): cancellation/late-response boundary and real-image behavior respectively; browser cancel controls remain separate. |
+| [T23](../handoff/T23.md) | [Purchases](#3-photo-ai-needswants-purchases-and-seller-settlement) and [notifications](#9-cross-cutting-money-safety-notifications-and-recovery): student-only insufficient/zero notices; does not close the reminder part. |
+| [T24](../handoff/T24.md), [T25](../handoff/T25.md) | [Savings/My Money](#5-savings-release-and-private-my-money--backend-still-missing): release requests/decisions/transfers, private spending/history and new-path privacy respectively. |
+| [T26](../handoff/T26.md), [T27](../handoff/T27.md) | [Weekly lifecycle](#6-weekly-schedule-test-advancement-reminder-and-recap), [notifications](#9-cross-cutting-money-safety-notifications-and-recovery) and decision acceptance: reminder/event, latest settings, running-operation restrictions and safe rollover/allocation; UI restrictions remain open. |
+| [T28](../handoff/T28.md), [T29](../handoff/T29.md), [T30](../handoff/T30.md) | [Withdrawal](#8-interactive-test-anchor-withdrawal--backend-still-missing): real anchor instructions, automatic bounded execution and privacy-safe summaries respectively; historical operator proof is insufficient. |
+| [T31](../handoff/T31.md), [T32](../handoff/T32.md) | [Safety/recovery](#9-cross-cutting-money-safety-notifications-and-recovery) and decision acceptance: operator queries/menu/redacted error history, then disable/recovery/slot release; neither alone closes the combined names/disable criterion. |
+| [T33](../handoff/T33.md) | [Onboarding](#10-onboarding-state--backend-dependent-work-before-frontend-only-handoff) and decision acceptance: names and independent account progress/resume; tutorial presentation remains open. |
+| [T34](../handoff/T34.md) | [Photo AI/performance](#3-photo-ai-needswants-purchases-and-seller-settlement): measured backend read/write targets; do not claim browser/Auth/AI latency targets passed from backend timings. |
+| [T35](../handoff/T35.md) | [Backend completion map](#backend-completion-map), [evidence gates](#exact-evidence-required-before-complete) and decision acceptance: combined real-database isolation, concurrency, interruption and bounded live evidence across all backend flows. |
+| [T36](../handoff/T36.md) | [Release](#13-release-and-final-backend-handoff-evidence) and each mapped release bullet: intended deployed backend/migrations/configuration and authenticated journeys; no designer/device acceptance. |
+| [T37](../handoff/T37.md) | [Final backend handoff](#13-release-and-final-backend-handoff-evidence): final API/error/setup/recovery contracts and independent clean setup; not the recording, judging README or full frontend delivery. |
+
+## Backend verification foundations
+
+These evidence-qualified checks are prerequisites, not product-feature or deployment acceptance. Current task review/acceptance remains in the [implementation plan](implementation-plan.md#backend-mvp-completion--t01t37).
+
+- [x] T01: the offline `contract-baseline` command exercises the unchanged browser client against isolated handlers, route/error contracts, existing backend tests and fixture validation. Recorded PASS on 2026-11-16; no hosted or live-provider compatibility is claimed. [Evidence](../handoff/T01.md#recorded-evidence).
+- [x] T02: the `environment` command verifies the isolated loopback-only local Supabase stack, ordered migrations, two synthetic families, membership/role denial, server-only administrative access, readiness gates and public-response credential isolation. Recorded PASS on 2026-11-16; no hosted setup or wallet custody/provisioning is claimed. [Evidence](../handoff/T02.md#recorded-evidence).
+- [ ] Verify: retain the owner-reported T02 review history and record merge/CI acceptance when available. DEC-103 requires no additional T02 review or T02–T04 checkpoint; missing historical reviewer details are not fabricated. [Review history](../handoff/T02.md#recorded-evidence).
 
 ## Completion summary — decisions, work and release gates
 
@@ -75,8 +115,10 @@ Evidence: [L-008](../handoff/L-008.md), [R-001](../handoff/R-001.md); implementa
 
 ### Unfinished backend / acceptance
 
-- [ ] Release/Verify: configure Supabase Site URL and allowed deployed redirects, confirm email/SMTP setup for users outside the project team, deploy canonical-origin handling, then observe a newly sent confirmation/resend link returning to the deployed app and permitting verified enrollment.
-- [ ] Verify: record the complete registration error matrix: duplicate email, invalid credentials, pending verification, expired confirmation, resend/delivery failure and expired/wrong-email/used setup code. Code/rollback cases do not establish every deployed user-facing outcome.
+- [x] T04 verified canonical Auth/redirect and approved Gmail SMTP settings, both fresh parent/student callbacks to deployed setup, and deployed enrollment/trusted linking. The corrected fresh-fixture `identity` check passed; targeted Terra re-review resolved its three findings. This is bounded inbox/API evidence, not full release acceptance. [Fresh evidence](../handoff/T04.md#fresh-live-acceptance-and-targeted-re-review--2026-11-16).
+- [ ] Verify: investigate the earlier parent confirmation links that displayed invalid/expired errors despite Auth later showing the parent confirmed. The fresh parent and student callbacks now succeed, but the cause of those older pages remains unestablished. [Observed history](../handoff/T04.md#confirmation-and-passing-identity-evidence).
+- [x] Corrected T04 verification requires unenrolled fixtures, explicit successful observations bound to both fresh identities, and the approved enabled SMTP configuration. Regression checks, fresh live acceptance and targeted Terra re-review passed; old enrolled fixtures fail instead of silently skipping cases. [Corrections and acceptance](../handoff/T04.md#fresh-live-acceptance-and-targeted-re-review--2026-11-16).
+- [ ] Verify: record the complete registration error matrix: duplicate email, invalid credentials, pending verification, expired confirmation, resend/delivery failure and expired/wrong-email/used setup code. T04 adds real deployed coverage for a subset; the full matrix is not closed. [Coverage and limits](../handoff/T04.md#confirmation-and-passing-identity-evidence).
 - [ ] Decide: exact independent-family key custody, signing, recovery, provisioning and Velo accounting/support under the selected app-managed wallet target (DEC-093); current demo secrets cannot simply be reused for unrelated families.
 - [ ] Missing: provision and durably bind independent family wallets/escrows/signing authority and receiving configuration before enabling financial access. No completed provisioning workflow or wallet registry currently establishes this.
 - [ ] Verify: two independently enrolled families cannot read each other's rules, activity, photos, codes or money operations, including guessed IDs and direct API calls; a student cannot act as parent.
@@ -115,7 +157,10 @@ Evidence: [R-002](../handoff/R-002.md), [L-002](../handoff/L-002.md), [L-003](..
 - [ ] Verify: representative real photos exercise the supported category boundaries, apple versus sweets/juice/electronics, uncertain/misclassified inputs and restricted-item no-payment behavior. Do not invent an accuracy percentage or treat a successful apple/notebook as coverage of all 15 categories.
 - [ ] Missing: notify the student on insufficient selected-bucket funds and when the selected bucket becomes zero after a successful purchase, without approval, debt or cross-bucket borrowing (DEC-097).
 
-DEC-099 includes AI latency/reliability in planning. User reports uncertain/unavailable results; expired Groq model/key is an unverified possible cause. Diagnose and measure before agreeing targets or selecting a provider/model; do not suppress uncertainty.
+The approved [backend plan](backend-mvp-completion-plan.md) records the owner's confirmed expired Groq credential; T03 replaces it without calling the expired key. T22 owns real-image behavior, T34 owns backend latency evidence, and browser/Auth/AI waiting remains separately measured rather than hidden.
+
+- [x] Replacement server-only Groq credential and configurable vision model produced one bounded valid real-image assessment on 2026-11-16. This establishes access only, not category accuracy or deployed configuration. [T03 evidence](../handoff/T03.md#recorded-evidence).
+- [ ] Verify: representative database-backed reads meet backend p95 ≤1 second and nonfinancial writes p95 ≤2 seconds under the approved plan; report third-party waiting separately. Browser/login and image accuracy are not established by these timings. [T34](../handoff/T34.md).
 
 - [ ] Missing/Verify (DEC-101): let the student cancel a slow scan or continue waiting; after cancellation or failure require the student to provide photo and details again. Prove cancellation races, late responses and retries cannot initiate a purchase. No implementation or provider choice is implied.
 
