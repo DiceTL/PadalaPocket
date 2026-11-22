@@ -7,7 +7,7 @@ import { authenticateMember } from './identity.mjs';
 import { phpToStroops, splitAllowance, MONEY_MAPPING } from './money-mapping.mjs';
 const err = (status, code) => Object.assign(new Error(code), {status, code});
 const amount = phpToStroops('968');
-export async function funding(req,res, { authenticate = authenticateMember, database = createClient, ledger = () => new NoirAgentClient({network:'testnet'}) } = {}) {
+export async function funding(req,res, { authenticate = authenticateMember, database = createClient, ledger = () => new NoirAgentClient({network:'testnet'}), writers } = {}) {
  res.setHeader('Content-Type','application/json'); res.setHeader('Cache-Control','no-store');
  const send=(status,body)=>{res.statusCode=status;res.end(JSON.stringify(body));};
  try {
@@ -20,37 +20,62 @@ export async function funding(req,res, { authenticate = authenticateMember, data
   const deviceHash=createHash('sha256').update('PadalaPocket Needs '+member.family_id).digest('hex');
   const asset=Asset.native().contractId(Networks.TESTNET);
   const query=()=>db.from('needs_funding');
-  const save=async(row,patch)=>{const {error}=await query().update(patch).eq('id',row.id);if(error)throw err(503,'PROVIDER_UNAVAILABLE');Object.assign(row,patch);};
+  const save=async(row,patch)=>{
+   const {data,error}=await query().update(patch).eq('id',row.id).eq('status',row.status)
+    .eq('steps',JSON.stringify(row.steps)).select('*').maybeSingle();
+   if(error||!data)throw err(503,'PROVIDER_UNAVAILABLE');
+   Object.assign(row,data);
+  };
   const project=row=>({id:row.id,status:row.status,priceMinor:row.price_minor,amountStroops:row.amount_stroops,mappingVersion:row.mapping_version,transactionHash:row.steps.fund?.hash??null,escrowStroops:row.escrow_stroops,createdAt:row.created_at,wantsStroops:row.wants_stroops??'0',totalStroops:row.total_stroops??row.amount_stroops,wantsTransactionHash:row.steps.wantsFund?.hash??null});
   async function reconcile(row) {
    if(row.status==='confirmed'||row.status==='failed') return;
    const required = BigInt(row.wants_stroops??'0')>0n ? ['fund','wantsFund'].filter(n=>n!=='fund'||BigInt(row.amount_stroops)>0n) : ['fund'];
    for(const name of required){
     if(!row.steps[name]?.hash)return;
-    const result=await noir.server.getTransaction(row.steps[name].hash);
-    if(result.status==='FAILED'&&row.rules_revision==null){await save(row,{status:'failed'});return;}
-    if(result.status!=='SUCCESS')return;
+    const result=await writers.observe({kind:'funding',row,stage:name});
+    if(result.outcome!=='confirmed')return;
    }
+   await confirmBacking(row);
+  }
+  async function confirmBacking(row) {
    const needs=BigInt(row.amount_stroops)>0n?await noir.getEscrowBalance(row.device_hash):0n;
    const wants=BigInt(row.wants_stroops??'0')>0n?await noir.getEscrowBalance(row.wants_device_hash):0n;
    if(needs<BigInt(row.amount_stroops)||wants<BigInt(row.wants_stroops??'0'))throw Error('BACKING_MISMATCH');
    await save(row,{status:'confirmed',escrow_stroops:needs.toString()});
   }
+  const pending=row=>['processing','unknown'].includes(row.status);
+  const resumable=row=>pending(row)&&row.parent_id===member.user_id&&row.rules_revision!=null&&writers.managed(row);
   if(req.method==='GET') {
    const {data,error}=await query().select('*').eq('family_id',member.family_id).order('created_at',{ascending:false});
    if(error)throw err(503,'PROVIDER_UNAVAILABLE');
    for(const row of data)await reconcile(row);
-   return send(200,{operations:data.map(project),confirmedNeedsStroops:data.filter(r=>r.status==='confirmed').reduce((a,r)=>a+BigInt(r.amount_stroops),0n).toString(),confirmedWantsStroops:data.filter(r=>r.status==='confirmed').reduce((a,r)=>a+BigInt(r.wants_stroops??'0'),0n).toString(),fundingPriceMinor:'968',fundingAmountStroops:amount});
+   return send(200,{operations:data.map(row=>({...project(row),...(distribution&&resumable(row)?{canResume:true}:{})})),confirmedNeedsStroops:data.filter(r=>r.status==='confirmed').reduce((a,r)=>a+BigInt(r.amount_stroops),0n).toString(),confirmedWantsStroops:data.filter(r=>r.status==='confirmed').reduce((a,r)=>a+BigInt(r.wants_stroops??'0'),0n).toString(),fundingPriceMinor:'968',fundingAmountStroops:amount});
   }
-  const key=req.headers['idempotency-key'];
-  if(!/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(key??''))throw err(400,'INVALID_INPUT');
   let body=req.body;
   if(body===undefined){let raw='';for await(const c of req){raw+=c;if(Buffer.byteLength(raw)>1024)throw err(400,'INVALID_INPUT');}try{body=JSON.parse(raw);}catch{throw err(400,'INVALID_INPUT');}}
   if(typeof body==='string'){try{body=JSON.parse(body);}catch{throw err(400,'INVALID_INPUT');}}
+  if(distribution&&body&&Object.keys(body).length===1&&Object.hasOwn(body,'resumeId')){
+   if(typeof body.resumeId!=='string'||!/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(body.resumeId))throw err(400,'INVALID_INPUT');
+   const {data:row,error}=await query().select('*').eq('id',body.resumeId).eq('family_id',member.family_id).eq('parent_id',member.user_id).maybeSingle();
+   if(error)throw err(503,'PROVIDER_UNAVAILABLE');
+   if(!row||row.rules_revision==null)throw err(404,'NOT_FOUND');
+   if(pending(row)&&!resumable(row))throw err(409,'FUNDING_PENDING');
+   if(resumable(row))await advance(row);
+   return send(200,project(row));
+  }
+  const key=req.headers['idempotency-key'];
+  if(!/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(key??''))throw err(400,'INVALID_INPUT');
   if(!body||Object.keys(body).length!==1||(distribution?!Number.isSafeInteger(body.expectedRevision):body.priceMinor!=='968'))throw err(409,'IDEMPOTENCY_CONFLICT');
   const prior=await query().select('*').eq('parent_id',member.user_id).eq('request_key',key).maybeSingle();
   if(prior.error)throw err(503,'PROVIDER_UNAVAILABLE');
-  if(prior.data){if(distribution?(prior.data.rules_revision!==body.expectedRevision):prior.data.rules_revision!=null)throw err(409,'IDEMPOTENCY_CONFLICT');await reconcile(prior.data);return send(200,project(prior.data));}
+  if(prior.data){
+   if(distribution?(prior.data.rules_revision!==body.expectedRevision):prior.data.rules_revision!=null)throw err(409,'IDEMPOTENCY_CONFLICT');
+   if(!['confirmed','failed'].includes(prior.data.status)){
+    if(writers.managed(prior.data))await advance(prior.data);
+    else await reconcile(prior.data);
+   }
+   return send(200,project(prior.data));
+  }
   const settings=distribution?await readFamilyRules(db,member.family_id):null;
   if(distribution&&settings.revision!==body.expectedRevision)throw err(409,'RULES_CHANGED');
   const total=distribution?phpToStroops(settings.settings.weeklyAmountMinor):amount;
@@ -59,37 +84,66 @@ export async function funding(req,res, { authenticate = authenticateMember, data
   const inserted=await query().insert({family_id:member.family_id,parent_id:member.user_id,request_key:key,price_minor:distribution?settings.settings.weeklyAmountMinor:'968',amount_stroops:split.needs,wants_stroops:split.wants,total_stroops:total,wants_device_hash:wantsDevice,rules_revision:settings?.revision??null,mapping_version:MONEY_MAPPING.version,device_hash:deviceHash}).select('*').single();
   if(inserted.error){if(inserted.error.code==='23505'){const replay=await query().select('*').eq('parent_id',member.user_id).eq('request_key',key).maybeSingle();if(replay.data){if(distribution?(replay.data.rules_revision!==body.expectedRevision):replay.data.rules_revision!=null)throw err(409,'IDEMPOTENCY_CONFLICT');return send(200,project(replay.data));}throw err(409,'FUNDING_PENDING');}throw err(503,'PROVIDER_UNAVAILABLE');}
   const row=inserted.data;
-  try {
-   const owner=keypairSigner(process.env.OWNER_SECRET), agent=keypairSigner(process.env.AGENT_SECRET);
-   const operations=[];
-   for(const [bucket,target,quantity] of [['',deviceHash,split.needs],['wants',wantsDevice,split.wants]]){
-    if(BigInt(quantity)===0n)continue;
-    const deviceOwner=await noir.getDeviceOwner(target);
-    if(!deviceOwner)operations.push([bucket?'wantsDevice':'device',{kind:'registerDevice',deviceHash:target,agent:agent.publicKey}]);
-    else if(deviceOwner!==owner.publicKey)throw Error('OWNER_MISMATCH');
-    operations.push([bucket?'wantsFund':'fund',{kind:'fundEscrow',deviceHash:target,token:asset,amount:BigInt(quantity)}]);
-   }
-   for(const [name,op] of operations){
-    const unsigned=await noir.prepare(owner.publicKey,op);
-    const signed=await owner.signTransaction(unsigned,{networkPassphrase:Networks.TESTNET});
-    const tx=TransactionBuilder.fromXDR(signed,Networks.TESTNET);
-    if(BigInt(tx.fee)>300000000n)throw Error('FEE_LIMIT');
-    const [accountResponse,ledgerResponse]=await Promise.all([fetch(`https://horizon-testnet.stellar.org/accounts/${owner.publicKey}`, {signal:AbortSignal.timeout(15000)}),fetch('https://horizon-testnet.stellar.org/ledgers?order=desc&limit=1', {signal:AbortSignal.timeout(15000)})]);
-    if(!accountResponse.ok||!ledgerResponse.ok)throw Error('RESERVE_UNAVAILABLE');
-    const account=await accountResponse.json(),ledger=(await ledgerResponse.json())._embedded.records[0];
-    const native=account.balances.find(b=>b.asset_type==='native');
-    const stroops=v=>BigInt(v.replace('.',''));
-    const reserve=BigInt(2+account.subentry_count+(account.num_sponsoring??0)-(account.num_sponsored??0))*BigInt(ledger.base_reserve_in_stroops);
-    if(operations[0][0]===name && stroops(native.balance)-stroops(native.selling_liabilities)-reserve-BigInt(total)-300000000n*BigInt(operations.length)<0n)throw Error('INSUFFICIENT_FUNDS');
-    if(stroops(native.balance)-stroops(native.selling_liabilities)-reserve-BigInt(tx.fee)<(op.kind==='fundEscrow'?op.amount:0n))throw Error('INSUFFICIENT_FUNDS');
-    row.steps[name]={hash:tx.hash().toString('hex'),signed};
-    await save(row,{steps:row.steps}); // durable envelope BEFORE network dispatch
-    await noir.submit(signed,op);
-    const result=await noir.server.getTransaction(row.steps[name].hash);
-    if(result.status!=='SUCCESS')throw Error('UNKNOWN');
-   }
-   await reconcile(row);
-  } catch {await save(row,{status:'unknown'});}
+  if(writers.managed(row))await advance(row);
   return send(row.status==='confirmed'?201:202,project(row));
+
+  async function advance(row) {
+   try {
+    const buckets=[['device','fund',row.device_hash,BigInt(row.amount_stroops)],
+     ['wantsDevice','wantsFund',row.wants_device_hash,BigInt(row.wants_stroops??'0')]];
+    let owner, agent, checkedReserve=false;
+    const operations=[];
+    async function outstanding(stage) {
+     const state=await writers.observe({kind:'funding',row,stage});
+     const saved=row.steps[stage]?.hash;
+     if(state.outcome==='confirmed'&&state.transactionHash&&(!saved||saved===state.transactionHash)){
+      if(!saved)await save(row,{steps:{...row.steps,[stage]:{hash:state.transactionHash}}});
+      return null;
+     }
+     // Resume saved prepared bytes through the existing one-shot send claim, never replace them.
+     if(state.phase==='prepared'&&state.reason==='NOT_DISPATCHED'&&state.transactionHash&&(!saved||saved===state.transactionHash))return 'prepared';
+     if(!saved&&state.reason==='NO_DISPATCH_RECORD')return 'unstarted';
+     throw Error('UNKNOWN');
+    }
+    for(const [registration,payment,target,quantity] of buckets){
+     if(quantity===0n||!await outstanding(payment))continue;
+     owner??=keypairSigner(process.env.OWNER_SECRET);
+     const deviceOwner=await noir.getDeviceOwner(target);
+     if(deviceOwner&&deviceOwner!==owner.publicKey)throw Error('OWNER_MISMATCH');
+     const registrationPhase=await outstanding(registration);
+     if(registrationPhase==='prepared'||(registrationPhase==='unstarted'&&!deviceOwner)){
+      operations.push([registration,{kind:'registerDevice',deviceHash:target,agent:(agent??=keypairSigner(process.env.AGENT_SECRET)).publicKey}]);
+     }
+     operations.push([payment,{kind:'fundEscrow',deviceHash:target,token:asset,amount:quantity}]);
+    }
+    for(const [name,op] of operations){
+     const state=await writers.dispatch({kind:'funding',row,stage:name,sourceAccount:owner.publicKey,prepare:async()=>{
+      const unsigned=await noir.prepare(owner.publicKey,op);
+      const signed=await owner.signTransaction(unsigned,{networkPassphrase:Networks.TESTNET});
+      const tx=TransactionBuilder.fromXDR(signed,Networks.TESTNET);
+      if(BigInt(tx.fee)>300000000n)throw Error('FEE_LIMIT');
+      const [accountResponse,ledgerResponse]=await Promise.all([fetch(`https://horizon-testnet.stellar.org/accounts/${owner.publicKey}`, {signal:AbortSignal.timeout(15000)}),fetch('https://horizon-testnet.stellar.org/ledgers?order=desc&limit=1', {signal:AbortSignal.timeout(15000)})]);
+      if(!accountResponse.ok||!ledgerResponse.ok)throw Error('RESERVE_UNAVAILABLE');
+      const account=await accountResponse.json(),ledger=(await ledgerResponse.json())._embedded.records[0];
+      const native=account.balances.find(b=>b.asset_type==='native');
+      const stroops=v=>BigInt(v.replace('.',''));
+      const reserve=BigInt(2+account.subentry_count+(account.num_sponsoring??0)-(account.num_sponsored??0))*BigInt(ledger.base_reserve_in_stroops);
+      const spendable=stroops(native.balance)-stroops(native.selling_liabilities)-reserve;
+      if(!checkedReserve){
+       const remaining=operations.slice(operations.findIndex(([stage])=>stage===name));
+       if(spendable<remaining.reduce((sum,[,step])=>sum+(step.amount??0n)+300000000n,0n))throw Error('INSUFFICIENT_FUNDS');
+       checkedReserve=true;
+      }
+      if(spendable-BigInt(tx.fee)<(op.kind==='fundEscrow'?op.amount:0n))throw Error('INSUFFICIENT_FUNDS');
+      return {signed,hash:tx.hash().toString('hex')};
+     }});
+     if(state.transactionHash&&!row.steps[name]?.hash)await save(row,{steps:{...row.steps,[name]:{hash:state.transactionHash}}});
+     if(state.phase!=='confirmed'||!state.transactionHash||row.steps[name]?.hash!==state.transactionHash)throw Error('UNKNOWN');
+    }
+    await confirmBacking(row);
+   } catch {
+    if(row.status!=='unknown')await save(row,{status:'unknown'});
+   }
+  }
  }catch(e){send(e.status??503,{error:{code:e.code??'PROVIDER_UNAVAILABLE',message:e.status?e.code:'Funding service unavailable.',retryable:!e.status||e.status>=500}});}
 }

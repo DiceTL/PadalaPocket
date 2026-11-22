@@ -17,16 +17,19 @@ test('swept principal cannot be spent again; Needs and Wants conserve independen
 });
 import {weekly} from '../src/weekly.mjs';
 function fixture(role='parent') {
- const event={id:'11111111-1111-4111-8111-111111111111',family_id:'family',parent_id:'parent',rules_revision:0,stage:0,stage_started:false,status:'processing',steps:{},needs_stroops:'100',wants_stroops:'80'};
+ const event={id:'11111111-1111-4111-8111-111111111111',coordinator_version:8,family_id:'family',parent_id:'parent',rules_revision:0,stage:0,stage_started:false,status:'processing',steps:{},needs_stroops:'100',wants_stroops:'80'};
  const clock={family_id:'family',revision:0,simulated_at:'2026-11-07T00:00:00Z',weekday:0,local_time:'09:00'};
  let prepare=0,submit=0,status='NOT_FOUND';
  const db={from(name){let patch,filters=[],single=false;const run=()=>{let data=name==='weekly_clocks'?[clock]:name==='weekly_events'?[event]:[];data=data.filter(r=>filters.every(([k,v])=>r[k]===v));if(patch)for(const r of data)Object.assign(r,structuredClone(patch));return Promise.resolve({data:structuredClone(single?data[0]??null:data)});};return {select(){return this;},upsert(){return Promise.resolve({data:null});},eq(k,v){filters.push([k,v]);return this;},update(p){patch=p;return this;},single(){single=true;return run();},maybeSingle(){single=true;return run();},order:run,then(a,b){return run().then(a,b);}};}};
  db.rpc=async()=>({data:null});
- const deps={authenticate:async()=>({member:{role,user_id:role,family_id:'family'}}),database:()=>db,ledger:()=>({verify:async()=>true,spendable:async()=>0n,prepare:async()=>{prepare++;return {signed:'envelope',hash:'hash'};},submit:async()=>{submit++;assert.equal(event.steps.savingsDevice.signed,'envelope');},status:async()=>({status})})};
+ const deps={authenticate:async()=>({member:{role,user_id:role,family_id:'family'}}),database:()=>db,
+  ledger:()=>({verify:async()=>true,spendable:async()=>0n,plan:async()=>({sourceAccount:'source',prepare:async()=>{prepare++;return {signed:'envelope',hash:'hash'};}})}),
+  writers:{managed:row=>row.coordinator_version===8,observe:async()=>({outcome:status==='SUCCESS'?'confirmed':'fenced'}),
+   dispatch:async({prepare:build})=>{const step=await build();submit++;return {phase:status==='SUCCESS'?'confirmed':'dispatching',transactionHash:step.hash};}}};
  const call=async(method='POST')=>{const res={setHeader(){},end(v){this.body=JSON.parse(v);}};await weekly({url:method==='POST'?'/api/demo/advance':'/api/weekly',method,headers:{'idempotency-key':event.id},body:{expectedRevision:0}},res,deps);return res;};
  return {event,call,setStatus:s=>{status=s;},counts:()=>({prepare,submit})};
 }
-test('unknown stage retains its envelope and concurrent/repeated admission cannot dispatch replacement',async()=>{
+test('unknown stage retains its identity and concurrent/repeated admission cannot dispatch replacement',async()=>{
  const f=fixture();await Promise.all([f.call(),f.call()]);assert.deepEqual(f.counts(),{prepare:1,submit:1});assert.equal(f.event.stage_started,true);
  await f.call();assert.deepEqual(f.counts(),{prepare:1,submit:1});
  f.setStatus('SUCCESS');await f.call();assert.equal(f.event.stage,1);assert.equal(f.event.stage_started,false);assert.deepEqual(f.counts(),{prepare:1,submit:1});
@@ -39,4 +42,10 @@ test('parent weekly projection excludes private balance and Wants credit; studen
 
 test('depleted parent wallet records skipped allocation without preparing or dispatching funding',async()=>{
  const f=fixture();f.event.stage=6;const result=await f.call();assert.equal(result.statusCode,200);assert.equal(result.body.status,'allocation_skipped');assert.deepEqual(f.counts(),{prepare:0,submit:0});
+});
+
+test('pre-cutover unknown weekly events cannot be promoted into new execution',async()=>{
+ const f=fixture();f.event.coordinator_version=0;f.event.status='unknown';
+ const result=await f.call();assert.equal(result.statusCode,202);assert.equal(result.body.status,'unknown');
+ assert.equal(f.event.stage,0);assert.equal(f.event.stage_started,false);assert.deepEqual(f.counts(),{prepare:0,submit:0});
 });

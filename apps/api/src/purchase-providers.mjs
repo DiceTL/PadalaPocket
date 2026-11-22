@@ -33,10 +33,10 @@ export function purchaseLedger() {
   const asset = Asset.native().contractId(Networks.TESTNET);
   return {
     merchantPublicKey: signers.merchant.publicKey,
+    sourceAccount: stage => stage.endsWith('claim') ? signers.merchant.publicKey : stage === 'authorize' ? signers.agent.publicKey : signers.owner.publicKey,
     consent: row => signExceptionConsent(row, process.env.OWNER_SECRET, signers.merchant.publicKey, asset),
     exceptionReady: async row => !(await noir.getDeviceOwner(exceptionDevice(row))) && (await noir.getEscrowBalance(exceptionDevice(row)))===0n,
     exceptionComplete: async row => (await noir.getEscrowBalance(exceptionDevice(row))) === 0n && (await noir.getPolicy(exceptionDevice(row))) === null,
-    status: hash => noir.server.getTransaction(hash),
     escrow: device => noir.getEscrowBalance(device), pending: () => noir.getPendingBalance(signers.merchant.publicKey),
     check: (deviceHash, amount) => noir.checkPayment({ deviceHash, agent: signers.agent.publicKey, asset, amount: BigInt(amount), requireEscrow: true }),
     async prepare(stage, row, deviceHash) {
@@ -71,6 +71,5 @@ export function purchaseLedger() {
       if (units(native.balance) - units(native.selling_liabilities) - reserve < BigInt(tx.fee)) throw Error('INSUFFICIENT_FEE_BALANCE');
       return { signed, hash: tx.hash().toString('hex') };
     },
-    submit: signed => noir.submit(signed),
   };
 }

@@ -149,9 +149,11 @@ function renderShell(root, state, controller) {
       }
     }
     if (state.fundingError) panel.append(el('p', '', state.fundingError));
-    const fund = el('button', 'button button-primary', state.fundingBusy ? 'Funding…' : 'Distribute to Needs and Wants');
-    fund.type = 'button'; fund.disabled = Boolean(state.fundingBusy || !state.familyRules || state.funding?.operations.some(op=>['processing','unknown'].includes(op.status)));
-    fund.addEventListener('click', () => controller.fundNeeds()); panel.append(fund);
+    const pending = state.funding?.operations.find(op => ['processing', 'unknown'].includes(op.status));
+    const fund = el('button', 'button button-primary', state.fundingBusy ? 'Funding…' : pending ? 'Resume pending allocation' : 'Distribute to Needs and Wants');
+    fund.type = 'button';
+    fund.disabled = Boolean(state.fundingBusy || (pending ? !pending.canResume : !state.familyRules));
+    fund.addEventListener('click', () => controller.fundNeeds(pending?.id)); panel.append(fund);
     const refresh = el('button', 'button button-secondary', 'Refresh funding status');
     refresh.type = 'button'; refresh.addEventListener('click', () => controller.refreshFunding()); panel.append(refresh);
     const dashboard=content.querySelector('.live-dashboard');

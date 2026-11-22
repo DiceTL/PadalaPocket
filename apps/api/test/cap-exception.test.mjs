@@ -20,22 +20,26 @@ test('owner approval binds every exception field; modified, expired and unrelate
   assert.throws(() => approvedOperation(r, Keypair.random().sign(approvalBytes(r)).toString('base64'), owner.publicKey()));
 });
 
-test('CLI initialization is exclusive, private and does not reveal signing material', async () => {
-  const { mkdtemp, writeFile, readFile, stat } = await import('node:fs/promises');
+test('retired cap CLI rejects mutations without creating or changing historical state', async () => {
+  const { mkdtemp, writeFile, readFile, readdir, rm } = await import('node:fs/promises');
   const { tmpdir } = await import('node:os');
   const { join, resolve } = await import('node:path');
   const { spawnSync } = await import('node:child_process');
   const cwd = await mkdtemp(join(tmpdir(), 'b002-'));
-  const secrets = { OWNER_SECRET: Keypair.random().secret(), AGENT_SECRET: Keypair.random().secret(), MERCHANT_SECRET: Keypair.random().secret() };
-  await writeFile(join(cwd, '.env.local'), '', { mode: 0o600 });
-  const script = resolve(import.meta.dirname, '../scripts/cap-exception.mjs');
-  const run = () => spawnSync(process.execPath, [script, 'init'], { cwd, env: { ...process.env, ...secrets }, encoding: 'utf8' });
-  const first = run();
-  assert.equal(first.status, 0, first.stdout);
-  const path = join(cwd, '.env.b002-state.json');
-  const original = await readFile(path, 'utf8');
-  assert.equal((await stat(path)).mode & 0o077, 0);
-  assert.equal(run().status, 1);
-  assert.equal(await readFile(path, 'utf8'), original);
-  for (const secret of [...Object.values(secrets), JSON.parse(original).exceptionSecret]) assert.ok(!first.stdout.includes(secret));
+  try {
+    const secrets = { OWNER_SECRET: Keypair.random().secret(), AGENT_SECRET: Keypair.random().secret(), MERCHANT_SECRET: Keypair.random().secret() };
+    const script = resolve(import.meta.dirname, '../scripts/cap-exception.mjs');
+    const run = command => spawnSync(process.execPath, [script, command], { cwd, env: { PATH: process.env.PATH, ...secrets }, encoding: 'utf8' });
+    const first = run('init');
+    assert.equal(first.status, 1); assert.deepEqual(await readdir(cwd), []);
+    const path = join(cwd, '.env.b002-state.json');
+    const original = JSON.stringify({ steps: { authorize: { phase: 'dispatched', hash: 'a'.repeat(64) } } });
+    await writeFile(path, original, { mode: 0o600 });
+    for (const command of ['init', 'run', 'approve']) {
+      const result = run(command);
+      assert.equal(result.status, 1);
+      assert.equal(await readFile(path, 'utf8'), original);
+      for (const secret of Object.values(secrets)) assert.equal((result.stdout + result.stderr).includes(secret), false);
+    }
+  } finally { await rm(cwd, { recursive: true, force: true }); }
 });

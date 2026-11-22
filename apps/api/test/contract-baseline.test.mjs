@@ -78,7 +78,7 @@ async function exchange({ invoke, path, method = 'GET', body, key, handler, deps
   } });
   return invoke(api);
 }
-const dependencies = (db, role = 'parent') => ({ database: () => db, authenticate: async () => ({ member: { ...member, role } }) });
+const dependencies = (db, role = 'parent') => ({ writers: {managed:()=>false}, database: () => db, authenticate: async () => ({ member: { ...member, role } }) });
 
 test('identity uses the direct body and preserves optional wallet readiness', async () => {
   for (const role of ['parent', 'student']) {
@@ -137,7 +137,7 @@ test('funding list and saved-revision replay retain both bucket amounts and hash
 test('purchase lists, legacy/current submissions, claim and photo use existing client shapes', async () => {
   const db = database([
     ['needs_purchases', [purchase]], ['needs_funding', [{ amount_stroops: '6000000', wants_stroops: '4000000' }]], ['weekly_events', []],
-    ['needs_purchases', purchase], ['needs_purchases', purchase], ['needs_purchases', purchase], ['needs_purchases', null], ['needs_purchases', purchase],
+    ['needs_purchases', purchase], ['needs_purchases', purchase], ['needs_purchases', purchase], ['needs_purchases', purchase],
   ]);
   const deps = { ...dependencies(db, 'student'), loadRules: async () => rules };
   const list = await exchange({ invoke: api => api.purchases(), path: '/api/purchases', handler: purchases, deps });

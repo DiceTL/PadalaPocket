@@ -1,0 +1,14 @@
+{
+  "framework": null,
+  "installCommand": "npm ci",
+  "buildCommand": "node --check api/index.js && mkdir -p public && printf 'User-agent: *\\nDisallow: /\\n' > public/robots.txt",
+  "outputDirectory": "public",
+  "fluid": true,
+  "functions": {
+    "api/index.js": { "maxDuration": 300 }
+  },
+  "rewrites": [
+    { "source": "/internal/authority", "destination": "/api/index" },
+    { "source": "/api/:path*", "destination": "/api/index" }
+  ]
+}
