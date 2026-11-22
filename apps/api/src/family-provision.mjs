@@ -1,6 +1,7 @@
 import { Account, Asset, Contract, Keypair, Networks, Operation, Transaction, TransactionBuilder } from '@stellar/stellar-sdk';
 import { NoirAgentClient, toCall } from '@noirx402/agent-sdk';
 import { dispatchMoneyStep } from './money-dispatch.mjs';
+import { reconcileMoneyStep } from './money-recovery.mjs';
 import { signFamilyTransaction } from './family-custody.mjs';
 import { readFamilyRules } from './family.mjs';
 import { phpToStroops } from './money-mapping.mjs';
@@ -57,7 +58,7 @@ export async function provisionFamily({ custody, signing, journal, feeSigner, se
   account = address => horizon(`/accounts/${address}`, true),
   baseReserve = async () => BigInt((await horizon('/ledgers?order=desc&limit=1'))._embedded.records[0].base_reserve_in_stroops),
   noir = new NoirAgentClient({ network: 'testnet' }), now = Date.now,
-}, { member, terms }) {
+}, { member, terms, renewal }) {
   if (!uuid.test(member?.family_id ?? '') || !uuid.test(member?.user_id ?? '') || !uuid.test(terms?.requestKey ?? '')) throw fail('INVALID_INPUT', 400);
   const source = feeSigner.publicKey(), family = member.family_id;
   Keypair.fromPublicKey(source);
@@ -70,10 +71,12 @@ export async function provisionFamily({ custody, signing, journal, feeSigner, se
   const total = starts.parent + starts.student + starts.agent;
   if (total > units(terms.maxOperatingTransferStroops) || total > 9223372036854775807n
     || nativeFee * 3n > 4294967295n || noirFee > 4294967295n || nativeFee * 3n + noirFee * 6n > maxFee
-    || !Number.isFinite(expires.getTime()) || expires.getTime() % 1000 !== 0 || expires.getTime() <= now()
-    || expires.getTime() > now() + 86400000 || await baseReserve() !== reserve) throw budget();
-  const rules = await readFamilyRules(journal, family);
-  if (cap > BigInt(phpToStroops(rules.settings.capMinor))) throw budget();
+    || !Number.isFinite(expires.getTime()) || expires.getTime() % 1000 !== 0) throw budget();
+  const validateLive = async deadline => {
+    if (deadline <= now() || deadline > now() + 86400000 || await baseReserve() !== reserve) throw budget();
+    const rules = await readFamilyRules(journal, family);
+    if (cap > BigInt(phpToStroops(rules.settings.capMinor)) || deadline <= now()) throw budget();
+  };
   const frozen = {
     baseReserveStroops: String(reserve), operatingFloatStroops: String(float),
     maxOperatingTransferStroops: terms.maxOperatingTransferStroops, accountFeePerOpStroops: String(nativeFee),
@@ -84,6 +87,8 @@ export async function provisionFamily({ custody, signing, journal, feeSigner, se
     [member.user_id, family, terms.requestKey, source, frozen, candidates && JSON.stringify(candidates)]);
   let record = await begin(null);
   if (!record) {
+    if (renewal) throw fail('PROVISION_CONFLICT');
+    await validateLive(expires.getTime());
     if (spendable(await account(source), source, reserve) < total + nativeFee * 3n) throw budget();
     record = await begin(roles.map(role => {
       const signer = Keypair.random();
@@ -92,8 +97,54 @@ export async function provisionFamily({ custody, signing, journal, feeSigner, se
   }
   const { operationId, accounts } = record;
   const pending = { status: 'pending', operationId, accounts };
-  const dispatch = (stepKey, sourceAccount, prepare) => dispatchMoneyStep(journal, { operationId, familyId: family, stepKey, sourceAccount }, { prepare, server, now });
-  const created = await dispatch('accounts', source, async () => {
+  const devices = buckets.map(([key, name]) => {
+    const role = key === 'my_money' ? 'student' : 'parent';
+    const routine = key === 'needs' || key === 'wants';
+    return { key, role, routine, target: bucketDevice(family, name), agent: accounts[routine ? 'agent' : role] };
+  });
+  const policies = devices.filter(device => device.routine);
+  const policySteps = policies.flatMap(device => [`${device.key}_revoke`, `${device.key}_policy`]);
+  const policyRecord = (previous = null, request = null, approved = null) => call(custody,
+    'select wallet_custody.family_provision_policy($1,$2,$3,$4,$5,$6) as value',
+    [member.user_id, family, operationId, previous, request, approved]);
+  let policy = await policyRecord();
+  let deadline = Date.parse(policy.terms.policyExpiresAt);
+  const observe = (id, stepKey) => reconcileMoneyStep(journal, { operationId: id, familyId: family, stepKey }, { server });
+  if (deadline <= now()) {
+    let inFlight = false;
+    for (const key of ['accounts', ...devices.map(d => `${d.key}_device`)]) {
+      const state = await observe(operationId, key);
+      if (state.phase === 'dispatching' && state.outcome !== 'confirmed') inFlight = true;
+    }
+    for (const key of policySteps) {
+      const state = await observe(policy.operationId, key);
+      if (state.phase === 'dispatching' && state.outcome !== 'confirmed') inFlight = true;
+    }
+    if (inFlight) return pending;
+    if (!renewal) return { ...pending, status: 'policy_renewal_required' };
+    const next = Date.parse(renewal.policyExpiresAt);
+    if (!uuid.test(renewal.requestKey ?? '') || renewal.requestKey === policy.requestKey
+      || !Number.isFinite(next) || next % 1000 !== 0 || units(renewal.maxFeeStroops) < 4n * noirFee) throw budget();
+    await validateLive(next);
+    for (const key of policySteps) {
+      const { data, error } = await journal.rpc('retire_unsent_provision_policy', {
+        p_operation: policy.operationId, p_family: family, p_step_key: key, p_source: accounts.parent,
+      });
+      if (error) throw fail('PROVISION_UNAVAILABLE', 503);
+      if (!data) return pending;
+    }
+    policy = await policyRecord(policy.operationId, renewal.requestKey,
+      { policyExpiresAt: new Date(next).toISOString(), maxFeeStroops: renewal.maxFeeStroops });
+    deadline = Date.parse(policy.terms.policyExpiresAt);
+  } else if (renewal && (policy.operationId === operationId || renewal.requestKey !== policy.requestKey
+    || Date.parse(renewal.policyExpiresAt) !== deadline || renewal.maxFeeStroops !== policy.terms.maxFeeStroops)) {
+    throw fail('PROVISION_CONFLICT');
+  }
+  const dispatch = (id, stepKey, sourceAccount, prepare) => dispatchMoneyStep(journal,
+    { operationId: id, familyId: family, stepKey, sourceAccount },
+    { prepare, server, now, recoverPreparation: true, beforeSend: () => validateLive(deadline) });
+  const created = await dispatch(operationId, 'accounts', source, async () => {
+    await validateLive(deadline);
     const snapshot = await account(source);
     if (spendable(snapshot, source, reserve) < total + nativeFee * 3n) throw budget();
     const builder = new TransactionBuilder(new Account(source, snapshot.sequence), { fee: String(nativeFee), networkPassphrase: Networks.TESTNET,
@@ -105,18 +156,29 @@ export async function provisionFamily({ custody, signing, journal, feeSigner, se
   });
   if (created.phase !== 'confirmed') return pending;
 
-  const devices = buckets.map(([key, name]) => {
-    const role = key === 'my_money' ? 'student' : 'parent';
-    const routine = key === 'needs' || key === 'wants';
-    return { key, role, routine, target: bucketDevice(family, name), agent: accounts[routine ? 'agent' : role] };
-  });
-  const steps = devices.map(d => [d, `${d.key}_device`, { kind: 'registerDevice', deviceHash: d.target, agent: d.agent }]);
-  for (const d of devices.filter(d => d.routine)) {
-    steps.push([d, `${d.key}_policy`, { kind: 'registerAgent', deviceHash: d.target, agent: d.agent, asset: token, maxAmount: cap, expiresAt: expires }]);
+  const steps = devices.map(d => [operationId, d, `${d.key}_device`, { kind: 'registerDevice', deviceHash: d.target, agent: d.agent }]);
+  for (const d of policies) {
+    if (policy.operationId !== operationId) {
+      const revokeKey = `${d.key}_revoke`;
+      const revoke = await observe(policy.operationId, revokeKey);
+      if (revoke.phase !== 'unstarted') {
+        steps.push([policy.operationId, d, revokeKey, { kind: 'revokeAgent', deviceHash: d.target }]);
+      } else if ((await observe(policy.operationId, `${d.key}_policy`)).phase === 'unstarted') {
+        const previous = await noir.getPolicy(d.target);
+        if (previous) {
+          if (previous.agent !== d.agent || previous.asset !== token || previous.maxAmount !== cap
+            || !(previous.expiresAt?.getTime() < now()) || await noir.getDeviceOwner(d.target) !== accounts.parent) throw evidence();
+          steps.push([policy.operationId, d, revokeKey, { kind: 'revokeAgent', deviceHash: d.target }]);
+        }
+      }
+    }
+    steps.push([policy.operationId, d, `${d.key}_policy`, { kind: 'registerAgent', deviceHash: d.target, agent: d.agent,
+      asset: token, maxAmount: cap, expiresAt: new Date(deadline) }]);
   }
-  for (const [device, step, operation] of steps) {
+  for (const [id, device, step, operation] of steps) {
     const address = accounts[device.role];
-    const state = await dispatch(step, address, async () => {
+    const state = await dispatch(id, step, address, async () => {
+      await validateLive(deadline);
       if (spendable(await account(address), address, reserve) < float + noirFee) throw budget();
       const unsigned = await noir.prepare(address, operation);
       const tx = TransactionBuilder.fromXDR(unsigned, Networks.TESTNET);
@@ -138,8 +200,9 @@ export async function provisionFamily({ custody, signing, journal, feeSigner, se
       noir.getPolicy(device.target), noir.getEscrowBalance(device.target)]);
     if (owner !== accounts[device.role] || agent !== device.agent || amount !== 0n) throw evidence();
     if (device.routine ? !policy || policy.agent !== device.agent || policy.asset !== token || policy.maxAmount !== cap
-      || policy.expiresAt?.getTime() !== expires.getTime() || expires.getTime() <= now() : policy !== null) throw evidence();
+      || policy.expiresAt?.getTime() !== deadline : policy !== null) throw evidence();
   }
-  if (await call(custody, 'select wallet_custody.finish_family_provision($1,$2,$3) as value', [member.user_id, family, operationId]) !== true) throw evidence();
+  if (deadline <= now()) return { ...pending, status: 'policy_renewal_required' };
+  if (await call(custody, 'select wallet_custody.finish_family_provision($1,$2,$3) as value', [member.user_id, family, policy.operationId]) !== true) throw evidence();
   return { ...pending, status: 'confirmed' };
 }

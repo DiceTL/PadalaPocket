@@ -27,18 +27,24 @@ try {
   const balances = new Map([[feeSource, 1000000000n]]), sequences = new Map(), devices = new Map(), policies = new Map();
   const prepared = new Map(), envelopes = new Map();
   const xlm = amount => `${amount / 10000000n}.${String(amount % 10000000n).padStart(7, '0')}`;
-  const account = async address => !balances.has(address) ? null : ({
+  let sourceReads = 0, failRead = true;
+  let clock = Math.floor(Date.now()/1000)*1000;
+  const account = async address => {
+    if (address === feeSource && ++sourceReads === 2 && failRead) throw Error('transient account read');
+    return !balances.has(address) ? null : ({
     account_id: address, sequence: String(sequences.get(address) ?? 0), subentry_count: 0, num_sponsoring: 0, num_sponsored: 0,
     signers: [{ key: address, weight: 1, type: 'ed25519_public_key' }], thresholds: { low_threshold: 0, med_threshold: 0, high_threshold: 0 },
     balances: [{ asset_type: 'native', balance: xlm(balances.get(address)), selling_liabilities: '0.0000000' }],
-  });
+    });
+  };
   const noir = {
     contracts: new NoirAgentClient({ network: 'testnet' }).contracts,
     async prepare(source, op) {
       stage = `prepare-${op.kind}`;
       const { contract, method, args } = toCall(source, op);
       const transaction = new TransactionBuilder(new Account(source, String(sequences.get(source) ?? 0)), { fee: BASE_FEE, networkPassphrase: Networks.TESTNET })
-        .addOperation(new Contract(this.contracts[contract]).call(method, ...args)).setTimeout(60).build();
+        .addOperation(new Contract(this.contracts[contract]).call(method, ...args))
+        .setTimebounds(0, Math.floor(clock / 1000) + 60).build();
       prepared.set(transaction.hash().toString('hex'), op);
       return transaction.toXDR();
     },
@@ -47,7 +53,7 @@ try {
     getPolicy: async id => policies.get(id) ?? null,
     getEscrowBalance: async () => 0n,
   };
-  let sends = 0, visible = false, wrongOwner;
+  let sends = 0, visible = false, hideLastPolicy = false, hiddenHash, wrongOwner;
   const server = {
     async sendTransaction(tx) {
       const hash = tx.hash().toString('hex');
@@ -68,7 +74,11 @@ try {
         assert.equal(operation.type, 'invokeHostFunction');
         const op = prepared.get(hash);
         if (op.kind === 'registerDevice') devices.set(op.deviceHash, { owner: tx.source, agent: op.agent });
-        else policies.set(op.deviceHash, { agent: op.agent, asset: op.asset, maxAmount: op.maxAmount, expiresAt: op.expiresAt });
+        else if (op.kind === 'revokeAgent') assert.ok(policies.delete(op.deviceHash));
+        else {
+          assert.ok(!policies.has(op.deviceHash), 'Noir rejects same-owner policy overwrite');
+          policies.set(op.deviceHash, { agent: op.agent, asset: op.asset, maxAmount: op.maxAmount, expiresAt: op.expiresAt });
+        }
         return xdr.OperationResult.opInner(xdr.OperationResultTr.invokeHostFunction(xdr.InvokeHostFunctionResult.invokeHostFunctionSuccess(Buffer.alloc(32))));
       });
       sequences.set(tx.source, Number(tx.sequence));
@@ -76,9 +86,10 @@ try {
       envelopes.set(hash, { status: 'SUCCESS', envelopeXdr: tx.toXDR(), ledger: 1,
         resultXdr: new xdr.TransactionResult({ feeCharged: xdr.Int64.fromString(tx.fee), result: xdr.TransactionResultResult.txSuccess(results), ext: new xdr.TransactionResultExt(0) }) });
       sends++;
+      if (hideLastPolicy && sends === 7) hiddenHash = hash;
       return { hash };
     },
-    async getTransaction(hash) { return visible ? envelopes.get(hash) ?? { status: 'NOT_FOUND' } : { status: 'NOT_FOUND' }; },
+    async getTransaction(hash) { return visible && hash !== hiddenHash ? envelopes.get(hash) ?? { status: 'NOT_FOUND' } : { status: 'NOT_FOUND' }; },
   };
   const scoped = role => ({ async query(sql, values) {
     await db.query('savepoint scoped_probe');
@@ -103,7 +114,8 @@ try {
     } };
    },
    async rpc(name, params) {
-    const allow = ['claim_money_dispatch', 'save_money_dispatch', 'claim_money_dispatch_send', 'confirm_money_dispatch'];
+    const allow = ['claim_money_dispatch', 'save_money_dispatch', 'claim_money_dispatch_send', 'confirm_money_dispatch',
+      'recover_provision_preparation', 'retire_unsent_provision_policy', 'read_money_recovery'];
     assert.ok(allow.includes(name));
     try {
       const { rows: [row] } = await coordinator.query(`select public.${name}(${Object.keys(params).map((key, i) => `${key} => $${i+1}`).join(',')}) as value`, Object.values(params));
@@ -114,7 +126,7 @@ try {
     maxOperatingTransferStroops: '34000000', accountFeePerOpStroops: '100', noirFeeCapStroops: '10000',
     maxFeeStroops: '60300', policyCapStroops: '5000000', policyExpiresAt: new Date(Math.floor(Date.now()/1000)*1000+3600000).toISOString() };
   const dependencies = { custody: scoped('family_provision_worker'), signing: scoped('family_custody_worker'),
-    journal, feeSigner, account, baseReserve: async () => 5000000n, noir, server };
+    journal, feeSigner, account, baseReserve: async () => 5000000n, noir, server, now: () => clock };
   await db.query('grant family_provision_worker to postgres with set true');
   stage = 'isolated-role-grants';
   const permissions = await db.query(`select
@@ -124,32 +136,58 @@ try {
     has_table_privilege('family_provision_worker','wallet_custody.family_signing_keys','select') as provision_table_read`);
   assert.deepEqual(permissions.rows[0], { provision_reads: false, signer_writes: false, public_api_writes: false, provision_table_read: false });
   await db.query('grant family_custody_worker to postgres with set true');
-  const run = (changes = {}) => provisionFamily(dependencies, { member, terms: { ...terms, ...changes } });
+  const run = (changes = {}, renewal) => provisionFamily(dependencies, { member, terms: { ...terms, ...changes }, renewal });
   stage = 'budget-denial';
   await assert.rejects(run({ maxFeeStroops: '60299' }), { code: 'PROVISION_BUDGET' });
   assert.equal(sends, 0);
+  stage = 'unsigned-preparation-retries';
+  await assert.rejects(run(), { code: 'PROVIDER_UNAVAILABLE' });
+  failRead = false;
+  assert.equal(sends, 0);
+  const { rows: [operation] } = await db.query('select operation_id from wallet_custody.family_provisions where family_id=$1', [member.family_id]);
+  const old = { p_operation: operation.operation_id, p_family: member.family_id, p_step_key: 'accounts', p_source: feeSource, p_claim: randomUUID() };
+  assert.equal((await journal.rpc('claim_money_dispatch', old)).data.canPrepare, true);
+  assert.equal((await run()).status, 'pending');
+  assert.equal(sends, 0);
+  await db.query("update public.money_dispatch_steps set created_at=clock_timestamp()-interval '3 minutes' where operation_id=$1 and step_key='accounts'", [operation.operation_id]);
   stage = 'one-shot-and-durable-replay';
   const pending = await run();
   assert.equal(pending.status, 'pending');
   assert.equal(sends, 1);
+  const [hash, received] = envelopes.entries().next().value;
+  const stale = await journal.rpc('save_money_dispatch', { ...old, p_signed: received.envelopeXdr, p_hash: hash });
+  assert.equal(stale.error?.message, 'STALE_WORKER');
   const saved = await db.query("select count(*)::int as n from wallet_custody.family_signing_keys where family_id=$1", [member.family_id]);
   assert.equal(saved.rows[0].n, 3);
   assert.equal((await run()).status, 'pending');
   assert.equal(sends, 1);
   await assert.rejects(run({ requestKey: randomUUID() }), { code: 'PROVISION_CONFLICT' });
-  stage = 'confirmed-resource-readback';
+  stage = 'expired-policy-observation';
   visible = true;
-  const complete = await run();
+  hideLastPolicy = true;
+  assert.equal((await run()).status, 'pending');
+  assert.equal(sends, 7);
+  clock = Date.parse(terms.policyExpiresAt) + 1000;
+  const renewal = { requestKey: randomUUID(), policyExpiresAt: new Date(clock + 3600000).toISOString(), maxFeeStroops: '40000' };
+  assert.equal((await run({}, renewal)).status, 'pending');
+  assert.equal(sends, 7);
+  hiddenHash = undefined;
+  assert.equal((await run()).status, 'policy_renewal_required');
+  assert.equal((await db.query("select phase from public.money_dispatch_steps where operation_id=$1 and step_key='wants_policy'", [operation.operation_id])).rows[0].phase, 'confirmed');
+  assert.equal(sends, 7);
+  stage = 'approved-renewal-same-accounts';
+  await assert.rejects(run({}, { ...renewal, maxFeeStroops: '39999' }), { code: 'PROVISION_BUDGET' });
+  const complete = await run({}, renewal);
   assert.equal(complete.status, 'confirmed');
   assert.deepEqual(complete.accounts, pending.accounts);
-  assert.equal(sends, 7);
+  assert.equal((await run({}, renewal)).status, 'confirmed');
+  assert.equal(sends, 11);
   assert.equal(devices.size, 4);
   assert.equal(policies.size, 2);
   assert.equal((await db.query('select count(*)::int as n from public.family_members where family_id=$1 and wallet_ready', [member.family_id])).rows[0].n, 0);
   wrongOwner = devices.values().next().value;
   wrongOwner.owner = feeSource;
   await assert.rejects(run(), { code: 'PROVISION_EVIDENCE_MISMATCH' });
-  assert.equal(sends, 7);
   await db.query('rollback');
   console.log('PASS: family-provision (isolated data and controlled Testnet transport)');
 } catch (error) {
