@@ -119,8 +119,13 @@ The additive coordinator uses durable `money_dispatch_steps` and per-Testnet-sou
 
 References: [T08 evidence and remaining scope](../handoff/T08.md#recorded-evidence); [Stellar weights/thresholds](https://developers.stellar.org/docs/learn/fundamentals/transactions/signatures-multisig); [Soroban source-account authorization](https://developers.stellar.org/docs/build/guides/transactions/signing-soroban-invocations). Grouped Astra review and separate approvals remain required before credentials, shared migrations, deployment or Testnet authority changes.
 
+### T09 family key access — DEC-118
 
+- `wallet_custody.family_signing_keys` binds one private Vault UUID to one family, signer role (`parent`, `student`, `agent`), Testnet address and positive version. The address and Vault UUID are each unique. No lookup by Vault ID or name, version fallback, or app-role write grant.
+- Only the dedicated `family_custody_worker` role can invoke the fixed-search-path definer lookup from an application connection. It matches the full binding and verifies the supplied actor belongs to that family. Keep both `wallet_custody` and `vault` outside the Data API. PostgreSQL administrators remain trusted; Supabase's built-in `service_role` Vault SQL grants are not revocable by app migrations, so do not give app credentials a SQL login inheriting that role or expose a Vault reader through the API.
+- `signFamilyTransaction` takes a `pg` client executing as the custody worker, an authenticated membership, a server-selected binding and a server-built unsigned transaction. The calling backend must authorize the action before invoking it. The signer checks the transaction source and derived public key, signs with the Testnet passphrase and returns only signed XDR to the caller. It does not send transactions or replace the coordinated journal. No HTTP route, production login, restore, or provisioning is added by T09.
 
+[Local custody evidence](../handoff/T09.md#recorded-evidence) is not hosted custody or wallet readiness.
 
 ## Proposed HTTP contract
 

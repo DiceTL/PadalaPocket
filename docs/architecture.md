@@ -6,13 +6,13 @@ This shared overview image is also embedded in the event README. Detailed owners
 
 ## Current MVP architecture target — DEC-093–DEC-099
 
-The selected target is up to ten financially enabled families with isolated app-managed Testnet wallets and one hard-configured seller. Registration/linking need not wait for financial capacity. The existing image above depicts the provisioned demo, not an implemented multi-family deployment. Exact provisioning, key custody, signer permissions and recovery, pooled Velo receipt attribution and family accounting remain open; neither the Nov 14 [Velo experiment](../work/evidence-ledger.md#ev-027) nor this choice validates them. Seller unattended SEP-24 is also unresolved. No real fiat.
+The selected target is up to ten financially enabled families with isolated app-managed Testnet wallets and one hard-configured seller. Registration/linking need not wait for financial capacity. The existing image depicts the provisioned demo, not an implemented multi-family deployment. T09 proves private Vault access locally; hosted custody, restore, provisioning, pooled Velo attribution and family accounting remain open. Seller unattended SEP-24 is also unresolved. No real fiat.
 
 ```mermaid
 flowchart LR
     Families["Families: up to 10 financially enabled"] --> API["Authenticated API / agent"]
     Others["Additional families: registration/linking only"] --> API
-    API -. "Provisioning, signing and custody design open" .-> Wallets["Isolated app-managed family Testnet wallets"]
+    API -. "Family wallet provisioning and routing pending" .-> Wallets["Isolated app-managed family Testnet wallets"]
     API -. "Create / verify linked checkout" .-> Velo["Velo checkout"]
     Velo -. "Confirmed payment; evidence contract open" .-> Pool["Project Testnet wallet"]
     Pool -. "Reserve once; confirmed transfer" .-> Wallets
@@ -114,6 +114,8 @@ T07 adds an observation-only recovery entry point within the existing API/Postgr
 T08 isolates signing for funding, purchases and weekly operations in a second Vercel Hobby project. The public app forwards financial requests and keeps Velo checkout. The deployed legacy database role cannot write or read signed envelopes; the original keys cannot authorize alone on Testnet. Historical operators are observation-only and provenance fences old unknown rows. See the [execution contract](technical-spec.md#t08-legacy-authority-boundary--dec-108) and [deployed evidence](../handoff/T08.md#2026-11-22--deployed-writer-cutover).
 
 DEC-111 uses a distinct project account for the one-time signer bootstrap and operating reserve subsidies. The approved DEC-117 transaction used the T06 journal and changed all four account policies atomically without consuming their transaction sequences or clearing historical fences.
+
+T09 adds a locally verified Supabase Vault boundary for future family signers. The isolated backend uses a dedicated PostgreSQL role and a private-schema lookup, not the public Data API. The [custody contract](technical-spec.md#t09-family-key-access--dec-118) is separate from the active T08 demo signers; no hosted credentials, wallet provisioning, or restore are in place from T09.
 
 Early proof access under DEC-033: B-001 uses an operator-only CLI calling a server endpoint protected by a high-entropy environment token in the Authorization header, validated before signing. Keep the token out of browser code, URLs and logs, with fixed demo destination and bounded amount. This temporary route is disabled when B-005 implements real parent/student Auth and operator authorization; it is not the application's user login design. The implementation plan is canonical for task order.
 

@@ -4,7 +4,7 @@
 
 The founder authorized a five-hour reduced submission build on 2026-11-07. Its [product scope](../docs/product-spec.md#five-hour-submission-mvp) and [implementation schedule](../docs/implementation-plan.md#five-hour-submission-build--dec-055) record that historical release, not the current MVP target.
 
-The five-hour scope is historical. The current MVP target under [DEC-093–DEC-099](../docs/decision-ledger.md) is up to ten financially enabled families with isolated app-managed Testnet wallets and one fixed seller, with registration/linking available beyond capacity. Actual provisioning, key custody, pooled Velo attribution and unattended anchor feasibility remain open; see [architecture](../docs/architecture.md#current-mvp-architecture-target--dec-093dec-099) and [handoff questions](../work/backend-decision-questions.md). This is not a deployment claim.
+The five-hour scope is historical. The current MVP target under [DEC-093–DEC-099](../docs/decision-ledger.md) is up to ten financially enabled families with isolated app-managed Testnet wallets and one fixed seller, with registration/linking available beyond capacity. [T09 custody](../docs/technical-spec.md#t09-family-key-access--dec-118) has local evidence only; actual provisioning, hosted custody, pooled Velo attribution and unattended anchor feasibility remain open. See the [target architecture](../docs/architecture.md#current-mvp-architecture-target--dec-093dec-099) and [handoff questions](../work/backend-decision-questions.md).
 
 DEC-102 selects verified project-wallet receipt and confirmed transfer to the relevant family parent wallet before deposit availability; the receipt, custody and recovery contracts remain unresolved and unimplemented.
 
