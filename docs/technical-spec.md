@@ -127,6 +127,12 @@ References: [T08 evidence and remaining scope](../handoff/T08.md#recorded-eviden
 
 [Local custody evidence](../handoff/T09.md#recorded-evidence) is not hosted custody or wallet readiness.
 
+### T10 custody backup and recovery
+
+- Keep the encrypted database backup (Vault rows, family memberships and exact key bindings) and the matching Vault root encryption key under separate operator-controlled access. For hosted Supabase, use the [documented Vault key portability procedure](https://supabase.com/docs/guides/database/vault#key-portability-and-migration); a manual restore to a different project's root key cannot decrypt those rows. Do not put the root key in the repo, database dump, coordinator environment, or logs.
+- Restore to an isolated target before use. Verify the restored binding through the custody-worker role in a fresh process, derive the original wallet address, and verify a signature over an offline challenge with the pre-backup public key. Reject wrong-key or wrong-binding results; generating a new wallet is not restoration.
+- `custody-restore` rehearses this with disposable clusters and an unfunded key. [T10 evidence](../handoff/T10.md#recorded-evidence) records what was exercised; no hosted backup or key export is performed.
+
 ## Proposed HTTP contract
 
 All routes below are PadalaPocket routes to implement, not claims about vendor APIs. Require a bearer access token. State-changing requests carry `Idempotency-Key`; reuse with a different body returns `409 IDEMPOTENCY_CONFLICT`. Persist intent before external side effects. Server checks ownership on every identifier. Return amounts as strings and timestamps as ISO 8601 UTC.

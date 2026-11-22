@@ -272,7 +272,7 @@ After each task, follow the plan’s [evidence and checklist update procedure](b
 | [T07 Reconciliation](../handoff/T07.md) | Local `recovery-boundary` and five earlier checks PASS; T04 live proof retained, not rerun. Grouped T05–T08 review and merge/CI pending; no live financial send or writer cutover. | Review |
 | [T08 Writer cutover](../handoff/T08.md) | Hosted legacy permissions revoked; atomic Testnet signer cutover and Vercel coordinator readiness verified. Full `writer-cutover` exit 0; additional correction re-review waived. No merge/CI result claimed. | Done |
 | [T09 Vault access](../handoff/T09.md) | `custody-access` red → green on isolated Supabase; workspace and earlier local gates PASS. No hosted use. Grouped Astra checkpoint remains before funded provisioning. | Review |
-| [T10 Key restoration](../handoff/T10.md) | Not started; follows T09 and the approved sequence. | Planned |
+| [T10 Key restoration](../handoff/T10.md) | `custody-restore` red → green on isolated Postgres; wrong root denied and restored address/signature verified in a fresh process. No hosted restore. Grouped Astra checkpoint remains before funded provisioning. | Review |
 | [T11 Family provisioning](../handoff/T11.md) | Not started; follows T10 and the approved sequence. | Planned |
 | [T12 Family capacity](../handoff/T12.md) | Not started; follows T11 and the approved sequence. | Planned |
 | [T13 Deposit admission](../handoff/T13.md) | Not started; follows T12 and the approved sequence. | Planned |
