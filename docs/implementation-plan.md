@@ -263,14 +263,14 @@ After each task, follow the plan’s [evidence and checklist update procedure](b
 
 | Task / packet | Acceptance evidence or remaining gate | State |
 |---|---|---|
-| [T01 Contract baseline](../handoff/T01.md) | Offline contract baseline PASS recorded on 2026-11-16; merge/CI acceptance not recorded in the packet. | Review |
-| [T02 Execution environment](../handoff/T02.md) | Local environment and earlier baseline PASS after corrections; retain owner-reported review history. DEC-103 commissions no additional T02 review; merge/CI acceptance remains unrecorded. | Review |
-| [T03 Groq access](../handoff/T03.md) | `vision-access` passed with the owner-provided replacement credential and one real image; earlier local checks passed. Merge/CI acceptance remains unrecorded. | Review |
-| [T04 Account delivery](../handoff/T04.md) | Corrected `identity` PASS with fresh unenrolled fixtures and both owner-observed deployed callbacks; all three earlier checks pass. Targeted Terra re-review resolved all findings. Merge/CI acceptance remains unrecorded; older link-error history is retained. | Review |
-| [T05 Financial journal](../handoff/T05.md) | Not started; follows T04 and the approved sequence. | Planned |
-| [T06 Coordinated dispatch](../handoff/T06.md) | Not started; follows T05 and the approved sequence. | Planned |
-| [T07 Reconciliation](../handoff/T07.md) | Not started; follows T06 and the approved sequence. | Planned |
-| [T08 Writer cutover](../handoff/T08.md) | Not started; follows T07 and the approved sequence. | Planned |
+| [T01 Contract baseline](../handoff/T01.md) | Offline contract baseline PASS; owner confirms Phase 1 merged and GitHub Actions passed. | Done |
+| [T02 Execution environment](../handoff/T02.md) | Local environment PASS; owner confirms Phase 1 merged and GitHub Actions passed. | Done |
+| [T03 Groq access](../handoff/T03.md) | Real-image `vision-access` PASS; owner confirms Phase 1 merged and GitHub Actions passed. | Done |
+| [T04 Account delivery](../handoff/T04.md) | Corrected live `identity` PASS and targeted Terra re-review passed; owner confirms Phase 1 merged and GitHub Actions passed. | Done |
+| [T05 Financial journal](../handoff/T05.md) | Local `money-journal` and three earlier checks PASS; T04 live proof retained, not rerun. Grouped T05–T08 review and merge/CI pending; no hosted migration or cutover. | Review |
+| [T06 Coordinated dispatch](../handoff/T06.md) | Local `dispatch-boundary` and four earlier checks PASS; T04 live proof retained, not rerun. Grouped T05–T08 review and merge/CI pending; no live financial send or cutover. | Review |
+| [T07 Reconciliation](../handoff/T07.md) | Local `recovery-boundary` and five earlier checks PASS; T04 live proof retained, not rerun. Grouped T05–T08 review and merge/CI pending; no live financial send or writer cutover. | Review |
+| [T08 Writer cutover](../handoff/T08.md) | Hosted legacy permissions revoked; atomic Testnet signer cutover and Vercel coordinator readiness verified. Full `writer-cutover` exit 0; additional correction re-review waived. No merge/CI result claimed. | Done |
 | [T09 Vault access](../handoff/T09.md) | Not started; follows T08 and the approved sequence. | Planned |
 | [T10 Key restoration](../handoff/T10.md) | Not started; follows T09 and the approved sequence. | Planned |
 | [T11 Family provisioning](../handoff/T11.md) | Not started; follows T10 and the approved sequence. | Planned |

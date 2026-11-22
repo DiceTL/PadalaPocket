@@ -72,14 +72,17 @@ flowchart TD
     API -->|"Validate identity"| Auth
     API --> DB["Supabase Postgres"]
     API --> Storage
-    API --> AI["Image AI - Groq proof candidate"]
-    API --> Agent["Agent decision and payment module"]
+    Coordinator --> AI["Image AI - Groq proof candidate"]
+    Coordinator --> Agent["Agent decision and payment module"]
+    API -->|"Authenticated financial forwarding"| Coordinator["Signing coordinator — separate Vercel Hobby project"]
+    Coordinator -->|"Restricted journal role"| DB
+    Coordinator -->|"Required guard co-signature"| Contracts
     Agent --> NoirSDK["Noir SDK"]
     NoirSDK --> Contracts["Deployed Noir Testnet contracts"]
     Agent -.->|"Additional product role to scope"| Velo["Velo SDK and service"]
     Velo -->|"Separate checkout confirmed in B-001"| Ledger["Stellar Testnet"]
     Contracts --> Ledger
-    API -->|"Demo merchant signer via Noir SDK"| Contracts
+    Coordinator -->|"Serialized merchant claims via Noir SDK"| Contracts
     Contracts -->|"Confirmed merchant claim"| Merchant["Demo merchant Stellar account"]
     Merchant -.->|"Authenticated withdrawal and asset transfer"| Anchor["Stellar test anchor"]
     Anchor -.-> Fiat["Simulated fiat payout - no GCash receipt"]
@@ -94,13 +97,23 @@ B-004 has verified merchant SEP-10 authentication and recovered one SEP-24 withd
 | Component | Responsibility | Authority boundary |
 |---|---|---|
 | Web app | Parent/student input, Auth, photos, displaying server outcomes | Cannot decide final permissions, edit balances or hold payment secrets |
-| Node API and agent module | Authenticate/authorize, apply spending rules, obtain AI assessment, execute permitted actions, reconcile results | AI classifies images; application policy decides and signers execute. No direct AI authority over keys |
+| Public Node API / isolated financial handlers | Public identity/readiness prechecks and nonfinancial routes; private handlers independently authorize financial requests, assess photos, apply rules and reconcile results | Only the isolated runtime receives the guard and coordinator database role; no generic signing endpoint or direct AI authority |
 | Supabase | Application records, memberships, bucket accounting and private photo evidence | Database balances require reconciliation with ledger-backed holdings; My Money app access is student-only |
 | Noir contracts | Device ownership, constrained agent policy, escrow authorization and merchant claim | Parent approval in the app does not by itself bypass contract policy |
 | Velo | B-001 creates/retrieves a separate checkout; product role remains to scope | Checkout confirmation is independent of Noir authorization/claim |
 | Test anchor | Test withdrawal protocol and simulated off-chain completion | No production peso exchange or GCash payout |
 
 Server custody for separate owner, agent and merchant Testnet signers is a proposal; exact signing permissions, request binding and recovery live in [technical spec](technical-spec.md#signing-and-integration-proof). Public Stellar activity may reveal wallet relationships despite private My Money app records. Physical wallet/escrow layout remains unresolved.
+
+T05 adds the approved journal foundation inside existing Postgres, not a new service (DEC-104). Operations, holds and saved transaction envelopes are service-only and immutable; no frontend route changes. Records are not evidence of backing or settlement. Existing financial writers remain separate until T08; dispatch and recovery are T06/T07. See the [journal contract](technical-spec.md#t05-durable-money-journal--dec-104) and [T05 evidence](../handoff/T05.md); local verification does not establish hosted deployment or cutover.
+
+T06 adds a Postgres-backed per-source coordinator within the existing Node API boundary (DEC-106); there is no new deployed service. Durable one-shot preparation/send claims protect saved transactions from competing workers, and verified confirmation permits source reuse. Claims do not expire into replacement authority. See the [dispatch contract](technical-spec.md#t06-coordinated-dispatch--dec-106) and [local boundary evidence](../handoff/T06.md#recorded-evidence); existing writers and unresolved recovery remain T08/T07 respectively. Local controlled-transport verification is not live Testnet settlement or hosted acceptance.
+
+T07 adds an observation-only recovery entry point within the existing API/Postgres boundary (DEC-107), using stored exact identities and T06's atomic checkpoint. It never signs, sends, replaces or releases principal. See the [recovery contract](technical-spec.md#t07-exact-identity-recovery--dec-107) and [local recovery evidence](../handoff/T07.md#recorded-evidence); unknowns and unsupported windows remain fenced, and existing writers are not cut over until T08. Controlled local responses do not establish live/deployed recovery acceptance.
+
+T08 isolates signing for funding, purchases and weekly operations in a second Vercel Hobby project. The public app forwards financial requests and keeps Velo checkout. The deployed legacy database role cannot write or read signed envelopes; the original keys cannot authorize alone on Testnet. Historical operators are observation-only and provenance fences old unknown rows. See the [execution contract](technical-spec.md#t08-legacy-authority-boundary--dec-108) and [deployed evidence](../handoff/T08.md#2026-11-22--deployed-writer-cutover).
+
+DEC-111 uses a distinct project account for the one-time signer bootstrap and operating reserve subsidies. The approved DEC-117 transaction used the T06 journal and changed all four account policies atomically without consuming their transaction sequences or clearing historical fences.
 
 Early proof access under DEC-033: B-001 uses an operator-only CLI calling a server endpoint protected by a high-entropy environment token in the Authorization header, validated before signing. Keep the token out of browser code, URLs and logs, with fixed demo destination and bounded amount. This temporary route is disabled when B-005 implements real parent/student Auth and operator authorization; it is not the application's user login design. The implementation plan is canonical for task order.
 

@@ -48,7 +48,7 @@ These evidence-qualified checks are prerequisites, not product-feature or deploy
 
 - [x] T01: the offline `contract-baseline` command exercises the unchanged browser client against isolated handlers, route/error contracts, existing backend tests and fixture validation. Recorded PASS on 2026-11-16; no hosted or live-provider compatibility is claimed. [Evidence](../handoff/T01.md#recorded-evidence).
 - [x] T02: the `environment` command verifies the isolated loopback-only local Supabase stack, ordered migrations, two synthetic families, membership/role denial, server-only administrative access, readiness gates and public-response credential isolation. Recorded PASS on 2026-11-16; no hosted setup or wallet custody/provisioning is claimed. [Evidence](../handoff/T02.md#recorded-evidence).
-- [ ] Verify: retain the owner-reported T02 review history and record merge/CI acceptance when available. DEC-103 requires no additional T02 review or T02–T04 checkpoint; missing historical reviewer details are not fabricated. [Review history](../handoff/T02.md#recorded-evidence).
+- [x] Owner confirms Phase 1 merge and GitHub Actions pass. DEC-103 requires no additional T02 review or T02–T04 checkpoint; missing historical reviewer details are not fabricated. [Review history](../handoff/T02.md#recorded-evidence).
 
 ## Completion summary — decisions, work and release gates
 
@@ -96,7 +96,7 @@ This index groups the remaining work; the detailed criteria below are canonical 
 | Weekly lifecycle | Saved PHT schedule, one-boundary test advance, real rollover/reallocation, skip notice | 24-hour demo reminder; due-event semantics where still proposed; current release/signers |
 | Velo | Validated matching-receiver checkout creation/read | Paid current-wallet top-up and deployed deposit-to-distribution acceptance; new-family ownership model |
 | Withdrawal | Separate successful operator/anchor proof only | Authenticated app initiation, durable session/transfer handling, status/reconciliation and app acceptance |
-| Safety/recovery | Durable admission, reservations, exact saved transactions and fail-closed unknowns | Documented bounded handling for unsupported interruption windows; no general automatic recovery exists |
+| Safety/recovery | Historical demo safeguards; [T05](../handoff/T05.md)/[T06](../handoff/T06.md) journal/coordinator and [T07](../handoff/T07.md) exact-identity recovery boundaries verified locally | T08 writer cutover, per-path live/deployed recovery and grouped review; no general automatic repair |
 | Onboarding | Signup/setup controls exist | Account-specific tutorial persistence/contract still needed; information board/tutorial UI comes last |
 
 ## 1. Accounts, family linking and financial onboarding
@@ -237,15 +237,23 @@ Evidence: [B-004](../handoff/B-004.md), [B-013](../handoff/B-013.md); L-005 rema
 
 ## 9. Cross-cutting money safety, notifications and recovery
 
-Evidence: [R-002](../handoff/R-002.md), [L-002](../handoff/L-002.md), [L-003A](../handoff/L-003A.md), [L-004](../handoff/L-004.md); current [router](../apps/api/src/router.mjs), [funding recovery](../apps/api/src/funding-recovery.mjs).
+Evidence: [R-002](../handoff/R-002.md), [L-002](../handoff/L-002.md), [L-003A](../handoff/L-003A.md), [L-004](../handoff/L-004.md), [T05 local journal proof, 2026-11-16](../handoff/T05.md#recorded-evidence); current [router](../apps/api/src/router.mjs), [funding recovery](../apps/api/src/funding-recovery.mjs).
+
+T05 proves foundation records only: concurrent identical requests create one operation/hold; changed requests conflict; integer stroops and saved-stage identities are preserved; application roles cannot mutate the journal. Existing writers and balance reads do not yet consume this journal. No feature criterion is closed by T05; backing, dispatch, recovery and cutover acceptance remain open.
+
+T06 adds [2026-11-17 local boundary evidence](../handoff/T06.md#recorded-evidence): separate and paused workers cannot sign competing replacements or acquire a second send permit; saved bytes precede send and confirmed checkpoints resume without re-signing. Controlled loopback RPC results are not live settlement. Existing writers, principal holds and balances remain unchanged; no feature criterion is closed.
+
+T07 adds [2026-11-17 local recovery evidence](../handoff/T07.md#recorded-evidence): interrupted workers retain holds, matching success confirms idempotently, retained checkpoints survive missing provider history, and unsupported/contradictory evidence stays fenced. The observation-only runtime never signs/sends, credits or releases principal. This is controlled local evidence, not per-path live/deployed acceptance; no feature criterion is closed.
+
+T08 [deployed evidence](../handoff/T08.md#2026-11-22--deployed-writer-cutover) verifies Vercel coordinator readiness, hosted legacy permission revocation, and mandatory Testnet guard authority on all four original accounts. Full `writer-cutover` **PASS**. This closes the writer boundary, not end-to-end acceptance of each payment or recovery path.
 
 - [x] Financial authority comes from validated Auth membership. Service-only journals/RPCs, database locks and admission guards—not process-local/browser locks—coordinate the shared demo signer and pending work.
 - [x] Available allowance subtracts reserved purchases and swept principal. Partial multi-leg transfers remain in transit; confirmed destination credit cannot be manufactured from pending movement.
-- [x] Signed operations/hashes are saved before submission where supported; exact-hash reconciliation and confirmed checkpoints avoid blind replacement transactions. Unknown outcomes retain reservations/fences and never become success merely after a timeout.
+- [x] Signed operations/hashes are saved before submission where supported; exact-hash reconciliation and confirmed checkpoints avoid blind replacement transactions. Unknown outcomes retain reservations/fences and never become success merely after a timeout. [T06 local proof, 2026-11-17](../handoff/T06.md#recorded-evidence) independently verifies returned envelope identity, one-shot send admission and stale-worker checkpoint safety; this does not establish T08 cutover or live acceptance.
 - [ ] Missing: student insufficient/zero-bucket notifications and both-role demo reminder, with family-scoped recipient access and idempotent event identity. A weekly skip notice is narrower; push delivery is not required.
 - [ ] Decide/Verify: establish an evidence-supported bounded operator/reconciliation procedure for unsupported interrupted admission/dispatch windows. Never clear a hold or generate a replacement merely because no hash was found.
-- [ ] Verify: explicitly document and exercise the supported recovery boundary for each money path. Funding setup closure currently fails with `RECOVERY_DISABLED_NO_DISPATCH_FENCE`; exception/weekly interrupted admissions without safe checkpoints can remain fenced. There is **no general automatic recovery guarantee**.
-- [ ] Verify: all newly implemented release/spend/notification/withdrawal/provisioning paths enforce tenant/role isolation, conservation, duplicate protection and truthful pending/error states; old demo-path tests cannot establish those future contracts.
+- [ ] Verify: explicitly document and exercise the supported recovery boundary for each money path. [T07, 2026-11-17](../handoff/T07.md#recorded-evidence) proves local observation/interruption fences; [T08, 2026-11-17](../handoff/T08.md#recorded-evidence) integrates existing writers with local managed-stage observation and preserves unmanaged historical unknowns. Per-path live/deployed verification remains open; exception/weekly interrupted admissions without safe checkpoints can remain fenced. There is **no general automatic recovery guarantee**.
+- [ ] Verify: all newly implemented release/spend/notification/withdrawal/provisioning paths enforce tenant/role isolation, conservation, duplicate protection and truthful pending/error states; old demo-path tests cannot establish those future contracts. The deployed writer boundary is verified; recovery and feature-specific acceptance remain open.
 
 ## 10. Onboarding state — backend-dependent work before frontend-only handoff
 
@@ -281,7 +289,7 @@ Evidence: [L-009](../handoff/L-009.md), DEC-091. This is packaging/browser/relea
 - [x] Repository includes environment guidance, ordered migrations, setup documentation, transaction proof links and local screenshots. README now contains team handles and a demo-video URL; the old blank-fields statement is superseded.
 - [ ] Release: complete review/merge/configuration/deployment gates recorded in the implementation plan. Do not mark L/UI packets Done from this evidence checklist alone.
 - [ ] Verify: intended deployed commit and migrations match, all required signers/configuration are present, and real parent/student sessions complete the final journey with correct balances/private access. Historical `51b288a` approval or earlier reduced-demo evidence does not establish current-tree parity.
-- [ ] Verify: supported interrupted-operation observation/continuation works within deployed request limits; explicitly report fenced cases rather than promising automatic repair.
+- [ ] Verify: supported interrupted-operation observation/continuation works within deployed request limits; explicitly report fenced cases rather than promising automatic repair. [T07 local proof, 2026-11-17](../handoff/T07.md#recorded-evidence) does not establish deployed limits, existing-writer cutover or complete path-specific recovery.
 - [ ] Verify: an independent user can run the current release from a fresh clone with their own service credentials and Testnet resources. Earlier setup checks do not establish the latest combined release or unimplemented multi-family custody.
 - [ ] Verify: rehearse the final two-minute demo, confirm the linked recording is accessible and matches demonstrated capabilities, and record remaining limitations. A video URL alone does not close R-004 acceptance.
 - [ ] Verify: backend handoff includes final authenticated request/response/error contracts and evidence for each completed function; the only remaining implementation is genuinely browser/presentation work, not missing money, account-state or notification behavior.
