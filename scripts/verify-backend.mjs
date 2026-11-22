@@ -25,6 +25,7 @@ const checks = {
   ],
   'custody-access': [['apps/api/scripts/verify-custody-access.mjs']],
   'custody-restore': [['apps/api/scripts/verify-custody-restore.mjs']],
+  'family-provision': [['apps/api/scripts/verify-family-provision.mjs']],
 };
 const [name, ...extra] = process.argv.slice(2);
 if (!Object.hasOwn(checks, name) || extra.length) {
@@ -34,7 +35,7 @@ if (!Object.hasOwn(checks, name) || extra.length) {
   // Checks receive no inherited credentials; live checks must opt into isolated access.
   let passed = false;
   try {
-    const env = ['environment', 'money-journal', 'dispatch-boundary', 'recovery-boundary', 'writer-cutover', 'custody-access', 'custody-restore'].includes(name) ? localDockerEnvironment() : { PATH: process.env.PATH, NODE_ENV: 'test' };
+    const env = ['environment', 'money-journal', 'dispatch-boundary', 'recovery-boundary', 'writer-cutover', 'custody-access', 'custody-restore', 'family-provision'].includes(name) ? localDockerEnvironment() : { PATH: process.env.PATH, NODE_ENV: 'test' };
     if (name === 'identity') {
       for (const key of ['HOME', 'SUPABASE_HOME', 'XDG_RUNTIME_DIR', 'XDG_CONFIG_HOME', 'XDG_DATA_HOME', 'XDG_STATE_HOME', 'DBUS_SESSION_BUS_ADDRESS', 'T04_PARENT_EMAIL', 'T04_STUDENT_EMAIL', 'T04_SMTP_SENDER']) {
         if (process.env[key] !== undefined) env[key] = process.env[key];
@@ -54,7 +55,7 @@ if (!Object.hasOwn(checks, name) || extra.length) {
         env: childEnv,
         stdio: name === 'identity' ? ['inherit', 'pipe', 'pipe'] : 'pipe',
       });
-      if ((liveCutover || ['dispatch-boundary', 'recovery-boundary', 'custody-access', 'custody-restore'].includes(name)) && result.status !== 0) process.stderr.write(result.stderr ?? '');
+      if ((liveCutover || ['dispatch-boundary', 'recovery-boundary', 'custody-access', 'custody-restore', 'family-provision'].includes(name)) && result.status !== 0) process.stderr.write(result.stderr ?? '');
       return !result.error && result.status === 0;
     });
   } catch {
