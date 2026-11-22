@@ -274,7 +274,7 @@ After each task, follow the plan’s [evidence and checklist update procedure](b
 | [T09 Vault access](../handoff/T09.md) | `custody-access` red → green on isolated Supabase; workspace and earlier local gates PASS. No hosted use. Grouped Astra checkpoint remains before funded provisioning. | Review |
 | [T10 Key restoration](../handoff/T10.md) | `custody-restore` red → green on isolated Postgres; wrong root denied and restored address/signature verified in a fresh process. No hosted restore. Grouped Astra checkpoint remains before funded provisioning. | Review |
 | [T11 Family provisioning](../handoff/T11.md) | Operator-only workflow implemented and exercised against isolated Supabase and controlled ledger responses. Grouped review and separately approved funded Testnet ownership/reserve proof remain; no hosted writes or readiness change. | Review |
-| [T12 Family capacity](../handoff/T12.md) | Not started; follows T11 and the approved sequence. | Planned |
+| [T12 Family capacity](../handoff/T12.md) | Local `family-capacity` PASS: ten durable slots under concurrent claims, overflow enrollment/linking preserved, and partial/overflow financial access denied. T09–T12 grouped review and T11 funded acceptance remain open. | Review |
 | [T13 Deposit admission](../handoff/T13.md) | Not started; follows T12 and the approved sequence. | Planned |
 | [T14 Velo receipt](../handoff/T14.md) | Not started; follows T13 and the approved sequence. | Planned |
 | [T15 Deposit credit](../handoff/T15.md) | Not started; follows T14 and the approved sequence. | Planned |

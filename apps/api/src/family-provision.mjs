@@ -45,7 +45,8 @@ async function horizon(path, allowMissing = false) {
 async function call(client, sql, values) {
   try { return (await client.query(sql, values)).rows[0].value; }
   catch (error) {
-    if (['PROVISION_FORBIDDEN', 'PROVISION_CONFLICT'].includes(error.message)) throw fail(error.message, error.message === 'PROVISION_FORBIDDEN' ? 403 : 409);
+    if (error.message === 'PROVISION_FORBIDDEN') throw fail(error.message, 403);
+    if (['PROVISION_CONFLICT', 'FAMILY_CAPACITY_FULL'].includes(error.message)) throw fail(error.message);
     throw fail('PROVISION_UNAVAILABLE', 503);
   }
 }

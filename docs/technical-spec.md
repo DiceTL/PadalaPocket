@@ -135,11 +135,17 @@ References: [T08 evidence and remaining scope](../handoff/T08.md#recorded-eviden
 
 ### T11 family provisioning — DEC-119
 
-- `provisionFamily` is a server-side operator entry point. Pass separate PostgreSQL clients for `family_provision_worker` (admit/finish only) and `family_custody_worker` (T09 signing only), the existing journal client, and the dedicated project fee signer matching the approved Testnet source. No login, secret, route, deployment, or change to the active financial writers is included.
+- `provisionFamily` is a server-side operator entry point. Pass separate PostgreSQL clients for `family_provision_worker` (provision admission/completion and capacity) and `family_custody_worker` (T09 signing only), the existing journal client, and the dedicated project fee signer matching the approved Testnet source. No login, secret, route, deployment, or change to the active financial writers is included.
 - `begin_family_provision` serializes by family. It requires a linked parent and a student not marked wallet-ready. The first request atomically binds the exact operation, funding terms and three distinct version-1 public addresses to encrypted Vault keys. Same request reuses those bindings; different actor, request, fee source or terms fail closed. The journal operation has zero family principal.
 - Approval fixes the measured base reserve, required spendable float per account, aggregate operating-transfer and fee caps, CreateAccount fee per operation, Noir fee ceiling per step, and a native-XLM policy cap and expiry. The fee source pays one atomic transaction creating all three accounts. Each starts with two base reserves plus operating float and its own maximum Noir fees. Setup does not fund escrow or credit an allowance. Once the provider returns the exact signed envelope and confirmed result, the journal releases the per-source dispatch fence; an unknown send is observed, never repeated or replaced.
 - Canonical bucket hashes use `bucketDevice`. Parent owns Needs/Wants/Savings and student owns My Money. The routine agent is registered on Needs/Wants and receives only their bounded temporary policies; Savings/My Money are self-registered without a routine policy. The operator records completion only after all seven journal confirmations and separate account authority, spendable balance, device/agent, policy and zero-escrow checks. Provisioning does not flip `wallet_ready`; the active shared demo signers are not migrated by this task.
 - [Local verification](../handoff/T11.md#recorded-evidence) uses controlled provider responses. Funded Testnet acceptance requires the grouped review checkpoint, the named family and fee source, exact approved limits, and hosted scope approval if applicable.
+
+### T12 family capacity — DEC-120
+
+- `wallet_custody.claim_family_slot(actor, family)` is callable only by the private provisioning worker. It requires the matching parent and a linked student. A transaction lock serializes allocation; the database permits only numbered slots 1–10 and one slot per family. Replay returns the same slot; overflow returns `FAMILY_CAPACITY_FULL`. Slots have no automatic release.
+- The first T11 admission must claim its slot in the same database transaction as the journal and Vault bindings. An overflow failure rolls back all of them before any ledger dispatch. The migration counts existing wallet-ready demo families and preexisting T11 provisions; it aborts rather than silently evicting records if the baseline exceeds ten.
+- A slot does not confer financial authority. Only grandfathered demo families may use the legacy `wallet_ready` flag while writers still use shared signers. Independent memberships (reserved, partial, completed setup, or overflow) remain `walletReady:false`; public and private financial handlers return `WALLET_SETUP_REQUIRED`. Enrollment and linking do not request a slot. `/api/me` preserves the existing ready-demo response shape.
 
 ## Proposed HTTP contract
 
@@ -338,7 +344,7 @@ Browser uses Supabase auth.signUp and auth.resend with a canonical public app UR
 
 POST /api/accounts/enroll accepts {role:'parent'} or {role:'student',code}; server validates Auth getUser/email confirmation and derives user ID. Enrollment is idempotent per user and never changes an existing role/family. POST /api/accounts/student-code accepts {email} from a verified linked parent; returns a random 48-hex-character code once and stores only its hash. Only the bound verified email can redeem it within 24 hours. One parent/student per family remains enforced by the existing unique membership constraint. GET /api/accounts/status returns studentLinked for the caller’s family. All account responses are no-store. No automatic invitation message is sent; the parent shares the code.
 
-New /api/me responses include walletReady:false until independent resources are provisioned. Financial routes reject these memberships with WALLET_SETUP_REQUIRED. No client can mutate wallet_ready. Existing demo /api/me responses remain compatible. Signup delivery, per-family wallets, tutorial and password recovery remain separate acceptance gates.
+`/api/me` readiness and financial route gating follow the [T12 capacity contract](#t12-family-capacity--dec-120). No client can mutate `wallet_ready`. Signup delivery, tutorial and password recovery remain separate acceptance gates.
 
 ## PWA — L-009
 

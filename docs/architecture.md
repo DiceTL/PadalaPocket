@@ -119,6 +119,8 @@ T09 adds a locally verified Supabase Vault boundary for future family signers. T
 
 T11 adds operator-only family provisioning inside the existing Node/Postgres custody boundary (DEC-119). No new deployment or frontend. Three family-specific Testnet accounts start with single protected keys; project operating funds stay separate from family principal. The [provisioning contract](technical-spec.md#t11-family-provisioning--dec-119) and [local evidence](../handoff/T11.md#recorded-evidence) do not establish hosted readiness or change the active T08 writer configuration.
 
+T12 enforces the ten-family admission cap in the same private Postgres schema (DEC-120). It separates durable slot reservation from permission to use the deployed demo writers. Enrollment and linking remain independent of capacity; see the [capacity contract](technical-spec.md#t12-family-capacity--dec-120).
+
 Early proof access under DEC-033: B-001 uses an operator-only CLI calling a server endpoint protected by a high-entropy environment token in the Authorization header, validated before signing. Keep the token out of browser code, URLs and logs, with fixed demo destination and bounded amount. This temporary route is disabled when B-005 implements real parent/student Auth and operator authorization; it is not the application's user login design. The implementation plan is canonical for task order.
 
 ## Main flow and unresolved money routing
