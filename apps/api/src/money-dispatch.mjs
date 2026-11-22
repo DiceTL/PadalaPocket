@@ -37,25 +37,44 @@ function testnetServer() {
 }
 
 // Caller owns business authorization and signer selection. No keys or transport come from HTTP input.
-export async function dispatchMoneyStep(db, input, { prepare, beforeSend, server, now = Date.now } = {}) {
+export async function dispatchMoneyStep(db, input, { prepare, beforeSend, recoverPreparation = false, server, now = Date.now } = {}) {
   try { Keypair.fromPublicKey(input?.sourceAccount); } catch { throw fail(400, 'INVALID_INPUT'); }
   const claim = randomUUID();
   const identity = { p_operation: input.operationId, p_family: input.familyId, p_step_key: input.stepKey,
     p_source: input.sourceAccount, p_claim: claim };
   let state = await call(db, 'claim_money_dispatch', identity);
+  if (recoverPreparation && (state.phase === 'busy' || (state.phase === 'preparing' && !state.canPrepare))
+    && await call(db, 'recover_provision_preparation', { ...identity, p_claim: null })) {
+    state = await call(db, 'claim_money_dispatch', identity);
+  }
+  if (recoverPreparation && state.phase === 'prepared') {
+    const saved = signedTransaction(state.signedEnvelope, input.sourceAccount, now, false);
+    if (saved.hash().toString('hex') !== state.transactionHash) throw fail(409, 'DISPATCH_IDENTITY_CONFLICT');
+    if (BigInt(saved.timeBounds.maxTime) <= BigInt(Math.floor(now() / 1000))) {
+      state = await call(db, 'replace_expired_provision_envelope',
+        { ...identity, p_hash: state.transactionHash, p_max_time: saved.timeBounds.maxTime });
+    }
+  }
   if (state.canPrepare) {
     if (typeof prepare !== 'function') throw fail(400, 'INVALID_INPUT');
-    let signed;
-    try { signed = await prepare(); } catch { throw fail(503, 'PROVIDER_UNAVAILABLE'); }
-    const tx = signedTransaction(signed, input.sourceAccount, now, true);
+    let tx;
+    try { tx = signedTransaction(await prepare(), input.sourceAccount, now, true); }
+    catch (error) {
+      if (recoverPreparation) await call(db, 'recover_provision_preparation', identity);
+      if (error.code === 'INVALID_SIGNED_TRANSACTION') throw error;
+      throw fail(503, 'PROVIDER_UNAVAILABLE');
+    }
     state = await call(db, 'save_money_dispatch', { ...identity, p_signed: tx.toXDR(), p_hash: tx.hash().toString('hex') });
   }
-  if (['busy', 'preparing', 'confirmed'].includes(state.phase)) return state;
+  if (['busy', 'preparing', 'confirmed', 'abandoned'].includes(state.phase)) return state;
   const tx = signedTransaction(state.signedEnvelope, input.sourceAccount, now, state.phase === 'prepared');
   if (tx.hash().toString('hex') !== state.transactionHash) throw fail(409, 'DISPATCH_IDENTITY_CONFLICT');
   if (state.phase === 'prepared') {
     if (beforeSend) await beforeSend(tx);
-    state = await call(db, 'claim_money_dispatch_send', identity);
+    if (BigInt(tx.timeBounds.maxTime) <= BigInt(Math.floor(now() / 1000))) throw fail(409, 'INVALID_SIGNED_TRANSACTION');
+    state = recoverPreparation
+      ? await call(db, 'claim_provision_dispatch_send', { ...identity, p_hash: state.transactionHash })
+      : await call(db, 'claim_money_dispatch_send', identity);
     if (state.phase === 'confirmed') return state;
     if (state.canSend) {
       server ??= testnetServer();

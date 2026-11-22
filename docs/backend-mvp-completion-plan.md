@@ -203,7 +203,7 @@ Review policy approved under [DEC-103](decision-ledger.md). Implementation model
 |---|---|---|
 | T04 only | Terra / Medium | Configuration, credential handling and test validity; escalate actual application permission changes to Sol |
 | T05–T08 | Astra / Medium | Journals, stale workers, dispatch/recovery fences and old writers |
-| T09–T12 | Astra / Medium | Key access/restoration, family ownership, provisioning and capacity |
+| T09–T12 | No further Astra pass (DEC-125) | Retain review findings, corrections and verified evidence; grouped owner acceptance is separate |
 | T13–T17 | Astra / Medium | Receipt reuse, backed credit, cancellation and spendable balances |
 | T18–T21 | Sol / Medium | Family authority, shared claims, exact consent and scan cancellation |
 | T23–T27 | Sol / Medium | Recipient/private-money privacy, conservation and weekly races |
@@ -214,6 +214,7 @@ Review policy approved under [DEC-103](decision-ledger.md). Implementation model
 - Every task still requires its done-check and applicable earlier checks. No new standalone review for T01, T03, T22 or T34–T37.
 - Review **before risky use**, not merely at the end of a group: dispatch before authority cutover/financial dispatch; custody and restore before funded provisioning; receipt/credit logic before live credit. Split a checkpoint at that prerequisite, then review only subsequent changes at group closure. This adds targeted passes when necessary, not repeated whole-group reviews.
 - Corrections require a targeted independent re-review of the corrected/new changes, not re-review of unchanged work.
+- DEC-125 supersedes another Astra pass for T09–T12, including the reviewer assignments shown in the task rows. This is not independent sign-off or merge acceptance.
 - Nonfinancial next tasks may proceed while review is pending. Task order, owner “next”, explicit operation approvals and review/merge/release acceptance gates still apply; passing checks do not fabricate review acceptance.
 - T04/T33 Terra reviews do not authorize Terra to implement or approve new signing, custody, financial execution or application permission boundaries; escalate those changes to Sol/Astra as appropriate.
 

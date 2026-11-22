@@ -6,13 +6,13 @@ This shared overview image is also embedded in the event README. Detailed owners
 
 ## Current MVP architecture target — DEC-093–DEC-099
 
-The selected target is up to ten financially enabled families with isolated app-managed Testnet wallets and one hard-configured seller. Registration/linking need not wait for financial capacity. The existing image above depicts the provisioned demo, not an implemented multi-family deployment. Exact provisioning, key custody, signer permissions and recovery, pooled Velo receipt attribution and family accounting remain open; neither the Nov 14 [Velo experiment](../work/evidence-ledger.md#ev-027) nor this choice validates them. Seller unattended SEP-24 is also unresolved. No real fiat.
+The selected target is up to ten financially enabled families with isolated app-managed Testnet wallets and one hard-configured seller. Registration/linking need not wait for financial capacity. The existing image depicts the provisioned demo, not an implemented multi-family deployment. T09 proves private Vault access locally; hosted custody, restore, provisioning, pooled Velo attribution and family accounting remain open. Seller unattended SEP-24 is also unresolved. No real fiat.
 
 ```mermaid
 flowchart LR
     Families["Families: up to 10 financially enabled"] --> API["Authenticated API / agent"]
     Others["Additional families: registration/linking only"] --> API
-    API -. "Provisioning, signing and custody design open" .-> Wallets["Isolated app-managed family Testnet wallets"]
+    API -. "Family wallet provisioning and routing pending" .-> Wallets["Isolated app-managed family Testnet wallets"]
     API -. "Create / verify linked checkout" .-> Velo["Velo checkout"]
     Velo -. "Confirmed payment; evidence contract open" .-> Pool["Project Testnet wallet"]
     Pool -. "Reserve once; confirmed transfer" .-> Wallets
@@ -107,13 +107,21 @@ Server custody for separate owner, agent and merchant Testnet signers is a propo
 
 T05 adds the approved journal foundation inside existing Postgres, not a new service (DEC-104). Operations, holds and saved transaction envelopes are service-only and immutable; no frontend route changes. Records are not evidence of backing or settlement. Existing financial writers remain separate until T08; dispatch and recovery are T06/T07. See the [journal contract](technical-spec.md#t05-durable-money-journal--dec-104) and [T05 evidence](../handoff/T05.md); local verification does not establish hosted deployment or cutover.
 
-T06 adds a Postgres-backed per-source coordinator within the existing Node API boundary (DEC-106); there is no new deployed service. Durable one-shot preparation/send claims protect saved transactions from competing workers, and verified confirmation permits source reuse. Claims do not expire into replacement authority. See the [dispatch contract](technical-spec.md#t06-coordinated-dispatch--dec-106) and [local boundary evidence](../handoff/T06.md#recorded-evidence); existing writers and unresolved recovery remain T08/T07 respectively. Local controlled-transport verification is not live Testnet settlement or hosted acceptance.
+T06 adds a Postgres-backed per-source coordinator within the existing Node API boundary (DEC-106); there is no new deployed service. Durable claims protect signed envelopes from competing workers, and verified confirmation permits source reuse. A send claim never expires into replacement authority. See the [dispatch contract](technical-spec.md#t06-coordinated-dispatch--dec-106) and [local evidence](../handoff/T06.md#recorded-evidence).
 
 T07 adds an observation-only recovery entry point within the existing API/Postgres boundary (DEC-107), using stored exact identities and T06's atomic checkpoint. It never signs, sends, replaces or releases principal. See the [recovery contract](technical-spec.md#t07-exact-identity-recovery--dec-107) and [local recovery evidence](../handoff/T07.md#recorded-evidence); unknowns and unsupported windows remain fenced, and existing writers are not cut over until T08. Controlled local responses do not establish live/deployed recovery acceptance.
 
 T08 isolates signing for funding, purchases and weekly operations in a second Vercel Hobby project. The public app forwards financial requests and keeps Velo checkout. The deployed legacy database role cannot write or read signed envelopes; the original keys cannot authorize alone on Testnet. Historical operators are observation-only and provenance fences old unknown rows. See the [execution contract](technical-spec.md#t08-legacy-authority-boundary--dec-108) and [deployed evidence](../handoff/T08.md#2026-11-22--deployed-writer-cutover).
 
 DEC-111 uses a distinct project account for the one-time signer bootstrap and operating reserve subsidies. The approved DEC-117 transaction used the T06 journal and changed all four account policies atomically without consuming their transaction sequences or clearing historical fences.
+
+T09 adds a locally verified Supabase Vault boundary for future family signers. The isolated backend uses a dedicated PostgreSQL role and a private-schema lookup, not the public Data API. The [custody contract](technical-spec.md#t09-family-key-access--dec-118) is separate from the active T08 demo signers; no hosted credentials, wallet provisioning, or restore are in place from T09.
+
+T11 adds operator-only family provisioning inside the existing Node/Postgres custody boundary (DEC-119). No new deployment or frontend. Three family-specific Testnet accounts start with single protected keys; project operating funds stay separate from family principal. The [provisioning contract](technical-spec.md#t11-family-provisioning--dec-119) and [local evidence](../handoff/T11.md#recorded-evidence) do not establish hosted readiness or change the active T08 writer configuration.
+
+DEC-121/122 add recovery of unsigned claims and expired envelopes that were never admitted for sending, plus separately approved policy renewal. Expiry does not prevent observing a previously submitted hash. See the [T11 recovery rules](technical-spec.md#t11-family-provisioning--dec-119).
+
+T12 enforces the ten-family admission cap in the same private Postgres schema (DEC-120). It separates durable slot reservation from permission to use the deployed demo writers. Enrollment and linking remain independent of capacity; see the [capacity contract](technical-spec.md#t12-family-capacity--dec-120).
 
 Early proof access under DEC-033: B-001 uses an operator-only CLI calling a server endpoint protected by a high-entropy environment token in the Authorization header, validated before signing. Keep the token out of browser code, URLs and logs, with fixed demo destination and bounded amount. This temporary route is disabled when B-005 implements real parent/student Auth and operator authorization; it is not the application's user login design. The implementation plan is canonical for task order.
 

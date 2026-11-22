@@ -71,6 +71,9 @@ export async function authenticateMember(req, env = process.env, clientFactory =
   const { data: member, error: memberError } = await client.from('family_members').select('user_id,family_id,role,wallet_ready').eq('user_id', auth.user.id).maybeSingle();
   if (memberError) throw fail(503, 'PROVIDER_UNAVAILABLE', 'Identity service unavailable.');
   if (!member || !['parent', 'student'].includes(member.role)) throw fail(403, 'ACCOUNT_SETUP_REQUIRED', 'Complete your account setup.');
-  if(member.wallet_ready===false && /^\/api\/(needs-funding|allowance-funding|velo-topups|purchases|weekly|demo)(?:[/?]|$)/.test(req.url??''))throw fail(409,'WALLET_SETUP_REQUIRED','Your family’s wallets are not ready yet.');
+  const path = new URL(req.url ?? '/', 'http://localhost').pathname;
+  if (member.wallet_ready !== true && /^\/api\/(needs-funding|allowance-funding|velo-topups|purchases|weekly|demo)(?:\/|$)/.test(path)) {
+    throw fail(409, 'WALLET_SETUP_REQUIRED', 'Your family’s wallets are not ready yet.');
+  }
   return { client, member };
 }
