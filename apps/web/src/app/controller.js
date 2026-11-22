@@ -166,17 +166,34 @@ export function createAppController({ auth, api }) {
       try { const user = await api.getMe(); if (epoch !== sessionEpoch) return; state = { ...state, screen: 'shell', status: 'ready', user, activePage: initialPage(user) }; publish(); await loadFunding(); await loadPurchases(); await loadFamily(); } catch(e) {if(epoch===sessionEpoch && e.code==='ACCOUNT_SETUP_REQUIRED'){state={...state,screen:'setup',status:'ready',accountRole:['parent','student'].includes(requestedRole)?requestedRole:null};publish();}}
     },
     refreshFunding: loadFunding,
-    async fundNeeds() {
-      if (state.fundingBusy || !state.familyRules) return;
-      const epoch = sessionEpoch, userId = state.user?.userId;
-      const key = localStorage.getItem('allowanceFundingKey:' + userId) || crypto.randomUUID();
-      const savedRevision = localStorage.getItem('allowanceFundingRevision:' + userId);
-      const allocationRevision = savedRevision === null ? state.familyRules.revision : Number(savedRevision);
-      localStorage.setItem('allowanceFundingRevision:' + userId, String(allocationRevision));
-      localStorage.setItem('allowanceFundingKey:' + userId, key);
+    async fundNeeds(resumeId) {
+      if (state.fundingBusy || state.user?.role !== 'parent') return;
+      const operation = state.funding?.operations.find(op => ['processing', 'unknown'].includes(op.status));
+      if (resumeId ? operation?.id !== resumeId || !operation.canResume : operation || !state.familyRules) return;
+      const epoch = sessionEpoch, userId = state.user.userId;
+      const keyName = 'allowanceFundingKey:' + userId, revisionName = 'allowanceFundingRevision:' + userId;
+      let key, revision;
+      if (!resumeId) {
+        key = localStorage.getItem(keyName) || crypto.randomUUID();
+        const saved = localStorage.getItem(revisionName);
+        revision = saved === null ? state.familyRules.revision : Number(saved);
+        localStorage.setItem(revisionName, String(revision));
+        localStorage.setItem(keyName, key);
+      }
+      const clearSubmission = () => {
+        if (!key || localStorage.getItem(keyName) !== key) return;
+        localStorage.removeItem(keyName);
+        localStorage.removeItem(revisionName);
+      };
       state = { ...state, fundingBusy: true, fundingError: null }; publish();
-      try { const result = await api.funding('POST', key, allocationRevision); if (result.status === 'confirmed' || result.status === 'failed') { localStorage.removeItem('allowanceFundingKey:' + userId); localStorage.removeItem('allowanceFundingRevision:' + userId); } if (!currentSession(epoch, userId)) return; await loadFunding(); await loadPurchases(); await loadFamily(); }
-      catch (e) { if (e.code === 'RULES_CHANGED') { localStorage.removeItem('allowanceFundingKey:' + userId); localStorage.removeItem('allowanceFundingRevision:' + userId); } if (currentSession(epoch, userId)) state = { ...state, fundingError: e.message }; }
+      try {
+        const result = resumeId ? await api.resumeFunding(resumeId) : await api.funding('POST', key, revision);
+        if (result.status === 'confirmed' || result.status === 'failed') clearSubmission();
+        if (currentSession(epoch, userId)) { await loadFunding(); await loadPurchases(); await loadFamily(); }
+      } catch (e) {
+        if (e.code === 'RULES_CHANGED') clearSubmission();
+        if (currentSession(epoch, userId)) state = { ...state, fundingError: e.message };
+      }
       finally { if (currentSession(epoch, userId)) { state = { ...state, fundingBusy: false }; publish(); } }
     },
     subscribe(listener) {

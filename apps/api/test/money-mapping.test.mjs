@@ -20,24 +20,25 @@ test('snapshot conversion uses integer half-up rounding and preserves bucket tot
   assert.throws(()=>splitAllowance('1',60.5));
 });
 
-test('backing CLI initializes once with private state and no leaked signer', async () => {
-  const { mkdtemp, writeFile, readFile, stat } = await import('node:fs/promises');
+test('retired backing CLI cannot initialize or replace unknown historical funding', async () => {
+  const { mkdtemp, writeFile, readFile, readdir, rm } = await import('node:fs/promises');
   const { tmpdir } = await import('node:os');
   const { join, resolve } = await import('node:path');
   const { spawnSync } = await import('node:child_process');
   const { Keypair } = await import('@stellar/stellar-sdk');
-  const cwd=await mkdtemp(join(tmpdir(),'b003-'));
-  await writeFile(join(cwd,'.env.local'),'',{mode:0o600});
-  const env={...process.env,OWNER_SECRET:Keypair.random().secret(),AGENT_SECRET:Keypair.random().secret(),MERCHANT_SECRET:Keypair.random().secret()};
-  const run=()=>spawnSync(process.execPath,[resolve(import.meta.dirname,'../scripts/wallet-backing.mjs'),'init'],{cwd,env,encoding:'utf8'});
-  const first=run(); assert.equal(first.status,0,first.stdout);
-  const path=join(cwd,'.env.b003-state.json'), before=await readFile(path,'utf8');
-  assert.equal((await stat(path)).mode & 0o077,0);
-  assert.equal(run().status,1); assert.equal(await readFile(path,'utf8'),before);
-  for (const secret of [env.OWNER_SECRET,env.AGENT_SECRET,env.MERCHANT_SECRET,JSON.parse(before).studentSecret]) assert.ok(!first.stdout.includes(secret));
-  const interrupted=JSON.parse(before); interrupted.steps.friendbot={phase:'dispatched'};
-  await writeFile(path,JSON.stringify(interrupted),{mode:0o600});
-  const recovery=spawnSync(process.execPath,[resolve(import.meta.dirname,'../scripts/wallet-backing.mjs'),'run'],{cwd,env,encoding:'utf8'});
-  assert.equal(recovery.status,1); // Unknown funding cannot trigger another Friendbot request.
-  assert.deepEqual(JSON.parse(await readFile(path,'utf8')),interrupted);
+  const cwd = await mkdtemp(join(tmpdir(), 'b003-'));
+  try {
+    const secrets = { OWNER_SECRET: Keypair.random().secret(), AGENT_SECRET: Keypair.random().secret(), MERCHANT_SECRET: Keypair.random().secret() };
+    const run = command => spawnSync(process.execPath, [resolve(import.meta.dirname, '../scripts/wallet-backing.mjs'), command], {
+      cwd, env: { PATH: process.env.PATH, ...secrets }, encoding: 'utf8' });
+    assert.equal(run('init').status, 1); assert.deepEqual(await readdir(cwd), []);
+    const path = join(cwd, '.env.b003-state.json');
+    const original = JSON.stringify({ steps: { friendbot: { phase: 'dispatched' } } });
+    await writeFile(path, original, { mode: 0o600 });
+    for (const command of ['init', 'run']) {
+      const result = run(command);
+      assert.equal(result.status, 1); assert.equal(await readFile(path, 'utf8'), original);
+      for (const secret of Object.values(secrets)) assert.equal((result.stdout + result.stderr).includes(secret), false);
+    }
+  } finally { await rm(cwd, { recursive: true, force: true }); }
 });

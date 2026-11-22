@@ -289,8 +289,13 @@ Review policy approved under [DEC-103](decision-ledger.md). Implementation model
 - **Financial live verification uses explicit principal and aggregate-fee budgets.** Measure and enforce them before dispatch; deterministic boundary cases use isolated database tests instead of unnecessary large payments.
 - **No fixed calendar expiry for Savings requests.** Requests remain pending until decision or a family-lifecycle action safely resolves them.
 - **Documentation changes occur during authorized implementation.** Preserve dated evidence and task-status ownership; leave README revisions until finalization.
+- **T05 journal storage defaults.** A request UUID is unique per family across purposes; source/destination references remain opaque, and saved envelopes are limited to 1 MiB. These are identity/storage constraints, not new wallet routing or permission to move funds; see the [journal contract](technical-spec.md#t05-durable-money-journal--dec-104).
+- **T06 coordination default.** Preparation and send claims do not expire into replacement authority. Continue from saved bytes/confirmed checkpoints; abandoned or uncertain work remains fenced for evidence-supported recovery. See the [dispatch contract](technical-spec.md#t06-coordinated-dispatch--dec-106); this does not add the deferred prolonged-reservation support concern.
+- **T07 observation default.** At most one saved-hash provider lookup per reconciliation call; no signing, sending, credit, principal release or automatic repair. Verified retained checkpoints need no provider lookup. See the [recovery contract](technical-spec.md#t07-exact-identity-recovery--dec-107).
 
 **Revisit after MVP — none of these blocks backend completion**
+
+- **Prolonged reservations — separate post-Phase 8 concern (DEC-105).** After T37, assess whether additional implementation is needed to identify and escalate long-unresolved reservations and improve their resolution. Decide scope, ownership and any response-time target then; no guaranteed resolution time or automatic release is approved. T07's existing evidence-based reconciliation and T37's recovery handoff remain required in Phase 8 and earlier. Never release or replace uncertain funds based only on elapsed time.
 
 - Frontend controls for additive APIs, tutorial presentation, visual design, PWA installation and device presentation.
 - Production custody, real-money deposits, real fiat payout, compliance and independent security audit.

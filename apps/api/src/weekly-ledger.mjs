@@ -15,8 +15,8 @@ export function weeklyLedger() {
   return units(native.balance)-units(native.selling_liabilities)-BigInt(2+account.subentry_count+(account.num_sponsoring??0)-(account.num_sponsored??0))*BigInt(ledger.base_reserve_in_stroops);
  }
  return {
-  spendable, status:hash=>noir.server.getTransaction(hash), submit:signed=>noir.submit(signed),
-  async prepare(stage,event) {
+  spendable,
+  async plan(stage,event) {
    const devices=Object.fromEntries(['Needs','Wants','Savings','My Money'].map(b=>[b,bucketDevice(event.family_id,b)]));
    const n=BigInt(event.needs_stroops),w=BigInt(event.wants_stroops);
    let signer=owner,op;
@@ -31,9 +31,11 @@ export function weeklyLedger() {
     if(kind==='defundEscrow' && await noir.getEscrowBalance(devices[bucket])!==amount)throw Error('BACKING_MISMATCH');
     op={kind,deviceHash:devices[bucket],token:asset,amount};
    }
+   return {sourceAccount:signer.publicKey,prepare:async()=>{
    const unsigned=await noir.prepare(signer.publicKey,op),signed=await signer.signTransaction(unsigned,{networkPassphrase:Networks.TESTNET});
    const tx=TransactionBuilder.fromXDR(signed,Networks.TESTNET);if(BigInt(tx.fee)>300000000n)throw Error('FEE_LIMIT');
    return {signed,hash:tx.hash().toString('hex')};
+   }};
   },
   async verify(event){return await noir.getEscrowBalance(bucketDevice(event.family_id,'Needs'))===0n && await noir.getEscrowBalance(bucketDevice(event.family_id,'Wants'))===0n;},
  };

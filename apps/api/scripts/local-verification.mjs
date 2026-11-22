@@ -30,6 +30,19 @@ export async function localConfiguration() {
   const password = email => createHmac('sha256', status.SERVICE_ROLE_KEY).update(`padalapocket-verification:${email}`).digest('hex');
   return { status, admin, password };
 }
+// Owner-approved T08 credential: isolated local project, five minutes, memory only.
+export async function coordinatorConfiguration() {
+  const configuration = await localConfiguration();
+  const { status } = configuration;
+  assert.ok(status.JWT_SECRET);
+  const now = Math.floor(Date.now() / 1000);
+  const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+  const payload = Buffer.from(JSON.stringify({ role: 'money_coordinator', iss: 'supabase', iat: now, exp: now + 300 })).toString('base64url');
+  const message = `${header}.${payload}`;
+  const token = `${message}.${createHmac('sha256', status.JWT_SECRET).update(message).digest('base64url')}`;
+  return { ...configuration, legacy: configuration.admin, admin: createClient(status.API_URL, status.ANON_KEY,
+    { ...options, global: { headers: { Authorization: `Bearer ${token}` } } }) };
+}
 export function assertLoopbackBindings() {
   const containers = command('docker', ['ps', '--filter', `label=com.supabase.cli.project=${project}`, '--format', '{{.Names}}']).trim().split('\n').filter(Boolean);
   assert.ok(containers.includes(`supabase_db_${project}`));

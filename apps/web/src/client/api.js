@@ -22,6 +22,13 @@ export function getFixture(name, expectedKind) {
 }
 
 export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-identity', fetchImpl = globalThis.fetch, getAccessToken = async () => null } = {}) {
+  async function requestFunding(method, key, payload) {
+    const token = await getAccessToken();
+    const response = await fetchImpl('/api/allowance-funding', { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(payload ? { body: JSON.stringify(payload) } : {}) });
+    const body = await response.json();
+    if (!response.ok) throw new ApiError(body.error, response.status);
+    return body;
+  }
   return {
     mode,
     async accountAction(action,payload){const token=await getAccessToken();const response=await fetchImpl('/api/accounts/'+action,{method:action==='status'?'GET':'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...(payload?{body:JSON.stringify(payload)}:{})});const body=await response.json();if(!response.ok)throw new ApiError(body.error,response.status);return body;},
@@ -75,13 +82,10 @@ export function createApiClient({ mode = 'mock', identityFixtureName = 'parent-i
       if (!response.ok) throw new ApiError(body?.error, response.status);
       return body;
     },
-    async funding(method = 'GET', key, expectedRevision) {
-      const token = await getAccessToken();
-      const response = await fetchImpl('/api/allowance-funding', { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(key ? { 'Idempotency-Key': key } : {}) }, ...(method === 'POST' ? { body: JSON.stringify({ expectedRevision }) } : {}) });
-      const body = await response.json();
-      if (!response.ok) throw new ApiError(body.error, response.status);
-      return body;
+    funding(method = 'GET', key, expectedRevision) {
+      return requestFunding(method, key, method === 'POST' ? { expectedRevision } : undefined);
     },
+    resumeFunding(id) { return requestFunding('POST', undefined, { resumeId: id }); },
     async purchases(method = 'GET', payload, key, suffix = '') {
       if (mode === 'mock') throw new Error('Purchase flow is available only with the live API.');
       const token = await getAccessToken();

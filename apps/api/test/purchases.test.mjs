@@ -11,14 +11,14 @@ const payload = { sellerId: 'demo-seller', priceMinor: '242', mime: 'image/png',
 function fixture({ role = 'student', ai = { productName: 'Notebook', category: 'school_supplies', uncertain: false, prohibited: false }, funds = true, status = 'SUCCESS', rows = [] } = {}) {
   const calls = { ai: 0, submit: [], prepare: [], db: 0 }; let nonce = 0;
   // Seeded rows have the same non-null defaults as the hosted schema.
-  for (const row of rows) { row.claim_started ??= false; row.reserved ??= false; }
+  for (const row of rows) { row.claim_started ??= false; row.reserved ??= false; row.coordinator_version ??= 8; }
   function table() {
     let filters = [], mutation, insert, single = false;
     const run = async () => {
       let selected = rows.filter(row => filters.every(([field, value]) => row[field] === value));
       if (insert) {
         if (rows.some(row => row.request_key === insert.request_key || !['blocked','claimed','failed'].includes(row.status))) return { error: { code: '23505' } };
-        const row = { exception_started:false,exception_stage:0,created_at:new Date().toISOString(), id, status: 'assessing', steps: {}, evidence: {}, claim_started: false, reserved: false, nonce: ++nonce, ...insert }; rows.push(row); selected = [row];
+        const row = { coordinator_version:8,exception_started:false,exception_stage:0,created_at:new Date().toISOString(), id, status: 'assessing', steps: {}, evidence: {}, claim_started: false, reserved: false, nonce: ++nonce, ...insert }; rows.push(row); selected = [row];
       }
       if (mutation) for (const row of selected) Object.assign(row, structuredClone(mutation));
       // PostgREST serializes every result, including insert/update responses.
@@ -47,8 +47,10 @@ function fixture({ role = 'student', ai = { productName: 'Notebook', category: '
     Object.assign(row, funds ? { status: 'reserved', reserved: true } : { status: 'blocked', reason: 'INSUFFICIENT_FUNDS' }); return { data: funds };
   } };
   let pending = 0n;
-  const ledger = { consent:()=>({signature:'test'}),exceptionReady:async()=>true,exceptionComplete:async()=>true,merchantPublicKey: 'fixed-merchant', status: async () => ({ status }), escrow: async () => 10000000n, pending: async () => pending, check: async () => ({ ok: true }), prepare: async stage => { calls.prepare.push(stage); return { signed: `${stage}-envelope`, hash: `${stage}-hash` }; }, submit: async signed => { assert.ok(rows[0].steps[calls.prepare.at(-1)]); calls.submit.push(signed); if(signed==='exception_authorize-envelope')pending=BigInt(rows[0].amount_stroops); if(signed==='exception_claim-envelope')pending=0n; if (signed === 'authorize-envelope') pending = 2500000n; if (signed === 'claim-envelope') pending = 0n; } };
-  const deps = { loadRules: async () => ({ revision: 0, settings: structuredClone(DEFAULT_SETTINGS) }), authenticate: async () => ({ member: { role, user_id: student, family_id: 'family' } }), database: () => db, validate: async () => {}, identify: async () => { calls.ai++; return { ai, usage: { total_tokens: 1 } }; }, ledger: () => ledger };
+  const ledger = { consent:()=>({signature:'test'}),exceptionReady:async()=>true,exceptionComplete:async()=>true,merchantPublicKey: 'fixed-merchant', sourceAccount:()=> 'source', status: async () => ({ status }), escrow: async () => 10000000n, pending: async () => pending, check: async () => ({ ok: true }), prepare: async stage => { calls.prepare.push(stage); return { signed: `${stage}-envelope`, hash: `${stage}-hash` }; }, submit: async signed => { calls.submit.push(signed); if(signed==='exception_authorize-envelope')pending=BigInt(rows[0].amount_stroops); if(signed==='exception_claim-envelope')pending=0n; if (signed === 'authorize-envelope') pending = 2500000n; if (signed === 'claim-envelope') pending = 0n; } };
+  const writers = { managed:row=>row.coordinator_version===8, observe:async({row,stage})=>({outcome:(await ledger.status(row.steps[stage].hash)).status==='SUCCESS'?'confirmed':'fenced'}),
+    dispatch:async({prepare})=>{const step=await prepare();await ledger.submit(step.signed);return {phase:(await ledger.status(step.hash)).status==='SUCCESS'?'confirmed':'dispatching',transactionHash:step.hash};} };
+  const deps = { writers, loadRules: async () => ({ revision: 0, settings: structuredClone(DEFAULT_SETTINGS) }), authenticate: async () => ({ member: { role, user_id: student, family_id: 'family' } }), database: () => db, validate: async () => {}, identify: async () => { calls.ai++; return { ai, usage: { total_tokens: 1 } }; }, ledger: () => ledger };
   const request = async (method = 'POST', body = payload, url = '/api/purchases', requestKey = key) => { const res = { setHeader() {}, end(raw) { this.body = Buffer.isBuffer(raw) ? raw : JSON.parse(raw); } }; await purchases({ method, url, body, headers: { 'idempotency-key': requestKey } }, res, deps); return res; };
   return { calls, rows, deps, request, ledger, setStatus(value) { status = value; } };
 }
@@ -198,7 +200,6 @@ test('status GET during admitted claim preparation cannot move the purchase back
   assert.equal(f.rows[0].status, 'claimed');
   assert.equal(claimed.body.status, 'claimed');
   assert.equal(f.rows[0].steps.claim.hash, 'claim-hash');
-  assert.equal(f.rows[0].steps.claim.signed, 'claim-envelope');
   assert.deepEqual(f.rows[0].steps.authorize, savedAuthorization);
   assert.equal(f.rows[0].evidence.claimLedgerStatus, 'SUCCESS');
   assert.equal(f.rows[0].evidence.merchantPendingStroops, '0');
@@ -291,3 +292,15 @@ test('available Wants subtracts only Wants reservations', async()=>{
   const result=await f.request('GET');assert.equal(result.body.availableNeedsStroops,'10000000');assert.equal(result.body.availableWantsStroops,'5500000');
 });
 test('unknown bucket fails before photo identification',async()=>{const f=fixture();assert.equal((await f.request('POST',{...payload,bucket:'savings'})).statusCode,400);assert.equal(f.calls.ai,0);});
+
+test('pre-cutover purchase unknowns retain principal and cannot be adopted through refresh or claim',async()=>{
+ const row={id,family_id:'family',student_id:student,coordinator_version:0,status:'unknown',reserved:true,
+  amount_stroops:'2500000',steps:{authorize:{hash:'historical-hash',signed:'historical-envelope'}},evidence:{}};
+ const f=fixture({rows:[row]});const before=structuredClone(row);
+ f.ledger.status=async()=>{assert.fail('Legacy unknown was observed through the new execution path');};
+ for(const [method,url] of [['GET','/api/purchases'],['POST',`/api/purchases/${id}/claim`]]){
+  const result=await f.request(method,{},url);assert.equal(result.statusCode,200);
+  assert.equal((result.body.purchases?.[0]??result.body).status,'unknown');
+ }
+ assert.deepEqual(row,before);assert.equal(f.calls.prepare.length,0);assert.equal(f.calls.submit.length,0);
+});

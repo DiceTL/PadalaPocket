@@ -7,7 +7,7 @@ import {nextWeeklyTime,WEEKLY_STAGES} from './weekly-plan.mjs';
 import {weeklyLedger} from './weekly-ledger.mjs';
 const fail=(status,code)=>Object.assign(Error(code),{status,code});
 const uuid=/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
-export async function weekly(req,res,{authenticate=authenticateMember,database=createClient,ledger=weeklyLedger}={}){
+export async function weekly(req,res,{authenticate=authenticateMember,database=createClient,ledger=weeklyLedger,writers}={}){
  res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');
  const send=(status,body)=>{res.statusCode=status;res.end(JSON.stringify(body));};
  try{
@@ -43,16 +43,17 @@ export async function weekly(req,res,{authenticate=authenticateMember,database=c
    if(admitted.error)throw fail(409,admitted.error.message.includes('PENDING')?'MONEY_OPERATION_PENDING':'CLOCK_CHANGED');e=admitted.data;
   }
   if(['confirmed','allocation_skipped'].includes(e.status))return send(200,projection(e));
+  if(!writers.managed(e))return send(202,projection(e));
   if(e.stage<6){
    const stage=WEEKLY_STAGES[e.stage];
    if(e.stage_started){
-    const step=e.steps[stage];if(!step || (await chain.status(step.hash)).status!=='SUCCESS')return send(202,projection(e));
+    const step=e.steps[stage];if(!step || (await writers.observe({kind:'weekly',row:e,stage})).outcome!=='confirmed')return send(202,projection(e));
    }else{
     const admitted=check(await events().update({stage_started:true}).eq('id',e.id).eq('stage',e.stage).eq('stage_started',false).select('*').maybeSingle());
     if(!admitted)return send(202,projection(e));e=admitted;
     try{
-     const step=await chain.prepare(stage,e);
-     if(step){e.steps={...e.steps,[stage]:step};check(await events().update({steps:e.steps}).eq('id',e.id));await chain.submit(step.signed);if((await chain.status(step.hash)).status!=='SUCCESS')throw Error('UNKNOWN');}
+     const plan=await chain.plan(stage,e);
+     if(plan){const state=await writers.dispatch({kind:'weekly',row:e,stage,...plan});if(state.transactionHash){e.steps={...e.steps,[stage]:{hash:state.transactionHash}};check(await events().update({steps:e.steps}).eq('id',e.id));}if(state.phase!=='confirmed')throw Error('UNKNOWN');}
     }catch{check(await events().update({status:'unknown'}).eq('id',e.id));e.status='unknown';return send(202,projection(e));}
    }
    check(await events().update({stage:e.stage+1,stage_started:false,status:'processing'}).eq('id',e.id).eq('stage',e.stage));e.stage++;e.stage_started=false;e.status='processing';
@@ -66,7 +67,7 @@ export async function weekly(req,res,{authenticate=authenticateMember,database=c
    check(await db.rpc('finish_weekly_event',{p_id:e.id,p_skipped:true}));e.status='allocation_skipped';e.notice='Next allowance skipped: insufficient parent funding.';return send(200,projection(e));
   }
   let result;
-  await funding({method:'POST',url:'/api/allowance-funding',headers:{'idempotency-key':e.id},body:{expectedRevision:e.rules_revision}},{setHeader(){},set statusCode(v){},end(v){result=JSON.parse(v);}},{authenticate:async()=>({member}),database});
+  await funding({method:'POST',url:'/api/allowance-funding',headers:{'idempotency-key':e.id},body:{expectedRevision:e.rules_revision}},{setHeader(){},set statusCode(v){},end(v){result=JSON.parse(v);}},{authenticate:async()=>({member}),database,writers});
   if(result?.status==='confirmed'){check(await db.rpc('finish_weekly_event',{p_id:e.id,p_skipped:false}));e.status='confirmed';}
   return send(e.status==='confirmed'?200:202,projection(e));
  }catch(e){send(e.status??503,{error:{code:e.code??'WEEKLY_UNAVAILABLE',message:e.code??'Weekly service unavailable.',retryable:false}});}

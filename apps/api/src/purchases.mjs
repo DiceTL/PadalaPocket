@@ -11,7 +11,7 @@ const fail = (status, code) => Object.assign(Error(code), { status, code });
 const uuid = /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const purchaseProjection = row => ({ id: row.id, bucket: row.bucket ?? 'needs', requestKey: row.request_key, status: row.status, reason: row.reason, sellerId: row.seller_id, priceMinor: row.price_minor, amountStroops: String(row.amount_stroops), rules: row.rules, ai: row.ai, createdAt: row.created_at, approvalBinding: row.approval_binding ?? null, approvalDeadline: row.approval_deadline ?? null, parentDecision: row.parent_decision ?? null, executionStarted: Boolean(row.exception_started), completedStages: row.exception_stage ?? 0, transactions: Object.fromEntries(Object.entries(row.steps).map(([name, step]) => [name, { hash: step.hash }])), evidence: row.evidence });
-export async function purchases(req, res, { authenticate = authenticateMember, database = createClient, validate = validatePhoto, identify = identifyPhoto, ledger = purchaseLedger, loadRules = readFamilyRules } = {}) {
+export async function purchases(req, res, { authenticate = authenticateMember, database = createClient, validate = validatePhoto, identify = identifyPhoto, ledger = purchaseLedger, loadRules = readFamilyRules, writers } = {}) {
   res.setHeader('Cache-Control', 'no-store'); res.setHeader('Content-Type', 'application/json');
   const send = (status, body) => { res.statusCode = status; res.end(JSON.stringify(body)); };
   try {
@@ -44,12 +44,13 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
     const network = () => chain ??= ledger();
     const device = row => hash('PadalaPocket ' + (row.bucket === 'wants' ? 'Wants ' : 'Needs ') + member.family_id);
     async function reconcile(row) {
+      if(!writers.managed(row))return;
       if (row.status === 'unknown' && row.reason === 'AI_UNAVAILABLE' && !row.reserved && !row.ai && Object.keys(row.steps).length === 0) { await save(row, { status: 'blocked' }); return; }
       if (['blocked','claimed','failed','awaiting_parent','approved','rejected','expired'].includes(row.status)) return;
       if (row.parent_decision?.decision === 'approve') {
         // Reads may only close a fully dispatched, confirmed exception; never start missing stages.
         if (!EXCEPTION_STAGES.every(stage=>row.steps[stage])) return;
-        for(const stage of EXCEPTION_STAGES) if((await network().status(row.steps[stage].hash)).status!=='SUCCESS') return;
+        for(const stage of EXCEPTION_STAGES) if((await writers.observe({kind:'purchase',row,stage})).outcome!=='confirmed') return;
         if(await network().pending()!==0n || !await network().exceptionComplete(row)) return;
         await save(row,{status:'claimed',reason:null,evidence:{...row.evidence,claimLedgerStatus:'SUCCESS',merchantPendingStroops:'0',exceptionRevoked:true}});
         return;
@@ -59,9 +60,8 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       if (row.claim_started && !row.steps.claim) return;
       for (const stage of ['claim','authorize','policy']) {
         if (!row.steps[stage]) continue;
-        const result = await network().status(row.steps[stage].hash);
-        if (result.status === 'FAILED') { await save(row, { status: 'failed', reason: `${stage.toUpperCase()}_FAILED` }, { beforeClaim: stage !== 'claim' }); return; }
-        if (result.status !== 'SUCCESS') return;
+        const result = await writers.observe({kind:'purchase',row,stage});
+        if (result.outcome !== 'confirmed') return;
         if (stage === 'claim') {
           const pending = await network().pending();
           if (pending !== 0n) return;
@@ -72,13 +72,14 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
     }
     async function dispatch(row, stage, pendingStatus) {
       if (row.steps[stage]) throw Error('STEP_ALREADY_EXISTS');
-      const step = await network().prepare(stage, row, device(row));
-      if (!await save(row, { steps: { ...row.steps, [stage]: step }, status: pendingStatus })) throw Error('STALE_OPERATION');
-      await network().submit(step.signed);
-      const result = await network().status(step.hash);
-      if (result.status !== 'SUCCESS') throw Error('TRANSACTION_UNKNOWN');
+      if (!await save(row, { status: pendingStatus })) throw Error('STALE_OPERATION');
+      const result = await writers.dispatch({kind:'purchase',row,stage,sourceAccount:network().sourceAccount(stage),
+        prepare:()=>network().prepare(stage,row,device(row))});
+      if(result.transactionHash && !await save(row,{steps:{...row.steps,[stage]:{hash:result.transactionHash}}}))throw Error('STALE_OPERATION');
+      if (result.phase !== 'confirmed') throw Error('TRANSACTION_UNKNOWN');
     }
     async function claim(row) {
+      if(!writers.managed(row))return;
       if(row.parent_decision) return;
       const admission = await table().update({ claim_started: true, status: 'claim_pending' }).eq('id', row.id).eq('status', 'merchant_pending').eq('claim_started', false).select('id').maybeSingle();
       if (admission.error) throw fail(503, 'PROVIDER_UNAVAILABLE');
@@ -88,6 +89,7 @@ export async function purchases(req, res, { authenticate = authenticateMember, d
       catch { await save(row, { status: 'unknown' }); }
     }
     async function executeException(row) {
+      if(!writers.managed(row))return;
       const admission=await db.rpc('admit_purchase_exception',{p_id:row.id,p_parent:member.user_id,p_family:member.family_id});
       if(admission.error)throw fail(503,'PROVIDER_UNAVAILABLE');
       if(admission.data?.error)throw fail(404,admission.data.error);

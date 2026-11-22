@@ -17,7 +17,7 @@ export function validateIntent(intent,row){
  if(intent.checkoutUrl){const parsed=new URL(intent.checkoutUrl);if(parsed.origin!=='https://www.velo-build.dev'||parsed.username||parsed.password)throw fail(503,'INVALID_VELO_RESPONSE');url=parsed.href;}
  return {intent_id:intent.paymentIntentId,status:intent.status,checkout_url:url};
 }
-export async function veloTopups(req,res,{authenticate=authenticateMember,database=createClient,provider=()=>new Velo({apiKey:process.env.VELO_API_KEY,baseUrl:'https://www.velo-build.dev',environment:'testnet',timeoutMs:15000,maxRetries:0}),receiver=()=>Keypair.fromSecret(process.env.OWNER_SECRET).publicKey(),loadRules=readFamilyRules}={}){
+export async function veloTopups(req,res,{authenticate=authenticateMember,database=createClient,provider=()=>new Velo({apiKey:process.env.VELO_API_KEY,baseUrl:'https://www.velo-build.dev',environment:'testnet',timeoutMs:15000,maxRetries:0}),receiver=()=>Keypair.fromPublicKey(process.env.OWNER_PUBLIC_KEY).publicKey(),loadRules=readFamilyRules}={}){
  res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type','application/json');
  const send=(code,body)=>{res.statusCode=code;res.end(JSON.stringify(body));};
  try{
