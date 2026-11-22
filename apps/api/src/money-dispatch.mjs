@@ -47,6 +47,14 @@ export async function dispatchMoneyStep(db, input, { prepare, beforeSend, recove
     && await call(db, 'recover_provision_preparation', { ...identity, p_claim: null })) {
     state = await call(db, 'claim_money_dispatch', identity);
   }
+  if (recoverPreparation && state.phase === 'prepared') {
+    const saved = signedTransaction(state.signedEnvelope, input.sourceAccount, now, false);
+    if (saved.hash().toString('hex') !== state.transactionHash) throw fail(409, 'DISPATCH_IDENTITY_CONFLICT');
+    if (BigInt(saved.timeBounds.maxTime) <= BigInt(Math.floor(now() / 1000))) {
+      state = await call(db, 'replace_expired_provision_envelope',
+        { ...identity, p_hash: state.transactionHash, p_max_time: saved.timeBounds.maxTime });
+    }
+  }
   if (state.canPrepare) {
     if (typeof prepare !== 'function') throw fail(400, 'INVALID_INPUT');
     let tx;
@@ -63,7 +71,10 @@ export async function dispatchMoneyStep(db, input, { prepare, beforeSend, recove
   if (tx.hash().toString('hex') !== state.transactionHash) throw fail(409, 'DISPATCH_IDENTITY_CONFLICT');
   if (state.phase === 'prepared') {
     if (beforeSend) await beforeSend(tx);
-    state = await call(db, 'claim_money_dispatch_send', identity);
+    if (BigInt(tx.timeBounds.maxTime) <= BigInt(Math.floor(now() / 1000))) throw fail(409, 'INVALID_SIGNED_TRANSACTION');
+    state = recoverPreparation
+      ? await call(db, 'claim_provision_dispatch_send', { ...identity, p_hash: state.transactionHash })
+      : await call(db, 'claim_money_dispatch_send', identity);
     if (state.phase === 'confirmed') return state;
     if (state.canSend) {
       server ??= testnetServer();

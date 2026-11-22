@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
-import { Account, BASE_FEE, Contract, Keypair, Networks, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
+import { Account, BASE_FEE, Contract, Keypair, Networks, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { NoirAgentClient, toCall } from '@noirx402/agent-sdk';
 import { assertLoopbackBindings, emails, localConfiguration } from './local-verification.mjs';
 
@@ -104,6 +104,7 @@ try {
     } finally { await db.query('release savepoint scoped_probe'); }
   } });
   const coordinator = scoped('money_coordinator');
+  let retiredHash, staleSendChecked = false;
   const journal = {
    from(table) {
     assert.equal(table, 'family_rules');
@@ -115,8 +116,16 @@ try {
    },
    async rpc(name, params) {
     const allow = ['claim_money_dispatch', 'save_money_dispatch', 'claim_money_dispatch_send', 'confirm_money_dispatch',
-      'recover_provision_preparation', 'retire_unsent_provision_policy', 'read_money_recovery'];
+      'recover_provision_preparation', 'retire_unsent_provision_policy', 'read_money_recovery',
+      'replace_expired_provision_envelope', 'claim_provision_dispatch_send'];
     assert.ok(allow.includes(name));
+    if (name === 'claim_provision_dispatch_send' && retiredHash && !staleSendChecked && params.p_step_key === 'accounts') {
+      staleSendChecked = true;
+      const stale = await journal.rpc(name, { ...params, p_hash: retiredHash });
+      assert.equal(stale.error?.message, 'STALE_WORKER');
+      const { p_hash, ...legacy } = params;
+      assert.equal((await journal.rpc('claim_money_dispatch_send', legacy)).error?.message, 'FORBIDDEN');
+    }
     try {
       const { rows: [row] } = await coordinator.query(`select public.${name}(${Object.keys(params).map((key, i) => `${key} => $${i+1}`).join(',')}) as value`, Object.values(params));
       return { data: row.value };
@@ -150,11 +159,34 @@ try {
   assert.equal((await run()).status, 'pending');
   assert.equal(sends, 0);
   await db.query("update public.money_dispatch_steps set created_at=clock_timestamp()-interval '3 minutes' where operation_id=$1 and step_key='accounts'", [operation.operation_id]);
+  assert.equal((await journal.rpc('recover_provision_preparation', { ...old, p_claim: null })).data, true);
+  const expiredClaim = { ...old, p_claim: randomUUID() };
+  assert.equal((await journal.rpc('claim_money_dispatch', expiredClaim)).data.canPrepare, true);
+  stage = 'expired-unsent-envelope';
+  const { rows: [binding] } = await db.query("select request_payload->'accounts' as accounts from public.money_operations where id=$1", [operation.operation_id]);
+  const builder = new TransactionBuilder(new Account(feeSource, '0'), { fee: BASE_FEE, networkPassphrase: Networks.TESTNET,
+    timebounds: { minTime: 0, maxTime: Math.floor(clock / 1000) - 10 } });
+  for (const [role, amount] of [['parent', '1.1050000'], ['student', '1.1010000'], ['agent', '1.1000000']]) {
+    builder.addOperation(Operation.createAccount({ destination: binding.accounts[role], startingBalance: amount }));
+  }
+  const expired = builder.build();
+  expired.sign(feeSigner);
+  const expiredHash = expired.hash().toString('hex');
+  const savedExpired = await journal.rpc('save_money_dispatch', { ...expiredClaim, p_signed: expired.toXDR(), p_hash: expiredHash });
+  assert.equal(savedExpired.data.phase, 'prepared');
+  retiredHash = expiredHash;
   stage = 'one-shot-and-durable-replay';
   const pending = await run();
   assert.equal(pending.status, 'pending');
   assert.equal(sends, 1);
+  assert.equal(staleSendChecked, true);
+  assert.ok(!envelopes.has(expiredHash));
+  const archive = await db.query('select 1 from wallet_custody.retired_provision_envelopes where transaction_hash=$1 and signed_envelope=$2', [expiredHash, expired.toXDR()]);
+  assert.equal(archive.rowCount, 1);
   const [hash, received] = envelopes.entries().next().value;
+  const cannotReplace = await journal.rpc('replace_expired_provision_envelope',
+    { ...expiredClaim, p_claim: randomUUID(), p_hash: hash, p_max_time: expired.timeBounds.maxTime });
+  assert.equal(cannotReplace.error?.message, 'STALE_WORKER');
   const stale = await journal.rpc('save_money_dispatch', { ...old, p_signed: received.envelopeXdr, p_hash: hash });
   assert.equal(stale.error?.message, 'STALE_WORKER');
   const saved = await db.query("select count(*)::int as n from wallet_custody.family_signing_keys where family_id=$1", [member.family_id]);

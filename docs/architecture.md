@@ -119,7 +119,7 @@ T09 adds a locally verified Supabase Vault boundary for future family signers. T
 
 T11 adds operator-only family provisioning inside the existing Node/Postgres custody boundary (DEC-119). No new deployment or frontend. Three family-specific Testnet accounts start with single protected keys; project operating funds stay separate from family principal. The [provisioning contract](technical-spec.md#t11-family-provisioning--dec-119) and [local evidence](../handoff/T11.md#recorded-evidence) do not establish hosted readiness or change the active T08 writer configuration.
 
-DEC-121 adds unsigned-claim recovery and separately approved policy renewal within the same provisioning and journal boundary. Expiry does not prevent observing a previously submitted hash. See the [T11 recovery rules](technical-spec.md#t11-family-provisioning--dec-119).
+DEC-121/122 add recovery of unsigned claims and expired envelopes that were never admitted for sending, plus separately approved policy renewal. Expiry does not prevent observing a previously submitted hash. See the [T11 recovery rules](technical-spec.md#t11-family-provisioning--dec-119).
 
 T12 enforces the ten-family admission cap in the same private Postgres schema (DEC-120). It separates durable slot reservation from permission to use the deployed demo writers. Enrollment and linking remain independent of capacity; see the [capacity contract](technical-spec.md#t12-family-capacity--dec-120).
 
