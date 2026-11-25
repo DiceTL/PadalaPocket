@@ -41,7 +41,15 @@ const expectedPurchase = {
 };
 
 // Ordered results keep the contract tests independent of a second database implementation.
-function database(results, rpc = async () => ({ data: null })) {
+// T17's balance projection is additive to the legacy Velo read; the default fake
+// returns its zero projection so the shared contract stays explicit and green.
+const zeroParentBalance = {
+  confirmedDepositStroops: '0', pendingDepositStroops: '0',
+  confirmedAllocationStroops: '0', pendingAllocationStroops: '0',
+  confirmedHoldingsStroops: '0', availableStroops: '0', basis: 'confirmed_journal', deposits: [],
+};
+const zeroBalance = async name => ({ data: name === 'read_parent_balance' ? structuredClone(zeroParentBalance) : null });
+function database(results, rpc = zeroBalance) {
   const remaining = [...results];
   return {
     rpc,
@@ -190,7 +198,14 @@ test('Velo list and legacy create replay preserve checkout presentation without 
   const expected = { id, status: 'unknown', amountXlm: '1.0000000', expectedReceiver: row.expected_receiver, checkoutUrl: null, intentId: null, createdAt: stamp };
   const db = database([['velo_topups', [row]], ['velo_topups', row]]);
   const deps = { ...dependencies(db), receiver: () => row.expected_receiver, provider: () => { throw Error('Provider must not be called'); } };
-  assert.deepEqual(await exchange({ invoke: api => api.veloTopups(), path: '/api/velo-topups', handler: veloTopups, deps }), { topups: [expected], expectedReceiver: row.expected_receiver });
+  assert.deepEqual(await exchange({ invoke: api => api.veloTopups(), path: '/api/velo-topups', handler: veloTopups, deps }), {
+    topups: [expected], expectedReceiver: row.expected_receiver,
+    parentBalance: {
+      confirmedDepositStroops: '0', pendingDepositStroops: '0',
+      confirmedAllocationStroops: '0', pendingAllocationStroops: '0',
+      confirmedHoldingsStroops: '0', availableStroops: '0', basis: 'confirmed_journal',
+    },
+  });
   assert.deepEqual(await exchange({ invoke: api => api.veloTopups('POST', id, 1), path: '/api/velo-topups', method: 'POST', body: { expectedRevision: 1 }, key: id, handler: veloTopups, deps }), expected);
   db.finished();
 });

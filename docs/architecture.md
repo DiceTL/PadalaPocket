@@ -6,7 +6,7 @@ This shared overview image is also embedded in the event README. Detailed owners
 
 ## Current MVP architecture target — DEC-093–DEC-099
 
-The selected target is up to ten financially enabled families with isolated app-managed Testnet wallets and one hard-configured seller. Registration/linking need not wait for financial capacity. The existing image depicts the provisioned demo, not an implemented multi-family deployment. T09 proves private Vault access locally; hosted custody, restore, provisioning, pooled Velo attribution and family accounting remain open. Seller unattended SEP-24 is also unresolved. No real fiat.
+The selected target is up to ten financially enabled families with isolated app-managed Testnet wallets and one hard-configured seller. Registration/linking need not wait for financial capacity. The existing image depicts the provisioned demo, not an implemented multi-family deployment. T09 proves private Vault access locally; hosted custody, restore, provisioning, and pooled/partner Velo attribution remain open. The Testnet MVP deposit path is a designated operator-paid Velo checkout with an app-verified Stellar receipt (DEC-127), a coordinated project-to-family credit (DEC-129) with its coordinator route, custody destination resolver and dedicated project source (DEC-142), and an app-level cancellation fence (DEC-131); the parent needs no Stellar wallet. Seller unattended SEP-24 is also unresolved. No real fiat.
 
 ```mermaid
 flowchart LR
@@ -14,7 +14,7 @@ flowchart LR
     Others["Additional families: registration/linking only"] --> API
     API -. "Family wallet provisioning and routing pending" .-> Wallets["Isolated app-managed family Testnet wallets"]
     API -. "Create / verify linked checkout" .-> Velo["Velo checkout"]
-    Velo -. "Confirmed payment; evidence contract open" .-> Pool["Project Testnet wallet"]
+    Velo -. "Operator-paid checkout; app verifies Stellar receipt" .-> Pool["Project Testnet wallet"]
     Pool -. "Reserve once; confirmed transfer" .-> Wallets
     Wallets --> Noir["Noir Testnet escrows / payments"]
     Noir --> Seller["One configured seller"]
@@ -24,7 +24,7 @@ flowchart LR
 
 This diagram shows the target and unresolved links, not shipped features. Disable requires reconciliation and confirmed recovery before capacity is released, subject to unavoidable reserves/fees; it does not recycle seller funds. Operational and privacy requirements are in the [product spec](product-spec.md#current-mvp-operational-choices--dec-093dec-099), with remaining design questions in [handoff](../work/backend-decision-questions.md).
 
-DEC-102 selects the target route shown: verified project receipt → one family-backed reservation → confirmed transfer to that family's parent wallet → available balance. Transaction evidence, safe reservation, custody and recovery contracts remain open; no transfer or family credit is implemented by this decision.
+DEC-102 selects the target route shown: verified project receipt → one family-backed reservation → confirmed transfer to that family's parent wallet → available balance. Under DEC-127, the Testnet MVP project receipt is a designated operator payer's Velo checkout, independently verified on Stellar; the parent does not need a wallet. Production partner/fiat automation and supported Velo reporting remain open. No transfer or family credit is implemented by these decisions.
 
 ## Connected-function extension — DEC-070/071
 
@@ -206,6 +206,10 @@ The parent-only `/api/allowance-funding` route reads saved family rules and dist
 Parent Deposit uses authenticated GET/POST `/api/velo-topups`. POST binds UUID Idempotency-Key and expectedRevision to the saved allowance amount, stores a server-only journal before one Velo checkout create call, and reads PaymentIntent state server-side. Only native Testnet checkout amounts and receiving wallet matching the configured parent owner are accepted. Incorrect receivers show configuration_required with no payment link; a fresh checkout can be created after selecting a Velo project owned by the parent wallet. Unknown creation never automatically repeats. No callback or local database row credits balances. Checkout deposits actual wallet funds; a separate explicit Noir allocation action distributes from that wallet. Signing and Velo API keys remain server-only. Velo checkouts pay the project owner's wallet (DEC-077). Use a Velo project owned by the existing parent Testnet wallet displayed in Deposit, and set its API key as server-only VELO_API_KEY. Do not replace OWNER_SECRET or expose it to this checkout. There is no separate receiving-wallet override in the installed SDK. Existing Velo sessions retain their original receiver, so create a new session after correction. Production deployment and a paid top-up require separate observed evidence.
 
 DEC-078 permits a bounded operator recovery of the activation-rejected Velo session with the identical saved checkout amount and idempotency/correlation key. No new request identity or Stellar payment is submitted. Normal API unknown-session recreation remains disabled. Old configuration-mismatched history remains read-only and does not block a correctly configured checkout after API key replacement.
+
+T14 records the operator-paid receipt; a paid receipt is not a balance. The deposit stores its intent window, and a payment is claimable only when its hash is unbound and its time is outside every other live, same-amount intent window (DEC-139). An explicit deposit does not expose its checkout URL to the parent; only the stored operator-side URL is payable. The parent GET retries a non-verified receipt at most once per 60 seconds and a bounded manual script can drive reconciliation without that interval. T15 reads one exact family/parent receipt in the isolated coordinator, reserves one `deposit_credit` operation in the T05 journal and dispatches one T06 project-to-family-parent payment. Only a confirmed dispatch is eligible for T17; unverified, pending, unknown or failed work remains non-spendable. The public API does not admit or sign this transfer; T38 now provides the coordinator-only `deposit-credit` route, the `wallet_custody` destination resolver and the optional dedicated `PROJECT_DEPOSIT_SOURCE_SECRET` source (DEC-142). DEC-143 provisioned that source, funded its fees and credited a verified Testnet receipt through the route once; the deployed call and the guard re-binding remain open (T36). T16 cancellation hides the checkout and fences replacement admission while an intent may still pay; a late paid receipt that verifies supersedes the failed cancellation and is credited once by T15, while an unverifiable one stays `late_paid` and fenced (DEC-140). Cancellation and T15 admission serialize on the deposit row.
+
+T17 projects the parent's spendable principal from that journal only: confirmed `deposit_credit` dispatch minus confirmed and pending Noir allocations, returned by a service-only `read_parent_balance` projection with a `confirmed_journal` basis. It reads no wallet or key, so reserves, fees and project operating float never appear as family funds, and a paid deposit that is still awaiting or pending credit stays non-spendable. Browser balance integration and live wallet reconciliation remain open.
 
 ## Parent decisions — L-002 / DEC-084
 
