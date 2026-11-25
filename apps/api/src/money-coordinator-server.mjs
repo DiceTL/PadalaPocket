@@ -2,6 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import { Keypair } from '@stellar/stellar-sdk';
 import { assertCoordinatorAuthority } from './money-authority.mjs';
 import { createMoneyWriters } from './money-writers.mjs';
+import { guardedDispatcher } from './money-guarded-dispatch.mjs';
+import { buildDepositCreditTransfer } from './velo-deposit-credit.mjs';
+import { createDepositCreditRoute } from './velo-deposit-credit-route.mjs';
 import { createIsolatedFinancialHandler } from './money-coordinator-handler.mjs';
 import { sendFinancialUnavailable } from './money-proxy.mjs';
 
@@ -9,7 +12,12 @@ import { sendFinancialUnavailable } from './money-proxy.mjs';
 function createHandler() {
   const guard = Keypair.fromSecret(process.env.MONEY_COORDINATOR_GUARD_SECRET);
   const sources = ['OWNER', 'AGENT', 'MERCHANT', 'STUDENT'].map(role => Keypair.fromSecret(process.env[`${role}_SECRET`]).publicKey());
-  if (new Set([...sources, guard.publicKey()]).size !== 5) throw Error();
+  // T38: a dedicated project deposit source funds deposit credit only. It is
+  // optional so an existing coordinator without one keeps serving its routes.
+  const depositSource = process.env.PROJECT_DEPOSIT_SOURCE_SECRET
+    ? Keypair.fromSecret(process.env.PROJECT_DEPOSIT_SOURCE_SECRET) : null;
+  if (depositSource) sources.push(depositSource.publicKey());
+  if (new Set([...sources, guard.publicKey()]).size !== sources.length + 1) throw Error();
   const token = process.env.MONEY_COORDINATOR_DATABASE_TOKEN;
   if (JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString()).role !== 'money_coordinator') throw Error();
   const database = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
@@ -21,6 +29,25 @@ function createHandler() {
     return response.json();
   };
   const writers = createMoneyWriters({ database, guard, readAccount, activatedAt: process.env.MONEY_COORDINATOR_ACTIVATED_AT });
+  // No route exists without a dedicated source; the route never selects a role
+  // account and the destination always comes from family custody.
+  const depositCredit = depositSource ? createDepositCreditRoute({
+    database,
+    sourceAccount: depositSource.publicKey(),
+    resolveDestination: async ({ familyId, parentId }) => {
+      const { data, error } = await database.rpc('resolve_family_parent_destination', { p_family: familyId, p_parent: parentId });
+      if (error) throw error;
+      if (!data) throw Error('DESTINATION_UNAVAILABLE');
+      return data;
+    },
+    dispatch: guardedDispatcher({ database, guard, readAccount }),
+    prepare: async ({ amountStroops, sourceAccount, destinationAccount }) => {
+      const current = await readAccount(sourceAccount);
+      return buildDepositCreditTransfer({
+        amountStroops, sourceAccount, destinationAccount, sequence: current.sequence, signer: depositSource,
+      });
+    },
+  }) : null;
   const readiness = async () => {
     await Promise.all(sources.map(async sourceAccount => assertCoordinatorAuthority(await readAccount(sourceAccount), { sourceAccount, guardAccount: guard.publicKey() })));
     const access = await database.rpc('read_money_cutover_access');
@@ -33,7 +60,7 @@ function createHandler() {
     throw error;
   });
   return createIsolatedFinancialHandler({
-    writers, database, readiness, ensureReady, token: process.env.MONEY_COORDINATOR_ACCESS_TOKEN,
+    writers, database, readiness, ensureReady, depositCredit, token: process.env.MONEY_COORDINATOR_ACCESS_TOKEN,
   });
 }
 

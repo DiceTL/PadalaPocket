@@ -18,13 +18,15 @@ function topupFixture() {
  const deps={
   authenticate:async()=>({member:{role:'parent',user_id:'parent',family_id:'family'}}),
   loadRules:async()=>({revision:1,settings:{weeklyAmountMinor:'968'}}),
-  database:()=>({from(){let patch;return {
+  database:()=>({rpc:async name=>({data:name==='read_parent_balance'?{confirmedDepositStroops:'0',pendingDepositStroops:'0',confirmedAllocationStroops:'0',pendingAllocationStroops:'0',confirmedHoldingsStroops:'0',availableStroops:'0',basis:'confirmed_journal',deposits:[]}:null}),from(){let patch;return {
    select(){return this;},eq(){return this;},order(){return this;},limit:async()=>({data:rows}),
    maybeSingle:async()=>({data:null}),
    insert(value){rows.push({...value,id:'topup',created_at:'2026-11-21T00:00:00Z',status:'creating'});return this;},
    single:async()=>({data:structuredClone(rows[0])}),
-   update(value){patch=value;return this;},
-   then(resolve,reject){Object.assign(rows[0],patch);return Promise.resolve({error:null}).then(resolve,reject);},
+   update(value){patch=value;const chain={eq(){return chain;},is(){return chain;},select(){return chain;},
+    maybeSingle:async()=>{Object.assign(rows[0],patch);return {data:structuredClone(rows[0]),error:null};},
+    then(resolve,reject){Object.assign(rows[0],patch);return Promise.resolve({error:null}).then(resolve,reject);},
+   };return chain;},
   };}}),
   provider:()=>{providerCalls++;return {checkout:{sessions:{create:async()=>({...intent,receiverAddress:rows[0].expected_receiver})}}};},
  };

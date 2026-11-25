@@ -163,6 +163,8 @@ Required live values go in ignored `.env.local` locally and server environment s
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Optional explicit public browser key override | Same publishable key; never use a secret key |
 | `VITE_PUBLIC_APP_URL` | Optional canonical public app origin for email confirmation redirects | Production defaults to `https://padalapocket.vercel.app`; set this for a different production domain or a preview deployment |
 | `OWNER_SECRET` | Testnet parent funding signer | Your newly created funded Stellar Testnet account |
+| `OWNER_PUBLIC_KEY` | Public receiver pinned for Velo checkouts; never derive it from a signing secret | Public address of the Velo project owner wallet |
+| `OPERATOR_PAYER_PUBLIC_KEY` | Public Testnet wallet that pays the designated deposit checkout; the server verifies its exact Stellar payment | A separate funded Stellar Testnet account, distinct from `OWNER_PUBLIC_KEY`; keep its secret in the operator wallet, not the app |
 | `AGENT_SECRET` | Separate Testnet purchase agent signer | Your second funded Testnet account |
 | `MERCHANT_SECRET` | Fixed demo seller signer | Your third funded Testnet account |
 | `GROQ_API_KEY` | Server-only product-photo identification access | Groq Console; account must support the configured vision model |
@@ -186,7 +188,7 @@ Actual signed-in **local Testnet** views, captured during verification. These ar
 ## What's next
 
 - Rehearse the public deployment and check that judges can access the linked demo recording.
-- Verify a paid Velo parent-wallet top-up through hosted checkout and subsequent Noir distribution.
+- Verify an operator-paid Velo deposit through hosted checkout, independently matched Stellar receipt, and subsequent Noir distribution.
 - Complete release verification for Wants purchases and the explicit weekly rollover flow.
 - Connect Savings releases, private My Money spending, background weekly scheduling and in-app test-anchor withdrawal.
 - Provision independent wallets for newly registered families and finish onboarding.

@@ -26,6 +26,12 @@ try {
     Keypair.fromPublicKey(source);
     return source;
   });
+  // T38's dedicated deposit source joins readiness once it is configured.
+  if (process.env.PROJECT_DEPOSIT_SOURCE_SECRET) {
+    const depositSource = Keypair.fromSecret(process.env.PROJECT_DEPOSIT_SOURCE_SECRET).publicKey();
+    assert.ok(!sources.includes(depositSource));
+    sources.push(depositSource);
+  }
   assert.equal(new Set(sources).size, sources.length);
   // Hosted permissions and real Testnet account policy cannot be proved by local fixtures.
   stage = 'hosted-envelope-permissions';

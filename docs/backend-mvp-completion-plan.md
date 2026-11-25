@@ -94,10 +94,10 @@ Packets: [T13](../handoff/T13.md), [T14](../handoff/T14.md), [T15](../handoff/T1
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
 | **T13** | Extend `velo-topups.mjs` with explicit simulated PHP deposit input, frozen conversion, minimum/cumulative-cap reservations and one unresolved deposit per family; preserve legacy `{expectedRevision}` requests. | Deposit creation | `deposit-admission`: centavos, ₱10 minimum, full ₱5,000, cumulative boundaries, replay and concurrent requests enforce the locked rules. |
-| **T14** | Implement the app-managed payer and approved Velo reporting adapter; save its own signed payment/hash before submission and verify Velo plus Stellar receiver, amount, asset and network. | Deposit payment and status | `deposit-receipt`: one bounded live checkout becomes paid with matching independently verified evidence; mismatches and provider errors produce no family credit. |
-| **T15** | Reserve confirmed project receipts once, reject payment reuse and execute one project-to-family-parent transfer; finalize deposit credit only after confirmed backing. | Deposit completion | `deposit-credit`: concurrent/repeated confirmation credits only the intended family once, with a matching confirmed transfer. |
-| **T16** | Add cancellation admission and reconciliation; cancellation before dispatch prevents payment, while possible dispatch remains pending until resolved. Preserve use of previously confirmed funds. | Deposit cancellation and pending states | `deposit-cancel`: cancellation/payment races produce neither lost confirmed receipts, duplicate credit nor premature replacement admission. |
-| **T17** | Expose available parent principal, pending transfers and deposit history; exclude reserves, operating float and allocations already moved to Noir. Keep existing `paid` presentation truthful. | Parent balance, Deposit and Overview | `parent-balance`: projected funds reconcile to confirmed holdings and reservations; pending receipts never appear spendable. |
+| **T14** | Implement the designated operator payer through Velo hosted checkout: attach a checkout to each admitted explicit deposit while preserving the legacy path, persist its intent window, observe the paid intent, locate and verify the exact Stellar payment from the pinned operator payer to the receiver (amount, native asset, Testnet, claimable hash), and store receipt evidence. An explicit deposit does not expose `checkoutUrl` to the parent; the stored URL is operator-side. No app-managed payer, server-side Velo reporting adapter, or internal Velo reporter. | Deposit payment and status | `deposit-receipt`: one bounded live checkout paid by the funded operator wallet is `paid` in Velo, the stored receipt matches the independently verified Stellar payment, and mismatches, reused/overlapping-window hashes, wrong payer or provider errors leave the deposit uncredited. |
+| **T15** | Reserve verified operator-paid receipts once, reject payment reuse and execute one project-to-family-parent transfer; finalize deposit credit only after confirmed backing. | Deposit completion | `deposit-credit`: concurrent/repeated confirmation credits only the intended family once, with a matching confirmed transfer. |
+| **T16** | Add cancellation admission and reconciliation as an app-level fence; Velo has no merchant cancel/expire API, so hide the checkout URL and mark the deposit cancelled. A later paid checkout remains pending until reconciled; a verified one supersedes the cancellation and is credited once (DEC-140). Preserve use of previously confirmed funds. | Deposit cancellation and pending states | `deposit-cancel`: cancellation/payment races produce neither lost confirmed receipts, duplicate credit nor premature replacement admission. |
+| **T17** | Expose available parent principal, pending transfers and deposit history; count only a T14 verified operator-paid receipt plus a confirmed T15 project-to-family transfer as confirmed, and exclude reserves, operating float and allocations already moved to Noir. Keep existing `paid` presentation truthful. | Parent balance, Deposit and Overview | `parent-balance`: projected funds reconcile to confirmed holdings and reservations; T14-verified receipts without a confirmed T15 transfer and pending/unknown receipts never appear spendable. |
 
 ### Phase 5 — Finish allowance, purchases and AI behavior
 
@@ -137,7 +137,7 @@ Packets: [T28](../handoff/T28.md), [T29](../handoff/T29.md), [T30](../handoff/T3
 
 ### Phase 8 — Finish account state and release acceptance
 
-Packets: [T33](../handoff/T33.md), [T34](../handoff/T34.md), [T35](../handoff/T35.md), [T36](../handoff/T36.md), [T37](../handoff/T37.md).
+Packets: [T33](../handoff/T33.md), [T34](../handoff/T34.md), [T35](../handoff/T35.md), [T36](../handoff/T36.md), [T37](../handoff/T37.md), [T38](../handoff/T38.md).
 
 | Task | Backend work and main location | Frontend feature served | Done-check |
 |---|---|---|---|
@@ -146,8 +146,9 @@ Packets: [T33](../handoff/T33.md), [T34](../handoff/T34.md), [T35](../handoff/T3
 | **T35** | Run the combined real-database concurrency, isolation and interruption matrix; complete bounded live evidence for the new family paths rather than repeating unchanged proofs. | All financial screens | `backend-acceptance`: every required scenario passes with conserved funds, correct authority and truthful status. |
 | **T36** | Deploy matching backend code, ordered migrations, secrets and permissions; exercise the unchanged client contract and additive APIs against the deployed release. | All existing screens | `deployed-acceptance`: authenticated parent/student journeys and isolation checks pass against the intended deployment. |
 | **T37** | Finish backend request/response/error documentation, setup, operator recovery instructions and evidence references; record backend-only client integration gaps explicitly. | Backend handoff | `backend-handoff`: an independent clean setup passes the backend acceptance command using its own credentials and Testnet resources. |
+| **T38** | Wire the T15 credit into the isolated coordinator: one authenticated `deposit_credit` route, a trusted family-custody destination resolver, and a dedicated project deposit source with fee funding. Implemented locally under DEC-142 and credited a verified receipt live on Testnet under DEC-143 (dedicated source, one send, replay reused it); hosted migration, deployment and guard re-binding remain open. Assigned by DEC-141; T35/T36 do not implement it. | Deposit completion | `deposit-credit-route`: a deployed coordinator call credits one verified receipt for the exact family once, rejects wrong-family/unauthenticated callers, refuses an unverified or fenced receipt, and exposes no signing authority. Local and live-route evidence passing; deployed evidence pending. |
 
-**Backend completion requires all 37 checks to pass.** A failed live provider check remains a release failure, not a successful mock or an assumed completion.
+**Backend completion requires all 38 checks to pass.** A failed live provider check remains a release failure, not a successful mock or an assumed completion.
 
 ### Part 2 — Your action
 
@@ -168,7 +169,7 @@ Packets: [T33](../handoff/T33.md), [T34](../handoff/T34.md), [T35](../handoff/T3
 | **T11 — Family provisioning** | **DO:** Approve the named Testnet funding source and the cumulative principal, reserve and fee limits for provisioning and later live checks. |
 | **T12 — Family capacity** | **NONE:** I can implement and verify the ten-family admission limit. |
 | **T13 — Deposit admission** | **NONE:** I can implement and verify deposit limits, pending reservations and request reuse. |
-| **T14 — Velo receipt** | **NONE:** I can execute the bounded checkout proof within the approved Testnet budget. |
+| **T14 — Velo receipt** | **NONE:** I can implement and verify the operator-paid hosted checkout and Stellar receipt within the approved Testnet budget. |
 | **T15 — Deposit credit** | **UNDERSTAND:** Explain why Velo’s paid status alone cannot create a spendable family balance. |
 | **T16 — Deposit cancellation** | **UNDERSTAND:** Explain why cancellation after possible payment dispatch stays pending until the existing payment is resolved. |
 | **T17 — Parent balance** | **UNDERSTAND:** Explain the difference between available family principal, reserved funds and project-paid operating costs. |
@@ -233,7 +234,7 @@ Review policy approved under [DEC-103](decision-ledger.md). Implementation model
 | **T11 — Family provisioning** — Risk if wrong: a family receives incorrectly owned resources or cannot access its funds. | Sol | Medium | Astra, Medium — grouped T09–T12 checkpoint; no separate task review |
 | **T12 — Family capacity** — Risk if wrong: concurrent setup enables excess or incomplete families. | Sol | Medium | Astra, Medium — grouped T09–T12 checkpoint; no separate task review |
 | **T13 — Deposit admission** — Risk if wrong: concurrent deposits exceed the cap or reserve the same funds twice. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
-| **T14 — Velo receipt** — Risk if wrong: an incorrect or reused payment is accepted as deposit backing. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
+| **T14 — Velo receipt** — Risk if wrong: an incorrect or reused payment is accepted as deposit backing. Scope is reduced to the operator-paid hosted checkout; the review assignment is unchanged. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
 | **T15 — Deposit credit** — Risk if wrong: one payment creates duplicate credit or funds the wrong family. | **Sol implements; Astra reviews only** | **High implementation:** payment, reservation and transfer records must remain consistent through interruptions. | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
 | **T16 — Deposit cancellation** — Risk if wrong: cancellation releases funds while payment still succeeds. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
 | **T17 — Parent balance** — Risk if wrong: reserved, pending or operating funds appear spendable. | Sol | Medium | Astra, Medium — grouped T13–T17 checkpoint; no separate task review |
@@ -279,10 +280,10 @@ Review policy approved under [DEC-103](decision-ledger.md). Implementation model
 - **Supabase Vault is the key store.** It protects stored secrets, not against a compromised authorized signing runtime or database administrator.
 - **Each enabled family has separate parent, student and routine-agent signing accounts.** Noir bucket devices remain contract resources.
 - **The project pays operating costs.** Family principal excludes account reserves and subsidized fees; insufficient operating funds reject new admissions.
-- **Deposits use a dedicated project-managed simulated payer and project receiver.** Family Velo accounts are not required by the selected flow.
+- **New MVP deposits use a designated operator payer through Velo hosted checkout.** The parent needs no Stellar wallet. A funded, operator-controlled Testnet wallet pays the checkout; the server pins its public key and verifies the exact Stellar payment before storing a receipt. The project receiver remains the Velo project owner wallet. A project-managed payer, real fiat/GCash/Maya collection, partner treasury automation and a supported Velo reporting adapter are deferred to production. No internal Velo reporter is used.
 - **One deposit payment transaction belongs to one deposit.** Store its network/hash and matched payment evidence; do not split one receipt across families.
 - **Shared seller execution stays serialized.** Family isolation does not remove shared seller or project-wallet coordination.
-- **A confirmed deposit payment wins over an unsuccessful cancellation attempt.** It completes the approved family-credit path; cancellation alone never reverses a ledger payment.
+- **A confirmed deposit payment wins over an unsuccessful cancellation attempt.** It completes the approved family-credit path; cancellation alone never reverses a ledger payment. DEC-140 implements this for a verified late receipt (`superseded` then one credit); an unverifiable late receipt stays fenced because the money is still unknown.
 - **Unknown operations remain fenced.** Only evidence-supported continuation is offered; automatic general repair is not required.
 - **Provider adapters are Testnet-specific.** Unexpected responses fail closed. No manual-withdrawal substitute or fabricated provider result satisfies automatic withdrawal.
 - **Operational continuation is durable and bounded.** Do not depend on browser presence or fire-and-forget work surviving a Vercel response; detail at implementation time.
